@@ -1,0 +1,37 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+<div class="home-exchange-rate">
+    <table class="table table-sm table-bordered mb-0">
+        <thead>
+            <tr>
+                <th>Валута</th>
+                <th>Купува</th>
+                <th>Продава</th>
+            </tr>
+        </thead>
+        <tbody id="exchangeRateWidget">
+            <tr>
+                <td><img src="/assets/images/flag_EUR.png" alt="EUR" style="height:14px;"> EUR</td>
+                <td class="rate-buy" data-currency="EUR">—</td>
+                <td class="rate-sell" data-currency="EUR">—</td>
+            </tr>
+            <tr>
+                <td><img src="/assets/images/flag_USD.png" alt="USD" style="height:14px;"> USD</td>
+                <td class="rate-buy" data-currency="USD">—</td>
+                <td class="rate-sell" data-currency="USD">—</td>
+            </tr>
+            <tr>
+                <td><img src="/assets/images/flag_GBP.png" alt="GBP" style="height:14px;"> GBP</td>
+                <td class="rate-buy" data-currency="GBP">—</td>
+                <td class="rate-sell" data-currency="GBP">—</td>
+            </tr>
+            <tr>
+                <td><img src="/assets/images/flag_CHF.png" alt="CHF" style="height:14px;"> CHF</td>
+                <td class="rate-buy" data-currency="CHF">—</td>
+                <td class="rate-sell" data-currency="CHF">—</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-right mt-1">
+        <a href="/finansiski-pazari/kursna-lista/" class="btn btn-sm btn-outline-primary">Целосна курсна листа</a>
+    </div>
+</div>

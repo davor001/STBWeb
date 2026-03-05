@@ -1,0 +1,121 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Strings
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_Layout.cshtml";
+    var heroBannerImage = Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("heroBannerImage");
+    var heroBannerHeading = Model.Value<string>("heroBannerHeading");
+    var heroBannerSubheading = Model.Value<string>("heroBannerSubheading");
+    var tabProductInfo = Model.Value<IHtmlEncodedString>("tabProductInfo");
+    var tabPricing = Model.Value<IHtmlEncodedString>("tabPricing");
+    var tabCriteriaAndDocs = Model.Value<IHtmlEncodedString>("tabCriteriaAndDocs");
+    var tabSecurity = Model.Value<IHtmlEncodedString>("tabSecurity");
+    var tabInterestRates = Model.Value<IHtmlEncodedString>("tabInterestRates");
+    var applyOnlineLinks = Model.Value<IEnumerable<Link>>("applyOnlineUrl");
+    var applyOnlineUrl = applyOnlineLinks?.FirstOrDefault()?.Url ?? "/appForm/";
+    var faqItems = Model.Value<BlockListModel>("faqItems");
+    var showSidebar = Model.Value<bool>("showSidebar");
+}
+
+@if (heroBannerImage != null)
+{
+    <div class="row mb-0">
+        <div class="col position-relative">
+            <img src="@heroBannerImage.MediaUrl()" class="w-100" alt="@heroBannerHeading" style="max-height:250px;object-fit:cover;">
+            @if (!string.IsNullOrEmpty(heroBannerHeading))
+            {
+                <div class="carousel-caption carousel-caption-left2">
+                    <h3>@heroBannerHeading</h3>
+                    <hr/>
+                    @if (!string.IsNullOrEmpty(heroBannerSubheading))
+                    {
+                        <h4>@heroBannerSubheading</h4>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<div class="container-fluid py-3">
+    @await Html.PartialAsync("_Breadcrumb")
+
+    <div class="row">
+        <div class="@(showSidebar ? "col-md-8 col-xl-9" : "col-12")">
+            <h2 class="mb-3 content-product">@Model.Name</h2>
+
+            <!-- Product Tabs -->
+            @{
+                var tabs = new List<(string id, string label, IHtmlEncodedString content)>();
+                if (tabProductInfo != null && !string.IsNullOrWhiteSpace(tabProductInfo.ToString()))
+                    tabs.Add(("info", "За производот", tabProductInfo));
+                if (tabPricing != null && !string.IsNullOrWhiteSpace(tabPricing.ToString()))
+                    tabs.Add(("pricing", "Ценовник", tabPricing));
+                if (tabInterestRates != null && !string.IsNullOrWhiteSpace(tabInterestRates.ToString()))
+                    tabs.Add(("rates", "Каматни стапки", tabInterestRates));
+                if (tabCriteriaAndDocs != null && !string.IsNullOrWhiteSpace(tabCriteriaAndDocs.ToString()))
+                    tabs.Add(("criteria", "Критериуми и документи", tabCriteriaAndDocs));
+                if (tabSecurity != null && !string.IsNullOrWhiteSpace(tabSecurity.ToString()))
+                    tabs.Add(("security", "Обезбедување", tabSecurity));
+            }
+
+            @if (tabs.Any())
+            {
+                <ul class="nav nav-tabs nav-bordered mb-3">
+                    @for (int i = 0; i < tabs.Count; i++)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link @(i == 0 ? "active" : "")" data-toggle="tab" href="#tab-@tabs[i].id">@tabs[i].label</a>
+                        </li>
+                    }
+                </ul>
+                <div class="tab-content">
+                    @for (int i = 0; i < tabs.Count; i++)
+                    {
+                        <div class="tab-pane fade @(i == 0 ? "show active" : "")" id="tab-@tabs[i].id">
+                            <div class="article-body">@tabs[i].content</div>
+                        </div>
+                    }
+                </div>
+            }
+
+            <!-- Apply Online CTA -->
+            <div class="text-center my-4">
+                <a href="@applyOnlineUrl" class="btn btn-primary btn-lg">Аплицирај онлајн</a>
+            </div>
+
+            <!-- FAQ -->
+            @if (faqItems != null && faqItems.Any())
+            {
+                <h4 class="mt-4 mb-3">Најчесто поставувани прашања</h4>
+                <div class="custom-accordion">
+                    @foreach (var block in faqItems)
+                    {
+                        var faq = block.Content;
+                        var question = faq.Value<string>("question");
+                        var answer = faq.Value<IHtmlEncodedString>("answer");
+                        var collapseId = $"faq-{Guid.NewGuid():N}";
+                        <div class="card">
+                            <div class="card-header">
+                                <button class="btn btn-link text-left w-100 collapsed" type="button"
+                                        data-toggle="collapse" data-target="#@collapseId">
+                                    @question
+                                </button>
+                            </div>
+                            <div id="@collapseId" class="collapse">
+                                <div class="card-body">@answer</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        @if (showSidebar)
+        {
+            @await Html.PartialAsync("_Sidebar")
+        }
+    </div>
+</div>

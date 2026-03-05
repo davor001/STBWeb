@@ -1,0 +1,68 @@
+﻿@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var pageTitle = Model == null ? "Апликација" : Model.Name;
+}
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@pageTitle - Стопанска Банка</title>
+
+    <!-- Legacy styles isolated here -->
+    <link href="/assets/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/css/app.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Using the specific SiteBoot isolated for these forms from the crawl -->
+    <link href="/css/SiteBoot.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Add any specific form validation or CSS libraries needed -->
+    <style>
+        .legacy-form-container {
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="content-page" style="margin-left: 0;"> <!-- Remove any sidebar margins if they bleed over -->
+            <div class="content">
+
+                <!-- Minimal Header suitable for form filling (e.g. no huge navigation distraction) -->
+                <nav class="navbar navbar-default bg-white shadow-sm py-2">
+                    <div class="container d-flex justify-content-between">
+                        <a class="navbar-brand" href="/">
+                            <img src="/media/logo_stb.png" alt="Стопанска Банка" height="40" onerror="this.src='/images/logo.png'">
+                        </a>
+                        <span class="navbar-text">
+                            @pageTitle
+                        </span>
+                    </div>
+                </nav>
+
+                <div class="container legacy-form-container">
+                    @RenderBody()
+                </div>
+
+                <!-- Minimal Footer -->
+                <footer class="footer mt-auto py-3 bg-light text-center border-top">
+                    <div class="container">
+                        <span class="text-muted small">© @DateTime.Now.Year Стопанска Банка АД - Скопје. Сите права се задржани.</span>
+                    </div>
+                </footer>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.0.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
+    
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,19 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@{
+    var content = Model.Content;
+    var iconClass = content.Value<string>("iconMdiClass") ?? "mdi-help-circle";
+    var label = content.Value<string>("label");
+    var color = content.Value<string>("iconColor") ?? "#0056a6";
+    var linkUrls = content.Value<IEnumerable<Link>>("linkUrl");
+    var url = linkUrls?.FirstOrDefault()?.Url ?? "#";
+}
+<div class="col-4 col-sm-3 col-md-2 text-center mb-3 win-icon-row">
+    <a href="@url" class="d-block">
+        <span class="win-icon-circle" style="background-color:@color;">
+            <i class="mdi @iconClass"></i>
+        </span>
+        <span class="d-block mt-1 small">@label</span>
+    </a>
+</div>

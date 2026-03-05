@@ -1,0 +1,14 @@
+/* tableHover.css - Exchange rate & data table hover styles */
+.table-hover tbody tr:hover {
+	background-color: #f0f6fc;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+	background-color: #f8f9fa;
+}
+
+.table thead th {
+	border-bottom: 2px solid #0056a6;
+	font-size: 12px;
+	text-transform: uppercase;
+}

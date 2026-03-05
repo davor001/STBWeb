@@ -1,0 +1,57 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var isEnglish = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
+}
+<div class="navbar-custom topnav-navbar d-print-none">
+    <div class="container-fluid">
+
+        <!-- LOGO -->
+        <a href="/" class="topnav-logo" aria-label="Logo Stb Bank">
+            <span class="topnav-logo-lg">
+                <img src="/assets/images/logo_small.png" alt="Стопанска Банка" height="35">
+            </span>
+            <span class="topnav-logo-sm">
+                <img src="/assets/images/logo_small.png" alt="Стопанска Банка" height="22">
+            </span>
+        </a>
+
+        <a class="navbar-toggle float-right" data-toggle="collapse" data-target="#topnav-menu-content">
+            <div class="lines">
+                <span></span><span></span><span></span>
+            </div>
+        </a>
+
+        <a class="btn btn-primary mt-2 btn-sm d-lg-none float-right ebank-btn" href="https://ebank.stb.com.mk">
+            <i class="mdi mdi-key mr-1"></i> e-најава
+        </a>
+
+        <!-- Language switcher -->
+        <ul class="list-unstyled topbar-right-menu float-right mb-0 topnav-category d-none d-sm-block">
+            <li><a href="@Model.Url("mk")" class="nav-link m-0@(isEnglish ? "" : " active")">mk</a></li>
+            <li>|</li>
+            <li><a href="@(Model.HasCulture("en") ? Model.Url("en") : "/en/")" class="nav-link m-0@(isEnglish ? " active" : "")">en</a></li>
+        </ul>
+
+        <!-- Phone -->
+        <span class="list-unstyled topbar-right-menu float-right mb-0 topnav-category topnav-phone mr-2 d-none d-md-block">
+            <span class="d-none d-lg-inline">КОНТАКТ ЦЕНТАР</span>
+            <i class="mdi mdi-phone"></i> + (02)3100 109
+        </span>
+
+        <!-- Search toggle -->
+        <span class="list-unstyled topbar-right-menu float-right mb-0 topnav-category topnav-phone mr-2 d-block">
+            <a class="nav-link right-bar-toggle" href="javascript:void(0);">
+                <i class="mdi mdi-magnify"></i>
+                <span class="search-text d-none d-xl-inline"> Пребарај</span>
+            </a>
+        </span>
+
+        <!-- Segment tabs -->
+        <div class="topnav-category d-none d-sm-block">
+            <a href="@(isEnglish ? "/en/" : "/")" class="mr-3">@(isEnglish ? "Individuals" : "Население")</a>
+            <a href="@(isEnglish ? "/en/legal-entities/" : "/pravni-lica/")">@(isEnglish ? "Legal Entities" : "Правни лица")</a>
+        </div>
+
+    </div>
+</div>

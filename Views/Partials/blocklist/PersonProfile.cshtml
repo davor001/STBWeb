@@ -1,0 +1,24 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Strings
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@{
+    var content = Model.Content;
+    var photo = content.Value<MediaWithCrops>("photo");
+    var name = content.Value<string>("fullName");
+    var role = content.Value<string>("role");
+    var bio = content.Value<IHtmlEncodedString>("biography");
+}
+<div class="col-md-4 mb-4 text-center">
+    @if (photo != null)
+    {
+        <img src="@photo.MediaUrl()" class="img-fluid rounded-circle mb-2"
+             style="width:120px;height:120px;object-fit:cover;" alt="@name">
+    }
+    <p class="text-muted small mb-1">@role</p>
+    <h5>@name</h5>
+    @if (bio != null && !string.IsNullOrWhiteSpace(bio.ToString()))
+    {
+        <div class="small text-left">@bio</div>
+    }
+</div>

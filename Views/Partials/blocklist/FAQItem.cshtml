@@ -1,0 +1,19 @@
+@using Umbraco.Cms.Core.Strings
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@{
+    var content = Model.Content;
+    var question = content.Value<string>("question");
+    var answer = content.Value<IHtmlEncodedString>("answer");
+    var collapseId = $"faq-{Guid.NewGuid():N}";
+}
+<div class="card">
+    <div class="card-header">
+        <button class="btn btn-link text-left w-100 collapsed" type="button"
+                data-toggle="collapse" data-target="#@collapseId">
+            @question
+        </button>
+    </div>
+    <div id="@collapseId" class="collapse">
+        <div class="card-body">@answer</div>
+    </div>
+</div>

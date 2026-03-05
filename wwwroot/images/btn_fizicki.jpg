@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+ <link rel="icon" href="https://www.stb.com.mk/images/favicon.png"" type="image/png" />   <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Стопанска Банка</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <style>
+      body {
+        padding-top: 54px;
+      }
+      @media (min-width: 992px) {
+        body {
+          padding-top: 56px;
+        }
+      }
+
+	  .back-image{width:612px; height:438px; 
+	  	background-image:url('images/404-pagenotfound.jpg'); margin:0 auto;
+	  	position:relative;
+	  }
+	
+	  .button-holder {
+	  	position:absolute;
+	  	top:325px;
+	  	left:90px;
+	  }
+	  
+	  .button-holder img:hover {transition: all 500ms ease; margin-top:-5px; }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+
+
+    <!-- Page Content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="back-image">
+          		<div class="button-holder">
+          			<table>
+          				<tr>
+          					<td><a href="https://www.stb.com.mk/"><img src="images/btn_pocetna.jpg"/></td>
+          					<td><a href="https://www.stb.com.mk/kontakt/"><img src="images/btn_kontakt.jpg"/></td>
+          					<td><a href="https://www.stb.com.mk/pravni-lica/"><img src="images/btn_pravni.jpg"/></td>
+          					<td><a href="https://www.stb.com.mk/naselenie"><img src="images/btn_fizicki.jpg"/></td>
+          				</tr>
+          			</table>
+          		</div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>

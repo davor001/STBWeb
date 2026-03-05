@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python crawl.py:*)",
+      "Bash(dotnet:*)",
+      "Bash(git:*)",
+      "Bash(cd:*)",
+      "Bash(echo Copying js...:*)"
+    ]
+  }
+}

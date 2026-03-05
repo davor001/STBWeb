@@ -1,0 +1,39 @@
+/* app_variant.css - STB theme overrides and variant styles */
+
+/* Blue gradient header bar */
+.topnav-navbar {
+    background: linear-gradient(135deg, #fff 0%, #f8fbff 100%);
+}
+
+/* Active nav highlighting */
+.topnav-menu .navbar-nav .nav-item.active > .nav-link {
+    background: rgba(255,255,255,0.15);
+    border-bottom: 3px solid #fff;
+}
+
+/* Card hover enhancements */
+.card {
+    transition: box-shadow 0.2s ease;
+}
+
+    .card:hover {
+        box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    }
+
+/* Button brand color */
+.btn-primary {
+    background-color: #0056a6;
+    border-color: #0056a6;
+}
+
+    .btn-primary:hover {
+        background-color: #003d75;
+        border-color: #003d75;
+    }
+
+/* Breadcrumb styling */
+.breadcrumb {
+    background: transparent;
+    padding: 0.5rem 0;
+    font-size: 13px;
+}

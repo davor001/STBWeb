@@ -1,0 +1,63 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Strings
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_Layout.cshtml";
+    var heroBannerImage = Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("heroBannerImage");
+    var heroBannerHeading = Model.Value<string>("heroBannerHeading");
+    var heroBannerSubheading = Model.Value<string>("heroBannerSubheading");
+    var bodyContent = Model.Value<IHtmlEncodedString>("bodyContent");
+    var children = Model.Children().Where(x => x.IsVisible()).ToList();
+}
+
+@if (heroBannerImage != null)
+{
+    <div class="row mb-0">
+        <div class="col position-relative">
+            <img src="@heroBannerImage.MediaUrl()" class="w-100" alt="@heroBannerHeading" style="max-height:250px;object-fit:cover;">
+            @if (!string.IsNullOrEmpty(heroBannerHeading))
+            {
+                <div class="carousel-caption carousel-caption-left2">
+                    <h3>@heroBannerHeading</h3>
+                    <hr/>
+                    @if (!string.IsNullOrEmpty(heroBannerSubheading))
+                    {
+                        <h4>@heroBannerSubheading</h4>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<div class="container-fluid py-3">
+    @await Html.PartialAsync("_Breadcrumb")
+
+    <h2 class="mb-3">@Model.Name</h2>
+
+    @if (bodyContent != null && !string.IsNullOrWhiteSpace(bodyContent.ToString()))
+    {
+        <div class="article-body mb-4">@bodyContent</div>
+    }
+
+    @if (children.Any())
+    {
+        <div class="row">
+            @foreach (var child in children)
+            {
+                var thumb = child.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("heroBannerImage");
+                <div class="col-sm-6 col-md-4 mb-3">
+                    <a href="@child.Url()" class="card d-block text-decoration-none h-100">
+                        @if (thumb != null)
+                        {
+                            <img src="@thumb.MediaUrl()" class="card-img-top" alt="@child.Name" style="height:130px;object-fit:cover;">
+                        }
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">@child.Name</h5>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+</div>

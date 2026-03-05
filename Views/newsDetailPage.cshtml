@@ -1,0 +1,52 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Strings
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_Layout.cshtml";
+    var newsListing = Model.Parent;
+    var heroBannerImage = newsListing?.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("heroBannerImage");
+    var publishDate = Model.Value<DateTime>("publishDate");
+    var articleBody = Model.Value<IHtmlEncodedString>("articleBody");
+    var summary = Model.Value<string>("summary");
+    var thumbnailImage = Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("thumbnailImage");
+}
+
+@if (heroBannerImage != null)
+{
+    <div class="row mb-0">
+        <div class="col position-relative">
+            <img src="@heroBannerImage.MediaUrl()" class="w-100" alt="@Model.Name" style="max-height:250px;object-fit:cover;">
+        </div>
+    </div>
+}
+
+<div class="container-fluid py-3">
+    @await Html.PartialAsync("_Breadcrumb")
+
+    <div class="row">
+        <div class="col-md-8 col-xl-9">
+            <h2 class="mb-1">@Model.Name</h2>
+            <p class="text-muted small mb-3">@publishDate.ToString("dd.MM.yyyy")</p>
+
+            @if (thumbnailImage != null)
+            {
+                <img src="@thumbnailImage.MediaUrl()" class="img-fluid mb-3 rounded" alt="@Model.Name">
+            }
+
+            @if (articleBody != null)
+            {
+                <div class="article-body">@articleBody</div>
+            }
+            else if (!string.IsNullOrEmpty(summary))
+            {
+                <div class="article-body">@summary</div>
+            }
+
+            <div class="mt-4">
+                <a href="@newsListing?.Url()" class="btn btn-outline-secondary">
+                    <i class="mdi mdi-arrow-left"></i> Назад кон вести
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_Layout.cshtml";
+    var heroBannerImage = Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("heroBannerImage");
+    var heroBannerHeading = Model.Value<string>("heroBannerHeading") ?? "Новости / Соопштенија";
+    var newsPerPage = Model.Value<int>("newsPerPage");
+    if (newsPerPage <= 0) newsPerPage = 9;
+
+    int.TryParse(Context.Request.Query["page"].FirstOrDefault(), out var page);
+    if (page < 1) page = 1;
+
+    var allNews = Model.Children()
+        .Where(c => c.ContentType.Alias == "newsDetailPage")
+        .OrderByDescending(c => c.Value<DateTime>("publishDate"))
+        .ToList();
+
+    var totalPages = (int)Math.Ceiling(allNews.Count / (double)newsPerPage);
+    var pagedNews = allNews.Skip((page - 1) * newsPerPage).Take(newsPerPage).ToList();
+}
+
+@if (heroBannerImage != null)
+{
+    <div class="row mb-0">
+        <div class="col position-relative">
+            <img src="@heroBannerImage.MediaUrl()" class="w-100" alt="@heroBannerHeading" style="max-height:250px;object-fit:cover;">
+            <div class="carousel-caption carousel-caption-left2">
+                <h3>@heroBannerHeading</h3>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container-fluid py-3">
+    @await Html.PartialAsync("_Breadcrumb")
+
+    <div class="row">
+        <div class="col-md-8 col-xl-9">
+            <!-- News Card Grid -->
+            <div class="row news-cards">
+                @foreach (var item in pagedNews)
+                {
+                    var thumb = item.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("thumbnailImage");
+                    var pubDate = item.Value<DateTime>("publishDate");
+                    var summary = item.Value<string>("summary");
+                    <div class="col-sm-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            @if (thumb != null)
+                            {
+                                <a href="@item.Url()">
+                                    <img src="@thumb.MediaUrl()" class="card-img-top" alt="@item.Name" style="height:150px;object-fit:cover;">
+                                </a>
+                            }
+                            <div class="card-body">
+                                <h5 class="card-title"><a href="@item.Url()">@item.Name</a></h5>
+                                @if (!string.IsNullOrEmpty(summary))
+                                {
+                                    <p class="card-text small">@(summary.Length > 120 ? summary.Substring(0, 120) + "..." : summary)</p>
+                                }
+                                <small class="text-muted">@pubDate.ToString("dd.MM.yyyy")</small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (totalPages > 1)
+            {
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        @for (int p = 1; p <= totalPages; p++)
+                        {
+                            <li class="page-item @(p == page ? "active" : "")">
+                                <a class="page-link" href="?page=@p">@p</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        </div>
+
+        @await Html.PartialAsync("_Sidebar")
+    </div>
+</div>

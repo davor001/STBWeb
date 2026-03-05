@@ -1,0 +1,1043 @@
+﻿<div id="divExchangeRate" class="mt-5">
+<div class="row mb-5">
+<div class="col-md-12 col-lg-10 col-xl-8">    
+
+<div class="form-horizontal" id="calc1" style="display: block;">
+
+
+                                                <div class="form-group row mb-1" id="divValutaCalc1">
+                                                    <label for="currencyCalc1" class="col-4 col-form-label">Валута:</label>
+                                                    <div class="col-8">
+                                                        <select name="currencyCalc1" id="currencyCalc1" onchange="currency_change()" class="form-control">
+                                                            <option value="1" selected="selected">
+                                                                МКД</option>
+                                                            <option value="2">
+                                                                ЕУР</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1" id="divGodiniCalc1">
+                                                    <label for="yearsCalc1" class="col-4 col-form-label">Рок на отплата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <select name="yearsCalc1" id="yearsCalc1" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                <option value="0.5" selected="selected">0.5 (6 месеци)</option>
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                                <option value="6">6</option>
+                                                                <option value="7">7</option>
+                                                                <option value="8">8</option>
+                                                                <option value="9">9</option>
+                                                                <option value="10">10</option>
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanGodiniCalc1"> години</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="form-group row mb-1" id="divKreditIznosCalc1">
+                                                    <label for="loanCalc1" class="col-4 col-form-label">Износ на кредитот:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="loanCalc1" class=" form-control" type="number" id="loanCalc1" size="15" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari"> денари</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1" id="divGodisnaKamatnaStapkaCalc1">
+                                                    <label for="KSCalc1" class="col-4 col-form-label">Годишна каматна стапка:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="KSCalc1" class="form-control" type="number" id="KSCalc1" size="15"  />
+
+                                                        </div>
+                                                        <span class="txt-danger" id="spanKamatnaStapkaPredupreduvanjeCalc1">Каматна стапка се внесува само со броеви и точка!</span>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1" id="divGodisnaKamatnaStapkaCalc1_1">
+                                                    
+                                                    <div class="offset-4 col">
+                                                        <button type="button" id="RESETCalc1" name="RESETCalc1" onclick="reset_inputText()" class="btn btn-primary d-none">Избриши ги вредностите</button> 
+                                                        <button type="button" id="BUTTONCalc1" onclick="compute_amountCalc1()" name="BUTTONCalc1" class="btn btn-info">ПРЕСМЕТАЈ</button>   
+                                                        <div id="errordivCalc1" class="text-danger">
+                                                            &nbsp;
+                                                        </div>
+   <div id="errordiv1Calc1" class="text-danger">
+                                                            &nbsp;
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1" id="divMesecnaRataCalc1">
+                                                    <label for="amountCalc1" class="col-4 col-form-label">Месечна рата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="amountCalc1" readonly type="text" id="amountCalc1" class="form-control" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari2"> денари</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>  
+                                            </div><div class="form-horizontal" id="calc2" style="display: none;">
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="currencyCalc2" class="col-4 col-form-label" id="divValutaCalc2">Валута:</label>
+                                                    <div class="col-8">
+                                                        <select name="currencyCalc2" id="currencyCalc2" onchange="allowGrejsCalc2(); currency_change()" class="form-control">
+                                                            <option value="1" selected="selected">
+                                                                МКД</option>
+                                                            <option value="2">
+                                                                ЕУР</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="yearsCalc2" class="col-4 col-form-label" id="divRokOtplataCalc2">Рок на отплата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divGodini2">
+                                                            <select name="yearsCalc2" id="yearsCalc2" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                <option value="3" selected="selected">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                                <option value="6">6</option>
+                                                                <option value="7">7</option>
+                                                                <option value="8">8</option>
+                                                                <option value="9">9</option>
+                                                                <option value="10">10</option>
+                                                                <option value="11">11</option>
+                                                                <option value="12">12</option>
+                                                                <option value="13">13</option>
+                                                                <option value="14">14</option>
+                                                                <option value="15">15</option>
+                                                                <option value="16">16</option>
+                                                                <option value="17">17</option>
+                                                                <option value="18">18</option>
+                                                                <option value="19">19</option>
+                                                                <option value="20">20</option>
+
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanGodini2"> години</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="loanCalc2" class="col-4 col-form-label" id="divKreditIznosCalc2">Износ на кредитот:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="loanCalc2" class=" form-control" type="number" id="loanCalc2" size="15" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari7"> &#8364;</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1" id="divGodisnaKamatnaStapkaCalc2">
+                                                    <label for="KSCalc2" class="col-4 col-form-label">Годишна каматна стапка:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divKamatnaStapkaPredupreduvanjeCalc2">
+                                                            <input name="KSCalc2" class="form-control" type="number" id="KSCalc2" size="15"  />
+
+                                                        </div>
+                                                        <span class="txt-danger" id="spanKamatnaStapkaPredupreduvanjeCalc2">Каматна стапка се внесува само со броеви и точка!</span>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1" id="divGodisnaKamatnaStapkaCalc1_5">
+                                                    
+                                                    <div class="offset-4 col">
+                                                        <button type="button" id="RESETCalc2" name="RESETCalc2" onclick="reset_inputText()" class="btn btn-primary d-none">Избриши ги вредностите</button> 
+                                                        <button type="button" id="BUTTONCalc2" onclick="compute_amountCalc2()" name="BUTTONCalc2" class="btn btn-info">ПРЕСМЕТАЈ</button>   
+                                                        <div id="errordivCalc2" class="errordiv text-danger">
+                                                            &nbsp;
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="amountCalc2" class="col-4 col-form-label" id="divMesecnaRataCalc2">Месечна рата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="amountCalc2" readonly type="text" id="amountCalc2" class="form-control" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari8"> &#8364;</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mb-1">
+                                                    <div class="col">
+                                                        <p id="pZabeleskaCalc2">
+                                                            Забелешка: Денарска валута - отплата се врши во денари
+                                                            Девизна валута - отплатата е во денарска противвредност на EUR по среден курс на НБРМ на денот на плаќањето  
+                                                        </p>
+
+                                                    </div>
+                                                </div> 
+                                            </div><div class="form-horizontal" id="calc3" style="display: none;">
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="currencyCalc3" class="col-4 col-form-label" id="divValutaCalc3">Валута:</label>
+                                                    <div class="col-8">
+                                                        <select name="currencyCalc3" id="currencyCalc3" onchange="currency_change()" class="form-control">
+                                                            <option value="1" selected="selected">  МКД</option>
+                                                            <option value="2">ЕУР</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="yearsCalc3" class="col-4 col-form-label" id="divRokOtplataCalc3">Рок на отплата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divMeseci">
+                                                            <select name="yearsCalc3" id="yearsCalc3" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                <option value="6" selected="selected">6</option>
+                                                                <option value="7">7</option>
+                                                                <option value="8">8</option>
+                                                                <option value="9">9</option>
+                                                                <option value="10">10</option>
+                                                                <option value="11">11</option>
+                                                                <option value="12">12</option>
+                                                                <option value="13">13</option>
+                                                                <option value="14">14</option>
+                                                                <option value="15">15</option>
+                                                                <option value="16">16</option>
+                                                                <option value="17">17</option>
+                                                                <option value="18">18</option>
+                                                                <option value="19">19</option>
+                                                                <option value="20">20</option>
+                                                                <option value="21">21</option>
+                                                                <option value="22">22</option>
+                                                                <option value="23">23</option>
+                                                                <option value="24">24</option>
+                                                                <option value="25">25</option>
+                                                                <option value="26">26</option>
+                                                                <option value="27">27</option>
+                                                                <option value="28">28</option>
+                                                                <option value="29">29</option>
+                                                                <option value="30">30</option>
+                                                                <option value="31">31</option>
+                                                                <option value="32">32</option>
+                                                                <option value="33">33</option>
+                                                                <option value="34">34</option>
+                                                                <option value="35">35</option>
+                                                                <option value="36">36</option>
+                                                                <option value="37">37</option>
+                                                                <option value="38">38</option>
+                                                                <option value="39">39</option>
+                                                                <option value="40">40</option>
+                                                                <option value="41">41</option>
+                                                                <option value="42">42</option>
+                                                                <option value="43">43</option>
+                                                                <option value="44">44</option>
+                                                                <option value="45">45</option>
+                                                                <option value="46">46</option>
+                                                                <option value="47">47</option>
+                                                                <option value="48">48</option>
+                                                                <option value="49">49</option>
+                                                                <option value="50">50</option>
+                                                                <option value="51">51</option>
+                                                                <option value="52">52</option>
+                                                                <option value="53">53</option>
+                                                                <option value="54">54</option>
+                                                                <option value="55">55</option>
+                                                                <option value="56">56</option>
+                                                                <option value="57">57</option>
+                                                                <option value="58">58</option>
+                                                                <option value="59">59</option>
+                                                                <option value="60">60</option>
+                                                                <option value="61">61</option>
+                                                                <option value="62">62</option>
+                                                                <option value="63">63</option>
+                                                                <option value="64">64</option>
+                                                                <option value="65">65</option>
+                                                                <option value="66">66</option>
+                                                                <option value="67">67</option>
+                                                                <option value="68">68</option>
+                                                                <option value="69">69</option>
+                                                                <option value="70">70</option>
+                                                                <option value="71">71</option>
+                                                                <option value="72">72</option>
+
+
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanMeseci"> месеци</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="loanCalc3" class="col-4 col-form-label" id="divKreditIznosCalc3">Износ на кредитот:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divDenari4_2">
+                                                            <input name="loanCalc3" class="form-control" type="text" id="loanCalc3" size="15" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari4"> денари</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1" id="divGodisnaKamatnaStapkaCalc3">
+                                                    <label for="KSCalc3" class="col-4 col-form-label">Годишна каматна стапка:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divKamatnaStapkaPredupreduvanjeCalc3">
+                                                            <input name="KSCalc3" class="form-control" type="number" id="KSCalc3" size="15"  />
+
+                                                        </div>
+                                                        <span class="txt-danger" id="spanKamatnaStapkaPredupreduvanjeCalc3">Каматна стапка се внесува само со броеви и точка!</span>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1" id="divGodisnaKamatnaStapkaCalc1_2">
+                                                    
+                                                    <div class="offset-4 col">
+                                                        <button type="button" id="RESETCalc3" name="RESETCalc3" onclick="reset_inputText()" class="btn btn-primary d-none">Избриши ги вредностите</button> 
+                                                        <button type="button" id="BUTTONCalc3" onclick="compute_amountCalc3()" name="BUTTONCalc3" class="btn btn-info">ПРЕСМЕТАЈ</button>   
+                                                        <div id="errordivCalc3" class="errordiv text-danger">
+                                                            &nbsp;
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="amountCalc3" class="col-4 col-form-label" id="divMesecnaRataCalc3">Месечна рата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divDenari5">
+                                                            <input name="amountCalc3" readonly type="text" id="amountCalc3" class="form-control" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari5"> денари</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div><div class="form-horizontal" id="calc4" style="display: none;">
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="currencyCalc4" class="col-4 col-form-label" id="divValutaCalc4">Валута:</label>
+                                                    <div class="col-8">
+                                                        <select name="currencyCalc4" id="currencyCalc4" onchange="allowGrejsCalc4(); currency_change()" class="form-control">
+                                                            <option value="1" selected="selected">  МКД</option>
+                                                            <option value="2">ЕУР</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="yearsCalc4" class="col-4 col-form-label" id="divRokOtplataCalc4">Рок на отплата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divGodiniCalc4">
+                                                            <select name="yearsCalc4" id="yearsCalc4" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                <option value="5" selected="selected">5</option>
+                                                                <option value="6">6</option>
+                                                                <option value="7">7</option>
+                                                                <option value="8">8</option>
+                                                                <option value="9">9</option>
+                                                                <option value="10">10</option>
+                                                                <option value="11">11</option>
+                                                                <option value="12">12</option>
+                                                                <option value="13">13</option>
+                                                                <option value="14">14</option>
+                                                                <option value="15">15</option>
+                                                                <option value="16">16</option>
+                                                                <option value="17">17</option>
+                                                                <option value="18">18</option>
+                                                                <option value="19">19</option>
+                                                                <option value="20">20</option>
+                                                                <option value="21">21</option>
+                                                                <option value="22">22</option>
+                                                                <option value="23">23</option>
+                                                                <option value="24">24</option>
+                                                                <option value="25">25</option>
+                                                                <option value="26">26</option>
+                                                                <option value="27">27</option>
+                                                                <option value="28">28</option>
+                                                                <option value="29">29</option>
+                                                                <option value="30">30</option>
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanGodiniCalc4"> години</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="loanCalc4" class="col-4 col-form-label" id="divKreditVrednostCalc4">Вредноста на кредитот:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divDenari4_loanCalc4">
+                                                            <input name="loanCalc4" class="form-control" type="text" id="loanCalc4" size="15" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari10"> &#8364;</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1" id="divGodisnaKamatnaStapkaCalc4">
+                                                    <label for="KSCalc4" class="col-4 col-form-label">Годишна каматна стапка:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divKamatnaStapkaPredupreduvanjeCalc4">
+                                                            <input name="KSCalc4" class="form-control" type="number" id="KSCalc4" size="15"  />
+
+                                                        </div>
+                                                        <span class="txt-danger" id="spanKamatnaStapkaPredupreduvanjeCalc4">Каматна стапка се внесува само со броеви и точка!</span>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1" >
+                                                    
+                                                    <div class="offset-4 col">
+                                                        <button type="button" id="RESETCalc4" name="RESETCalc4" onclick="reset_inputText()" class="btn btn-primary d-none">Избриши ги вредностите</button> 
+                                                        <button type="button" id="BUTTONCalc4" onclick="compute_amountCalc4()" name="BUTTONCalc4" class="btn btn-info">ПРЕСМЕТАЈ</button>   
+                                                        <div id="errordivCalc4" class="errordiv text-danger">
+                                                            &nbsp;
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="amountCalc4" class="col-4 col-form-label" id="divMesecnaRataCalc4">Месечна рата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divDenari5_1">
+                                                            <input name="amountCalc4" readonly type="text" id="amountCalc4" class="form-control" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari11"> &#8364;</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div><div class="form-horizontal" id="calc5" style="display: none;">
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="currencyCalc5" class="col-4 col-form-label" id="divValutaCalc5">Валута:</label>
+                                                    <div class="col-8">
+                                                        <select name="currencyCalc5" id="currencyCalc5" onchange="currency_change()" class="form-control">
+                                                            <option value="1" selected="selected">  МКД</option>
+                                                            <option value="2">ЕУР</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="CarAmountCalc5" class="col-4 col-form-label" id="divVrednostVozilo">Вредност на возилото:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="CarAmountCalc5" class="form-control" type="number" id="CarAmountCalc5" size="15" onchange="promeniLoanCalc5()" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari13"> &#8364;</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="UcestvoCalc5" class="col-4 col-form-label" id="divUcestvo">Учество:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="UcestvoCalc5" class="form-control" type="number" id="UcestvoCalc5" size="15" onchange="promeniLoanCalc5()" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari14"> &#8364;</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="yearsCalc5" class="col-4 col-form-label" id="divRokOtplataCalc5">Рок на отплата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divGodiniCalc5">
+                                                            <select name="yearsCalc5" id="yearsCalc5" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                <option value="1" selected="selected">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                                <option value="6">6</option>
+                                                                <option value="7">7</option>
+
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanGodiniCalc5"> години</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="loanCalc5" class="col-4 col-form-label" id="divBaranKredit">Баран кредит:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divDenari4_1">
+                                                            <input name="loanCalc5" class="form-control" type="text" id="loanCalc5" size="15" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari19"> &#8364;</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1" id="divGodisnaKamatnaStapkaCalc5">
+                                                    <label for="KSCalc5" class="col-4 col-form-label">Годишна каматна стапка:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divKamatnaStapkaPredupreduvanjeCalc5">
+                                                            <input name="KSCalc5" class="form-control" type="number" id="KSCalc5" size="15"  />
+
+                                                        </div>
+                                                        <span class="txt-danger" id="spanKamatnaStapkaPredupreduvanjeCalc5">Каматна стапка се внесува само со броеви и точка!</span>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1" >
+                                                    
+                                                    <div class="offset-4 col">
+                                                        <button type="button" id="RESETCalc5" name="RESETCalc5" onclick="reset_inputText()" class="btn btn-primary d-none">Избриши ги вредностите</button> 
+                                                        <button type="button" id="BUTTONCalc5" onclick="compute_amountCalc4()" name="BUTTONCalc5" class="btn btn-info">ПРЕСМЕТАЈ</button>   
+                                                        <div id="errordivCalc5" class="errordiv text-danger">
+                                                            &nbsp;
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="amountCalc5" class="col-4 col-form-label" id="divMesecnaRataCalc5">Месечна рата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divDenari5_3">
+                                                            <input name="amountCalc5" readonly type="text" id="amountCalc5" class="form-control" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari15"> &#8364;</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div><div class="form-horizontal" id="calc6" style="display: none;">
+
+
+                                                <div class="form-group row mb-1" style="display: none;">
+                                                    <label for="VidDepozitCalc6" class="col-4 col-form-label" id="divVidDepozit">Вид на депозит:</label>
+                                                    <div class="col-8">
+                                                        <select name="VidDepozitCalc6" id="VidDepozitCalc6" onchange="promeniVid();" class="form-control">
+                                                            <option value="1">Премиум</option>
+                                                            <option value="2">Евро Бонус</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="periodCalc6" class="col-4 col-form-label" id="divPeriodNaOrocuvanje">Период на орочување:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <select name="periodCalc6" id="periodCalc6" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanMeseciCalc6"> месеци</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1" id="nacinIsplataRed" style="display: none">
+                                                    <label for="nacinIsplataCalc6" class="col-4 col-form-label" id="divNacinIsplataCalc6">Начин на исплата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <select name="nacinIsplataCalc6" id="nacinIsplataCalc6" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                <option value="1" selected="selected">Декурзивно</option>
+                                                                <option value="2">Антиципативно</option>
+                                                            </select>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="iznosCalc6" class="col-4 col-form-label" id="divIznosDepozit">Износ на депозитот:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="iznosCalc6" class="form-control" type="text" id="iznosCalc6" size="15" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="valutaCalc6"></span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1" >
+                                                    
+                                                    <div class="offset-4 col">
+                                                        <button type="button" id="RESETCalc6" name="RESETCalc6" onclick="reset_inputText()" class="btn btn-primary d-none">Избриши ги вредностите</button> 
+                                                        <button type="button" id="BUTTONCalc6" onclick="compute_amountCalc6()" name="BUTTONCalc6" class="btn btn-info">ПРЕСМЕТАЈ</button>   
+                                                        <div id="errordivCalc6" class="errordiv text-danger">
+                                                            &nbsp;
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="kamataCalc6" class="col-4 col-form-label" id="divKamataCalc6">Камата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="kamataCalc6" readonly type="text" id="kamataCalc6" class="form-control" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari11_1"> МКД</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <div class="col">
+                                                        <p id="pZabeleskaCalc6"> Забелешка: Износот на каматата е апроксимативен. Се смета дека секој месец има 30 дена.</p>
+
+                                                    </div>
+                                                </div>
+                                            </div><div class="form-horizontal" id="calc21" style="display: none;">
+
+
+                                                <div class="form-group row mb-1" style="display: none;">
+                                                    <label for="VidDepozitCalc21" class="col-4 col-form-label" id="divVidDepozit">Вид на депозит:</label>
+                                                    <div class="col-8">
+                                                        <select name="VidDepozitCalc21" id="VidDepozitCalc21" onchange="promeniVid();" class="form-control">
+                                                            <option value="1">Премиум</option>
+                                                            <option value="2">Евро Бонус</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="periodCalc21" class="col-4 col-form-label" id="divPeriodNaOrocuvanje21">Период на орочување:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <select name="periodCalc21" id="periodCalc21" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanMeseciCalc21"> месеци</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1" id="nacinIsplataRed21" style="display: none">
+                                                    <label for="nacinIsplataRed21" class="col-4 col-form-label" id="divnacinIsplataRed21">Начин на исплата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <select name="nacinIsplataCalc21" id="nacinIsplataCalc21" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                <option value="1" selected="selected">Декурзивно</option>
+                                                                <option value="2">Антиципативно</option>
+                                                            </select>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="iznosCalc21" class="col-4 col-form-label" id="divIznosDepozit">Износ на депозитот:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="iznosCalc21" class="form-control" type="text" id="iznosCalc21" size="15" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="valutaCalc21"></span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1" >
+                                                    
+                                                    <div class="offset-4 col">
+                                                        <button type="button" id="RESETCalc21" name="RESETCalc21" onclick="reset_inputText()" class="btn btn-primary d-none">Избриши ги вредностите</button> 
+                                                        <button type="button" id="BUTTONCalc21" onclick="compute_amountCalc21()" name="BUTTONCalc21" class="btn btn-info">ПРЕСМЕТАЈ</button>   
+                                                        <div id="errordivCalc21" class="errordiv text-danger">
+                                                            &nbsp;
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="kamataCalc21" class="col-4 col-form-label" id="divkamataCalc21">Камата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="kamataCalc21" readonly type="text" id="kamataCalc21" class="form-control" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari11_1"> &#8364;</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <div class="col">
+                                                        <p id="pZabeleskaCalc21"> Забелешка: Износот на каматата е апроксимативен. Се смета дека секој месец има 30 дена.</p>
+
+                                                    </div>
+                                                </div>
+                                            </div><div class="form-horizontal" id="calc7" style="display: none;">
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="currencyCalc7" class="col-4 col-form-label" id="divValutaCalc7">Валута:</label>
+                                                    <div class="col-8">
+                                                        <select name="currencyCalc7" id="currencyCalc7" onchange="currency_change()" class="form-control">
+                                                            <option value="1" selected="selected">  МКД</option>
+                                                            <option value="2">ЕУР</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="loanCalc7" class="col-4 col-form-label" id="divKreditIznosCalc7">Износ на кредитот:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="loanCalc7" class="form-control" type="text" id="loanCalc7" size="15" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari17"> &#8364;</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="monthsCalc7" class="col-4 col-form-label" id="divRokOtplataCalc7">Рок на отплата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divGodiniCalc4_2">
+                                                            <select name="monthsCalc7" id="monthsCalc7" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanMeseciCalc7"> месеци</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+
+                                                
+
+                                                <div class="form-group row mb-1" id="divGodisnaKamatnaStapkaCalc7">
+                                                    <label for="KSCalc7" class="col-4 col-form-label">Годишна каматна стапка:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group" id="divKamatnaStapkaPredupreduvanjeCalc7">
+                                                            <input name="KSCalc7" class="form-control" type="number" id="KSCalc7" size="15"  />
+
+                                                        </div>
+                                                        <span class="txt-danger" id="spanKamatnaStapkaPredupreduvanjeCalc7">Каматна стапка се внесува само со броеви и точка!</span>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1" >
+                                                    
+                                                    <div class="offset-4 col">
+                                                        <button type="button" id="RESETCalc7" name="RESETCalc7" onclick="reset_inputText()" class="btn btn-primary d-none">Избриши ги вредностите</button> 
+                                                        <button type="button" id="BUTTONCalc7" onclick="compute_amountCalc7()" name="BUTTONCalc7" class="btn btn-info">ПРЕСМЕТАЈ</button>   
+                                                        <div id="errordivCalc7" class="errordiv text-danger">
+                                                            &nbsp;
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="amountCalc7" class="col-4 col-form-label" id="divMesecnaRataCalc7">Месечна рата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="amountCalc7" readonly type="text" id="amountCalc7" class="form-control" />
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">
+                                                                    <span id="spanDenari18"> &#8364;</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <div class="col">
+                                                        <p id="pZabeleskaCalc7"> Забелешка:<br>
+                                                            Денарска валута отплата се врши во денари<br>
+                                                            Девизна валута отплатата е во денарска противвредност на EUR на денот на плаќањето
+                                                        </p>
+
+                                                    </div>
+                                                </div>
+                                            </div><div class="form-horizontal" id="calc8" style="display: none;">
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="ValutaCalc8" class="col-4 col-form-label" id="divValutaCalc8">Валута:</label>
+                                                    <div class="col-8">
+                                                        <select name="ValutaCalc8" id="ValutaCalc8" class="form-control">
+                                                            <option value="1">МКД</option>
+                                                            <option value="2" selected="">ЕУР</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="nacinIsplataCalc8" class="col-4 col-form-label" id="divKapitalizacijaCalc8">Капитализација:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <select name="nacinIsplataCalc8" id="nacinIsplataCalc8" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                <option value="1" selected="selected">Да</option>
+                                                                <option value="2">Не</option>
+                                                            </select>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="iznosCalc8" class="col-4 col-form-label" id="divIznosDepozitCalc8">Износ на депозитот:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="iznosCalc8" class="form-control" type="text" id="iznosCalc8" size="15" />
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1" >
+                                                    
+                                                    <div class="offset-4 col">
+                                                        <button type="button" id="RESETCalc8" name="RESETCalc8" onclick="reset_inputText()" class="btn btn-primary d-none">Избриши ги вредностите</button> 
+                                                        <button type="button" id="BUTTONCalc8" onclick="compute_amountCalc8()" name="BUTTONCalc8" class="btn btn-info">ПРЕСМЕТАЈ</button>   
+                                                        <div id="errordivCalc8" class="errordiv text-danger">
+                                                            &nbsp;
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="kamataCalc8" class="col-4 col-form-label" id="divVkupnaKamata">Вкупна камата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="kamataCalc8" readonly type="text" id="kamataCalc8" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <div class="col">
+                                                        <p id="pZabeleskaCalc8"> Забелешка: Износот на вкупната камата се однесува на година со 360 дена, а месеците
+                                                            се земени со 30 дена. Од таа причина, износот на вкупната камата во калкулаторот
+                                                            е помал за околу 0,15% од износот кој реално би се пресметал на клиентот со примена
+                                                            на точниот број на календарски денови во месецот/годината.
+                                                        </p>
+
+                                                    </div>
+                                                </div>
+                                            </div><div class="form-horizontal" id="calc9" style="display: none;">
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="ValutaCalc9" class="col-4 col-form-label" id="divValutaCalc9">Валута:</label>
+                                                    <div class="col-8">
+                                                        <select name="ValutaCalc9" id="ValutaCalc9" class="form-control">
+                                                            <option value="1">МКД</option>
+                                                            <option value="2" selected="">ЕУР</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="nacinIsplataCalc9" class="col-4 col-form-label" id="divKapitalizacijaCalc9">Капитализација:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <select name="nacinIsplataCalc9" id="nacinIsplataCalc9" class="form-control" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                                <option value="1" selected="selected">Да</option>
+                                                                <option value="2">Не</option>
+                                                            </select>
+                                                        </div>                                                     
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="iznosCalc9" class="col-4 col-form-label" id="divIznosDepozitCalc9">Износ на депозитот:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="iznosCalc9" class="form-control" type="text" id="iznosCalc9" size="15" />
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mb-1" >
+                                                    
+                                                    <div class="offset-4 col">
+                                                        <button type="button" id="RESETCalc9" name="RESETCalc9" onclick="reset_inputText()" class="btn btn-primary d-none">Избриши ги вредностите</button> 
+                                                        <button type="button" id="BUTTONCalc9" onclick="compute_amountCalc9()" name="BUTTONCalc9" class="btn btn-info">ПРЕСМЕТАЈ</button>   
+                                                        <div id="errordivCalc9" class="errordiv text-danger">
+                                                            &nbsp;
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <label for="kamataCalc9" class="col-4 col-form-label" id="divVkupnaKamataCalc9">Вкупна камата:</label>
+                                                    <div class="col-8">
+                                                        <div class="input-group">
+                                                            <input name="kamataCalc9" readonly type="text" id="kamataCalc9" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row mb-1">
+                                                    <div class="col">
+                                                        <p id="pZabeleskaCalc9"> Забелешка: Износот на вкупната камата се однесува на година со 360 дена, а месеците
+                                                            се земени со 30 дена. Од таа причина, износот на вкупната камата во калкулаторот
+                                                            е помал за околу 0,15% од износот кој реално би се пресметал на клиентот со примена
+                                                            на точниот број на календарски денови во месецот/годината.
+
+                                                        </p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+<br />
+</div>
+</div>
+</div>

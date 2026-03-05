@@ -1,0 +1,16 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@{
+    var content = Model.Content;
+    var label = content.Value<string>("docLabel");
+    var file = content.Value<MediaWithCrops>("docFile");
+}
+@if (file != null)
+{
+    <li class="mb-2">
+        <a href="@file.MediaUrl()" target="_blank">
+            <i class="mdi mdi-file-pdf-outline text-danger"></i> @(label ?? file.Content.Name)
+        </a>
+    </li>
+}

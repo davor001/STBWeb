@@ -1,0 +1,117 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Web.Common.Views
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_AppFormLayout";
+    
+    // Fallbacks for properties that might not exist yet on the document type
+    var pageHeading = Model.Value<string>("pageHeading") ?? Model.Name;
+    var showCalculators = Model.Value<bool>("showCalculators"); // e.g. amount and term sliders
+}
+
+@section Head {
+    <style>
+        .app-form-wrapper {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+        .form-heading {
+            color: #EC008C; /* Brand color */
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+    </style>
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="app-form-wrapper">
+                <h2 class="form-heading">@pageHeading</h2>
+                <p class="text-muted mb-4">Пополнете ги Вашите податоци за да аплицирате.</p>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+
+                <!-- using native ASP.NET Core forms mapped to Umbraco SurfaceController -->
+                @using (Html.BeginUmbracoForm<STBWeb.Controllers.AppFormSurfaceController>(nameof(STBWeb.Controllers.AppFormSurfaceController.Submit)))
+                {
+                    <div class="row g-4">
+                        <!-- Personal Info Section -->
+                        <div class="col-12">
+                            <h4 class="h5 mb-3 stb-text-blue pb-2 border-bottom">Лични податоци</h4>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="firstName" class="form-label">Име <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" required placeholder="Внесете име">
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="lastName" class="form-label">Презиме <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" required placeholder="Внесете презиме">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Телефон за контакт <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required placeholder="07X XXX XXX">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Е-маил адреса</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="example@email.com">
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-primary w-100 py-2">Поднеси Апликација <i class="mdi mdi-send ms-1"></i></button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simple logic to sync range sliders with displays if they exist
+            const amountRange = document.getElementById('amountRange');
+            const amountDisplay = document.getElementById('amountDisplay');
+            if(amountRange && amountDisplay) {
+                amountRange.addEventListener('input', function() {
+                    amountDisplay.textContent = this.value;
+                });
+            }
+
+            const termRange = document.getElementById('termRange');
+            const termDisplay = document.getElementById('termDisplay');
+            if(termRange && termDisplay) {
+                termRange.addEventListener('input', function() {
+                    termDisplay.textContent = this.value;
+                });
+            }
+
+            // Client-side validation visual feedback
+            const form = document.getElementById('genericApplicationForm');
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    // Prevent actual submission for the template placeholder
+                    event.preventDefault();
+                    alert("Ова е демо шаблон. Апликацијата е успешно валидирана!");
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    </script>
+}

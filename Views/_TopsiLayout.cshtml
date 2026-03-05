@@ -1,0 +1,90 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var pageTitle = Model?.Value<string>("seoTitle") ?? Model?.Name ?? "TOPSI";
+}
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VNYDDYL1MY"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-VNYDDYL1MY');</script>
+
+    <meta charset="utf-8" />
+    <title>@pageTitle - TOPSI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/2152/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/2151/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/media/2150/favicon-16x16.png">
+
+    <link href="/css/topsi.css?v=0.1.5" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body data-layout="topnav">
+    <div class="wrapper_">
+        <div class="content-page">
+            <div class="content" id="master_page_content">
+
+                <!-- TOPSI Navbar -->
+                <div class="topnav" id="navbar">
+                    <div class="container-fluid">
+                        <nav class="navbar navbar-light navbar-expand-lg topnav-menu w-100">
+                            <a class="navbar-brand" href="/topsi">
+                                <span class="topnav-logo-lg">
+                                    <img src="/media/2137/logo_transparent.png" alt="TOPSI" class="img-fluid">
+                                </span>
+                            </a>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="topnav-menu-content">
+                                <ul class="navbar-nav w-100">
+                                    <li><a class="nav-link" href="/topsi/shto-e-topsi/">Што е топси</a></li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle arrow-none" href="javascript:void(0);"
+                                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Производи <div class="arrow-down d-lg-none"></div>
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <a href="/topsi/proizvodi/studiram/" class="dropdown-item">Студирам</a>
+                                            <a href="/topsi/proizvodi/rabotam/" class="dropdown-item">Работам</a>
+                                            <a href="/topsi/proizvodi/site-proizvodi/" class="dropdown-item">Сите производи</a>
+                                        </div>
+                                    </li>
+                                    <li><a class="nav-link" href="/topsi/npp/">НПП</a></li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+
+                @RenderBody()
+
+                <!-- TOPSI Footer -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 text-center">
+                                <img src="/media/2279/stb_logo_bottom_mk.png" class="img-fluid d-inline-block" alt="STB">
+                            </div>
+                            <div class="col-sm-12 col-md-6 text-center mt-2">
+                                <ul class="list-unstyled footer-social d-inline-block">
+                                    <li><a href="https://www.facebook.com/stopanskabankaSK/" target="_blank" class="nav-link" aria-label="Facebook"><i class="mdi mdi-facebook"></i></a></li>
+                                    <li><a href="https://twitter.com/ibankstoreSTB" target="_blank" class="nav-link" aria-label="Twitter"><i class="mdi mdi-twitter"></i></a></li>
+                                    <li><a href="https://www.instagram.com/stopanskabanka/" target="_blank" class="nav-link" aria-label="Instagram"><i class="mdi mdi-instagram"></i></a></li>
+                                    <li><a href="https://www.youtube.com/user/stopanskabankamk" target="_blank" class="nav-link" aria-label="YouTube"><i class="mdi mdi-youtube"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.0.0.min.js"></script>
+    <script src="/assets/js/app.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

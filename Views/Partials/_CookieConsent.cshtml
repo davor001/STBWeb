@@ -1,0 +1,56 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+<!-- GDPR Cookie Consent -->
+<div class="gdpr py-3" id="GdprModal" style="display:none;">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <p class="mb-0">
+                    Оваа веб-страница користи колачиња со цел да ви обезбеди подобро искуство при прелистувањето.
+                    Со продолжување на прелистувањето, се согласувате со нашата
+                    <a href="/za-bankata/politika-za-privatnost-i-postavuvanje-na-kolacinja/">Политика за приватност</a>.
+                </p>
+            </div>
+            <div class="col-md-4 text-md-right mt-2 mt-md-0">
+                <button type="button" class="btn btn-outline-primary ml-1 mb-1" id="settingsCookies">Поставки</button>
+                <button type="button" class="btn btn-primary ml-1 mb-1" id="allowCookies">Ги прифаќам сите колачиња</button>
+                <button type="button" class="btn btn-outline-danger ml-1 mb-1" id="rejectCookies">Не прифаќам колачиња</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cookie Settings Modal -->
+<div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="cookieSettingsLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cookieSettingsLabel">Поставки за колачиња</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Затвори">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Аналитички колачиња</label>
+                    <div>
+                        <input type="checkbox" id="analyticsCookies" data-switch="none"/>
+                        <label for="analyticsCookies" data-on-label="Да" data-off-label="Не"></label>
+                    </div>
+                    <small class="text-muted">Ни помагаат да разбереме како го користите сајтот.</small>
+                </div>
+                <div class="form-group">
+                    <label>Маркетинг колачиња</label>
+                    <div>
+                        <input type="checkbox" id="marketingCookies" data-switch="none"/>
+                        <label for="marketingCookies" data-on-label="Да" data-off-label="Не"></label>
+                    </div>
+                    <small class="text-muted">Се користат за персонализирани реклами.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="allowSettingsCookies">Промени подесувања</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Откажи</button>
+            </div>
+        </div>
+    </div>
+</div>

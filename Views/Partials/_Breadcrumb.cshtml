@@ -1,0 +1,23 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var ancestors = Model?.AncestorsOrSelf()?.Reverse().ToList();
+}
+@if (ancestors != null && ancestors.Count > 1)
+{
+    <nav aria-label="breadcrumb" class="d-print-none">
+        <ol class="breadcrumb">
+            @foreach (var ancestor in ancestors)
+            {
+                if (ancestor.Id == Model?.Id)
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@ancestor.Name</li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item"><a href="@ancestor.Url()">@ancestor.Name</a></li>
+                }
+            }
+        </ol>
+    </nav>
+}

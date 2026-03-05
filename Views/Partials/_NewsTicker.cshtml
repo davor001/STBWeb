@@ -1,0 +1,29 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    // Fetch latest 10 news articles from the content tree
+    var newsRoot = Umbraco.ContentAtRoot()
+        .SelectMany(r => r.DescendantsOrSelf())
+        .FirstOrDefault(c => c.ContentType.Alias == "newsListingPage");
+
+    var newsItems = newsRoot?.Children()
+        .Where(c => c.ContentType.Alias == "newsDetailPage")
+        .OrderByDescending(c => c.Value<DateTime>("publishDate"))
+        .Take(10)
+        .ToList();
+}
+@if (newsItems != null && newsItems.Any())
+{
+    <div class="row d-print-none">
+        <div class="col-12">
+            <div class="js-conveyor-example">
+                <ul class="conveyor-content">
+                    @foreach (var item in newsItems)
+                    {
+                        <li><a href="@item.Url()">@item.Name</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}

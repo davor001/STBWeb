@@ -1,0 +1,354 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_Layout.cshtml";
+    var heroBannerImage = Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("heroBannerImage");
+    var heroBannerHeading = Model.Value<string>("heroBannerHeading") ?? "СБ Локации";
+    var mapType = Model.Value<string>("mapType") ?? "branches";
+    var mapDefaultCenter = Model.Value<string>("mapDefaultCenter") ?? "41.9973,21.4280";
+    var centerParts = mapDefaultCenter.Split(',');
+    var centerLat = centerParts.Length > 0 ? centerParts[0].Trim() : "41.9973";
+    var centerLng = centerParts.Length > 1 ? centerParts[1].Trim() : "21.4280";
+    
+    // Default to atms or branches json
+    var dataUrl = mapType == "atms" ? "/data/atms.json" : "/data/branches.json";
+}
+
+@if (heroBannerImage != null)
+{
+<div class="row">
+    <div class="col">
+        <img class="w-100" src="@heroBannerImage.MediaUrl()" alt="@heroBannerHeading">
+        <div class="carousel-caption-left2 ">
+            <h3>СБ Локации</h3>
+            <hr>
+            <h4>@heroBannerHeading</h4>
+        </div>
+    </div>
+</div>
+}
+
+<div class="container-fluid content-product">
+    <div class="row pt-4">
+        <div class="col-12">
+            <ul class="nav nav-tabs nav-bordered mb-3">
+                <li class="nav-item">
+                    <a href="/sb-lokacii/mreza-na-filijali/" class="nav-link @(mapType == "branches" ? "active" : "")">
+                        <span>Мрежа на филијали</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/sb-lokacii/mreza-na-bankomati/" class="nav-link @(mapType == "atms" ? "active" : "")">
+                        <span>Мрежа на банкомати</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>    
+    <div class="row">
+        <div class="col-md-8 col-xl-9">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <a href="#" id="nearestLocationBtn" class="btn btn-sm btn-link float-right">Најблиску до тебе
+                                <i class="mdi mdi-map-marker"></i>
+                            </a>
+                            @if(mapType == "atms") {
+                            <a href="#" id="cashInBtn" class="btn btn-sm btn-link float-right">Cash In (уплата)</a>
+                            <a href="#" id="allAtmsBtn" class="btn btn-sm btn-link float-right d-none">Сите</a>
+                            }
+                            <h4 class="header-title mb-3">МАПА</h4>
+                            <div id="gmaps-markers" class="gmaps" style="height: 500px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mb-0">Градови</h4>
+                </div>
+                <!-- Dynamic Accordion -->
+                <ul class="list-group list-group-flush gmaps-list custom-accordion mb-3" id="accordion"></ul>
+                
+                <!-- Details Panel -->
+                <div id="poiDetails" class="card-body pt-0 d-none">
+                    <div class="gmaps-list">
+                        <a href="#" id="closeDetailsBtn" class="d-inline-block w-100">< Назад кон листа</a>
+                        <img id="poiImage" src="" class="img-fluid mt-1" />
+                        <h4 id="poiTitle" class="text-primary mt-3"></h4>
+                        <p><i class="mdi mdi-map-marker"></i> <span id="poiAddress"></span></p>
+                        <p id="poiCashIn" class="d-none"></p>
+                        <div id="poiContact" class="d-none"></div>
+                        <div id="poiWorking" class="d-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZ4pKxy4LcD_fCe4rhxJbP-MKFP6ocNQI"></script>
+    <script src="/assets/js/vendor/gmaps.min.js"></script>
+    <script>
+        var mapType = '@mapType';
+        var dataUrl = '@dataUrl';
+        var centerLat = @centerLat;
+        var centerLng = @centerLng;
+        var gMap = null;
+        var allLocations = [];
+        
+        var iconBase = {
+            url: '/media/1837/map_pin_transparent.png',
+            scaledSize: new google.maps.Size(50, 50)
+        };
+        var iconSelected = {
+            url: '/media/1836/map_pin.png',
+            scaledSize: new google.maps.Size(50, 50)
+        };
+
+        function getCityGroup(location) {
+            var cities = ['Скопје', 'Битола', 'Куманово', 'Прилеп', 'Тетово', 'Велес', 'Штип', 'Охрид', 'Гостивар', 'Струмица', 'Кичево', 'Кавадарци', 'Кочани', 'Струга', 'Радовиш', 'Гевгелија', 'Дебар', 'Крива Паланка', 'Свети Николе', 'Неготино', 'Делчево', 'Виница', 'Ресен', 'Пробиштип', 'Берово', 'Кратово', 'Крушево', 'Македонски Брод', 'Македонска Каменица', 'Богданци', 'Демир Хисар', 'Демир Капија', 'Пехчево', 'Валандово', 'Дојран', 'Злетово', 'Ново Село', 'Негорци', 'Росоман', 'Градско', 'Стар Дојран'];
+            
+            for (var c of cities) {
+                if (location.address && location.address.includes(c)) return c;
+                if (location.name && location.name.includes(c)) return c;
+            }
+            if (location.address && location.address.includes(',')) {
+                var parts = location.address.split(',');
+                var potentialCity = parts[parts.length-1].trim();
+                if(potentialCity.length > 2) return potentialCity;
+            }
+            return 'Останати';
+        }
+
+        function sortCities(a, b) {
+            return a.localeCompare(b, 'mk');
+        }
+
+        function renderAccordion(locations) {
+            var grouped = {};
+            locations.forEach(loc => {
+                var city = getCityGroup(loc);
+                if (!grouped[city]) grouped[city] = [];
+                grouped[city].push(loc);
+            });
+
+            var sortedCities = Object.keys(grouped).sort(sortCities);
+            var accordionHtml = '';
+            
+            sortedCities.forEach((city, index) => {
+                var cityLocs = grouped[city];
+                var collapseId = 'collapse-' + index;
+                
+                accordionHtml += '<li class="list-group-item">';
+                if (cityLocs.length === 1) {
+                    accordionHtml += '<a class="text-dark collapsed d-block custom-cursor" href="#" data-loc-id="' + cityLocs[0].id + '">' + city + '<span class="float-right"><i class="mdi mdi-chevron-down accordion-arrow"></i></span></a>';
+                } else {
+                    accordionHtml += '<a class="text-dark collapsed d-block" data-toggle="collapse" href="#' + collapseId + '" aria-expanded="false" aria-controls="' + collapseId + '">' + city + '<span class="float-right"><i class="mdi mdi-chevron-down accordion-arrow"></i></span></a>';
+                    accordionHtml += '<div id="' + collapseId + '" class="collapse" data-parent="#accordion">';
+                    cityLocs.forEach(loc => {
+                        accordionHtml += '<div class="location-item d-inline-block w-100">';
+                        accordionHtml += '  <a href="#" data-loc-id="' + loc.id + '" class="w-100">';
+                        accordionHtml += '    <i class="mdi mdi-map-marker"></i> <span class="subtitle d-inline-block">' + loc.name + '</span>';
+                        accordionHtml += '  </a>';
+                        if (loc.isCashIn) {
+                            accordionHtml += '  <span class="subtitle d-inline-block w-100">' + loc.isCashIn + '</span>';
+                        }
+                        accordionHtml += '</div>';
+                    });
+                    accordionHtml += '</div>';
+                }
+                accordionHtml += '</li>';
+            });
+            
+            document.getElementById('accordion').innerHTML = accordionHtml;
+
+            // Attach event listeners
+            document.querySelectorAll('a[data-loc-id]').forEach(function(el) {
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var locId = this.getAttribute('data-loc-id');
+                    openDetails(locId);
+                });
+            });
+        }
+
+        function initMap(locations) {
+            if(!gMap) {
+                gMap = new GMaps({
+                    div: '#gmaps-markers',
+                    lat: centerLat,
+                    lng: centerLng,
+                    zoom: 10
+                });
+            }
+
+            locations.forEach(loc => {
+                if(loc.lat && loc.lon) {
+                    gMap.addMarker({
+                        lat: parseFloat(loc.lat),
+                        lng: parseFloat(loc.lon),
+                        title: loc.name,
+                        icon: iconBase,
+                        details: loc,
+                        click: function(e) {
+                            openDetails(loc.id);
+                        }
+                    });
+                }
+            });
+        }
+        
+        function changeMarker(id) {
+            if(gMap && gMap.markers) {
+                gMap.markers.forEach(m => {
+                    if(m.details && m.details.id == id) {
+                        m.setIcon(iconSelected);
+                        gMap.setCenter(m.getPosition().lat(), m.getPosition().lng());
+                        gMap.setZoom(16);
+                    } else {
+                        m.setIcon(iconBase);
+                    }
+                });
+            }
+        }
+
+        function openDetails(id) {
+            var loc = allLocations.find(l => l.id == id);
+            if (!loc) return;
+            
+            document.getElementById('poiTitle').innerText = loc.name;
+            document.getElementById('poiAddress').innerText = loc.address;
+            
+            var imgEl = document.getElementById('poiImage');
+            if (loc.image && loc.image.trim() !== "" && !loc.image.endsWith('no_image.jpg')) {
+                imgEl.src = loc.image;
+                imgEl.classList.remove('d-none');
+            } else {
+                imgEl.classList.add('d-none');
+            }
+            
+            var cashInEl = document.getElementById('poiCashIn');
+            if (loc.isCashIn && loc.isCashIn.trim() !== '') {
+                cashInEl.innerHTML = '<span class="subtitle d-inline-block w-100">' + loc.isCashIn + '</span>';
+                cashInEl.classList.remove('d-none');
+            } else {
+                cashInEl.classList.add('d-none');
+            }
+
+            // Branches have additional fields
+            var contactEl = document.getElementById('poiContact');
+            var contactHtml = '';
+            if (loc.email && loc.email.trim() !== '') contactHtml += '<span class="w-100 d-inline-block"><i class="mdi mdi-email"></i><a href="mailto:' + loc.email + '"> ' + loc.email + '</a></span>';
+            if (loc.manager && loc.manager.trim() !== '') contactHtml += '<span class="w-100 d-inline-block"><i class="mdi mdi-account"></i> ' + loc.manager + '</span>';
+            if (loc.phone && loc.phone.trim() !== '') contactHtml += '<span class="w-100 d-inline-block"><i class="mdi mdi-phone"></i> ' + loc.phone + '</span>';
+            
+            if (contactHtml !== '') {
+                contactEl.innerHTML = contactHtml;
+                contactEl.classList.remove('d-none');
+            } else {
+                contactEl.classList.add('d-none');
+            }
+
+            var workingEl = document.getElementById('poiWorking');
+            var workingHtml = '';
+            if (loc.closed) {
+                workingHtml += '<span class="w-100 d-inline-block"><i class="mdi mdi-clock"></i><strong class="text-danger"> Затворено</strong></span>';
+            } else {
+                if (loc.working && loc.working.trim() !== '') workingHtml += '<span class="w-100 d-inline-block"><i class="mdi mdi-clock"></i><strong> пон-пет:</strong> ' + loc.working + '</span>';
+                if (loc.weekend && loc.weekend.trim() !== '') workingHtml += '<span class="w-100 d-inline-block"><i class="mdi mdi-clock"></i><strong> сабота:</strong> ' + loc.weekend + '</span>';
+            }
+
+            if (workingHtml !== '') {
+                workingEl.innerHTML = '<p>' + workingHtml + '</p>';
+                workingEl.classList.remove('d-none');
+            } else {
+                workingEl.classList.add('d-none');
+            }
+            
+            changeMarker(id);
+
+            $('#accordion').fadeOut(200, function() {
+                $('#poiDetails').removeClass('d-none').hide().fadeIn('fast');
+            });
+        }
+
+        document.getElementById('closeDetailsBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            $('#poiDetails').fadeOut(200, function() {
+                $('#accordion').removeClass('d-none').hide().fadeIn('fast');
+            });
+            if(gMap && gMap.markers) {
+                gMap.markers.forEach(m => m.setIcon(iconBase));
+                gMap.setCenter(centerLat, centerLng);
+                gMap.setZoom(10);
+            }
+        });
+
+        document.getElementById('nearestLocationBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    gMap.setCenter(lat, lng);
+                    gMap.setZoom(14);
+                    
+                    gMap.addMarker({
+                        lat: lat,
+                        lng: lng,
+                        title: 'Вашата локација',
+                        infoWindow: { content: '<p>Вие сте тука</p>' }
+                    });
+                }, function(error) {
+                    alert("Geolocation error: " + error.message);
+                }, { enableHighAccuracy: true });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        });
+
+        var cashInBtn = document.getElementById('cashInBtn');
+        var allAtmsBtn = document.getElementById('allAtmsBtn');
+
+        if(cashInBtn && allAtmsBtn) {
+            cashInBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var cashInLocs = allLocations.filter(l => l.isCashIn && l.isCashIn.includes('да'));
+                renderAccordion(cashInLocs);
+                gMap.removeMarkers();
+                initMap(cashInLocs);
+                cashInBtn.classList.add('d-none');
+                allAtmsBtn.classList.remove('d-none');
+            });
+
+            allAtmsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                renderAccordion(allLocations);
+                gMap.removeMarkers();
+                initMap(allLocations);
+                allAtmsBtn.classList.add('d-none');
+                cashInBtn.classList.remove('d-none');
+            });
+        }
+
+        // Initialize maps and data on load
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch(dataUrl)
+                .then(function(r) { return r.json(); })
+                .then(function(locations) {
+                    allLocations = locations;
+                    renderAccordion(locations);
+                    initMap(locations);
+                })
+                .catch(function(e) {
+                    document.getElementById('gmaps-markers').innerHTML = '<p class="text-center pt-5 text-danger">Грешка при вчитување на податоците.</p>';
+                    console.error('Data fetch error:', e);
+                });
+        });
+    </script>
+}

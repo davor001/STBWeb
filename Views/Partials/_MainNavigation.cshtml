@@ -1,0 +1,104 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var home = Model.Root();
+    // Match by content type alias instead of name - much more reliable
+    // Top-level sectionRoot nodes are the nav items
+    var topLevelNavItems = home.Children
+        .Where(x => x.IsVisible() && x.ContentType.Alias == "sectionRoot")
+        .ToList();
+}
+<div class="topnav d-print-none" id="navbar">
+    <div class="container-fluid">
+        <nav class="navbar navbar-light navbar-expand-lg topnav-menu w-100">
+            <div class="collapse navbar-collapse" id="topnav-menu-content">
+
+                @{
+                    var isEnglish = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
+                }
+                <!-- Mobile segment switcher -->
+                <ul class="navbar-nav list-unstyled mb-2 navbar-right-secundary d-sm-none">
+                    <li class="nav-item ml-auto">
+                        <a href="@(isEnglish ? "/en/" : "/")" class="nav-link">@(isEnglish ? "Individuals" : "Население")</a>
+                    </li>
+                    <li class="nav-item mr-auto">
+                        <a href="@(isEnglish ? "/en/legal-entities/" : "/pravni-lica/")" class="nav-link">@(isEnglish ? "Legal Entities" : "Правни лица")</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item logo-sticky">
+                        <a href="/"><img src="/assets/images/logo_small.png" alt="" height="35"></a>
+                    </li>
+
+                    @foreach (var navItem in topLevelNavItems)
+                    {
+                        var isActive = Model.AncestorsOrSelf().Any(a => a.Id == navItem.Id);
+                        var activeClass = isActive ? "active" : "";
+                        var children = navItem.Children.Where(x => x.IsVisible()).ToList();
+                        
+                        if (children.Any())
+                        {
+                            <li class="nav-item dropdown @activeClass">
+                                <a class="nav-link dropdown-toggle arrow-none" href="@navItem.Url()" id="nav_@navItem.Id" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    @navItem.Name <div class="arrow-down d-lg-none"></div>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="nav_@navItem.Id">
+                                    @foreach (var child in children)
+                                    {
+                                        var subChildren = child.Children.Where(x => x.IsVisible()).ToList();
+                                        if (subChildren.Any())
+                                        {
+                                            <div class="dropdown">
+                                                <a class="dropdown-item dropdown-toggle arrow-none" href="@child.Url()" id="nav_@child.Id" role="button" data-toggle="dropdown">@child.Name<div class="arrow-down"></div></a>
+                                                <div class="dropdown-menu" aria-labelledby="nav_@child.Id">
+                                                    @foreach (var subChild in subChildren)
+                                                    {
+                                                        var subSubChildren = subChild.Children.Where(x => x.IsVisible()).ToList();
+                                                        if (subSubChildren.Any())
+                                                        {
+                                                            <div class="dropdown">
+                                                                <a class="dropdown-item dropdown-toggle arrow-none" href="@subChild.Url()" id="nav_@subChild.Id" role="button" data-toggle="dropdown">@subChild.Name<div class="arrow-down"></div></a>
+                                                                <div class="dropdown-menu" aria-labelledby="nav_@subChild.Id">
+                                                                    @foreach (var ssc in subSubChildren)
+                                                                    {
+                                                                        <a href="@ssc.Url()" class="dropdown-item">@ssc.Name</a>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="@subChild.Url()" class="dropdown-item">@subChild.Name</a>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <a href="@child.Url()" class="dropdown-item">@child.Name</a>
+                                        }
+                                    }
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item @activeClass">
+                                <a class="nav-link" href="@navItem.Url()">@navItem.Name</a>
+                            </li>
+                        }
+                    }
+
+                    <!-- e-banking CTA -->
+                    <li class="nav-item d-none d-lg-block ml-auto">
+                        <a class="btn btn-primary btn-sm mt-1" href="https://ebank.stb.com.mk">
+                            <i class="mdi mdi-key mr-1"></i> e-најава
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>

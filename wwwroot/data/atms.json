@@ -1,0 +1,1397 @@
+[
+  {
+    "id": 4195,
+    "name": "Ramstore Ново Лисиче",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "бул. Февруарски поход бр.46, Скопје",
+    "lat": "41.9827",
+    "lon": "21.4816",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4177,
+    "name": "Tинекс - Драмски",
+    "image": "https://www.stb.com.mk/media/1075/markettinexdramski670751fb246a4654929bcf71de4c084f.jpg",
+    "address": "ул. Шекспирова, Скопје",
+    "lat": "42.0024",
+    "lon": "21.4078",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4212,
+    "name": "Автобуска станица",
+    "image": "https://www.stb.com.mk/media/1025/busstationa582f110454d9e416d8f84f59f2f7c52.jpg",
+    "address": "ул. Никола Карев бр.20, Скопје",
+    "lat": "41.991",
+    "lon": "21.4454",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4191,
+    "name": "Адора Флет Ирон",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "Борис Трајковски 1",
+    "lat": "41.985479",
+    "lon": "21.437879",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4242,
+    "name": "АМСМ Зграда - Струга",
+    "image": "https://www.stb.com.mk/media/1118/vasidoraprilepno_image.jpg",
+    "address": "ул. Пролетерски Бригади бб, Струга",
+    "lat": "41.1815",
+    "lon": "20.6761",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4253,
+    "name": "Аптека Херба Прилеп",
+    "image": "https://www.stb.com.mk/media/1014/apothecaryherbaprilep11786fcd89ead4f656e000b6804afe26.jpg",
+    "address": "ул. \"Борка Талески\" бр. 3, Прилеп",
+    "lat": "41.341846",
+    "lon": "21.557001",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4271,
+    "name": "АТВА - Кичево",
+    "image": "https://www.stb.com.mk/media/1015/atva-kicevo123f0cfab811309d7752f8a8d6faaf6f.jpg",
+    "address": "Ул. Индустриска бр. 16, Кичево",
+    "lat": "41.5116",
+    "lon": "20.9512",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4221,
+    "name": "Бензинска пумпа Макпетрол Козле",
+    "image": "https://www.stb.com.mk/media/1074/makpetrolkozle4d924de893000c598495231093a77b31.jpg",
+    "address": "Козле, Скопје",
+    "lat": "41.9945",
+    "lon": "21.3959",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4298,
+    "name": "Беџети Компани - Тетово",
+    "image": "https://www.stb.com.mk/media/1018/bedzeticompany-tetovocb6acf18af68148b02660b0239129513.jpg",
+    "address": "ул. Илинденска бб, Тетово",
+    "lat": "41.9902",
+    "lon": "20.9594",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4250,
+    "name": "Битола - Реонско пазариште",
+    "image": "https://www.stb.com.mk/media/1020/bitola-reonskopazariste52248_bitola_vero_atm.jpeg",
+    "address": "Васко Карангелески бб Реонско пазариште, Битола",
+    "lat": "41.027",
+    "lon": "21.3138",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4246,
+    "name": "Битола Партизанска",
+    "image": "https://www.stb.com.mk/media/1118/vasidoraprilepno_image.jpg",
+    "address": "ул. Партизанска бб, Битола",
+    "lat": "41.0246",
+    "lon": "21.3193",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4311,
+    "name": "Куманово 2",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. 3та Македонска Ударна Бригада бр.36А, Куманово",
+    "lat": "42.1325",
+    "lon": "21.7167",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4254,
+    "name": "Васидора Прилеп",
+    "image": "https://www.stb.com.mk/media/1118/vasidoraprilepno_image.jpg",
+    "address": "ул. Леце Котески, Прилеп",
+    "lat": "41.3437",
+    "lon": "21.5359",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4316,
+    "name": "Велес - Благој Ѓорев",
+    "image": "https://www.stb.com.mk/media/1119/veles-blagojgjorev1f9ce921bb6e41827efe0db50939c6eb.jpg",
+    "address": "Благој Ѓорев бр. 33, Велес",
+    "lat": "41.7172",
+    "lon": "21.7749",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4315,
+    "name": "Велес - Нова Населба",
+    "image": "https://www.stb.com.mk/media/1120/veles-novanaselba42ce39d5b281f98d4ac211adcb5a70a9.jpg",
+    "address": "Благој Ѓорев бб, Велес",
+    "lat": "41.7153",
+    "lon": "21.7689",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4218,
+    "name": "ВЕРО 1",
+    "image": "https://www.stb.com.mk/media/1122/vero1cfea560508b4eac35ce388038c8dd84b.jpg",
+    "address": "Бул. Јане Сандански 111, Скопје",
+    "lat": "41.9847",
+    "lon": "21.4686",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4178,
+    "name": "ВЕРО Чаир",
+    "image": "https://www.stb.com.mk/media/1118/vasidoraprilepno_image.jpg",
+    "address": "ул. Џон Кенеди бб, Скопје",
+    "lat": "42.0142",
+    "lon": "21.4449",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4302,
+    "name": "Виница - Оска Пром",
+    "image": "https://www.stb.com.mk/media/1125/vinica-oskaprom46465fc223b4e2c01ca71b3df2e60a0d.jpg",
+    "address": "\"Оска-Пром\" - Страшо Пинџур бр.3, Виница",
+    "lat": "41.8862",
+    "lon": "22.5119",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4223,
+    "name": "Волково",
+    "image": "https://www.stb.com.mk/media/1118/vasidoraprilepno_image.jpg",
+    "address": "ул. 100 бр.20В Скопје",
+    "lat": "42.0375",
+    "lon": "21.3492",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4262,
+    "name": "Гевгелија - Гевгелиски партизански одреди",
+    "image": "https://www.stb.com.mk/media/1039/gevgelija-gevgeliskipartizanskiodredi75809_gevgelija_plostad.jpg",
+    "address": "Гевгелиски партизански одреди зграда 1, влез 16, Гевгелија",
+    "lat": "41.1401",
+    "lon": "22.5042",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 9102,
+    "name": "Гостивар - Ризванче 2 Аптека",
+    "image": "",
+    "address": "Борче Јовановски 64, Гостивар",
+    "lat": "41.792963",
+    "lon": "20.909741",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4277,
+    "name": "Гостивар - Мега Маркет Монтенегро",
+    "image": "https://www.stb.com.mk/media/1042/gostivar-hipermarketmontenegroc02a0fdc4ec2a1e1383ce1625945c762.jpg",
+    "address": "ул. Борис Кидрич бб, Гостивар",
+    "lat": "41.80325",
+    "lon": "20.915416",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 8920,
+    "name": "Гостивар Мега Трејд",
+    "image": "",
+    "address": "Бул. Гоце Делчев",
+    "lat": "41.796282",
+    "lon": "20.910522",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4289,
+    "name": "Штип - Сити Мол",
+    "image": "https://www.stb.com.mk/media/1118/vasidoraprilepno_image.jpg",
+    "address": "ул. д-р Слободан Јовановски бр. 2",
+    "lat": "41.743719",
+    "lon": "22.187449",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4276,
+    "name": "Градско",
+    "image": "https://www.stb.com.mk/media/1046/gradsko611_veles_gradsko.jpg",
+    "address": "Маршал Тито бр. 24, Градско",
+    "lat": "41.5804",
+    "lon": "21.9419",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4258,
+    "name": "Дебар",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. 8ми Септември бр.28, Дебар",
+    "lat": "41.521141",
+    "lon": "20.528541",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4266,
+    "name": "Демир Капија",
+    "image": "https://www.stb.com.mk/media/1036/demirkapija26431_negotino_demir_kapija.jpg",
+    "address": "Маршал Тито бр. 20, Демир Капија",
+    "lat": "41.4124",
+    "lon": "22.2413",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4251,
+    "name": "Демир Хисар",
+    "image": "https://www.stb.com.mk/media/1035/demirhisared05aff7f28490973a56b44df636c252.jpg",
+    "address": "Битолска бр. 52, Демир Хисар",
+    "lat": "41.2194",
+    "lon": "21.204",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4211,
+    "name": "Економски Факултет УКИМ",
+    "image": "https://www.stb.com.mk/media/1038/facultyofeconomicsukim791135fcb3dec21a0061f9c30545f1e7.jpg",
+    "address": "Бул.Крсте Мисирков бб, Скопје",
+    "lat": "42.0005",
+    "lon": "21.4433",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 6653,
+    "name": "Железара - Жито Маркет",
+    "image": "https://www.stb.com.mk/media/1013/amsmbuilding-strugano_image.jpg",
+    "address": "ул. Филип Филиповиќ бр. 2а",
+    "lat": "42.010788",
+    "lon": "21.460768",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4318,
+    "name": "Жито Дооел",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. Благој Ѓорев бр.166, Велес",
+    "lat": "41.7145",
+    "lon": "21.7658",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4308,
+    "name": "Злетово",
+    "image": "https://www.stb.com.mk/media/1128/zletovo99b5c6f066b70f3e7fac9bfd35b91d90.jpg",
+    "address": "Б. Петров бр. 8, Злетово",
+    "lat": "41.9882",
+    "lon": "22.2358",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4183,
+    "name": "ИТЦ Травел",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "Бул. Партизански одреди бр.13/1, Скопје",
+    "lat": "41.9977",
+    "lon": "21.4265",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4265,
+    "name": "Кавадарци Илинденска",
+    "image": "https://www.stb.com.mk/media/1055/kavadarciilindenska32954_kavadarci_ilindenska_105a.jpg",
+    "address": "Илинденска 105а, Кавадарци",
+    "lat": "41.4373",
+    "lon": "22.0106",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4264,
+    "name": "Кам",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. Охридска бр.1, Кавадарци",
+    "lat": "41.4392",
+    "lon": "22.0096",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4200,
+    "name": "КАМ Маркет Драчево",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. \"Аџево\" бб, Драчево, Скопје",
+    "lat": "41.9398",
+    "lon": "21.514",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4247,
+    "name": "Битола - Св.Тома",
+    "image": "https://www.stb.com.mk/media/1118/vasidoraprilepno_image.jpg",
+    "address": "ул. Карпош, Битола",
+    "lat": "41.027176",
+    "lon": "21.340803",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4192,
+    "name": "Капитол Мол",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "бул. Јане Сандански 71А, Скопје",
+    "lat": "41.9859",
+    "lon": "21.4665",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4272,
+    "name": "Кичево - Ст. зграда Ложионица",
+    "image": "https://www.stb.com.mk/media/1056/kicevo-stzgradalozionicaf9cdb68823a8626d282272bef25fac37.jpg",
+    "address": "Ул. Булевар Ослободување бб, Ст. зграда Ложионица, Кичево",
+    "lat": "41.5126",
+    "lon": "20.9542",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4303,
+    "name": "Кочани - Бензинска пумпа Макпетрол",
+    "image": "https://www.stb.com.mk/media/1060/kocani-petrolstationmakpetrolda4a6a902ad6daee8bb19e7ec8352f0c.jpg",
+    "address": "ул. Никола Карев, Кочани",
+    "lat": "41.9138",
+    "lon": "22.4119",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4309,
+    "name": "Кратово",
+    "image": "https://www.stb.com.mk/media/1062/kratovocadb2fc2047194d40acf9c369ed4e752.jpg",
+    "address": "Гоце Делчев 1, Кратово",
+    "lat": "42.0784",
+    "lon": "22.1757",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4283,
+    "name": "Крисмел ДОО - Струмица",
+    "image": "https://www.stb.com.mk/media/1063/krismeldoo-strumicadbb17d7c1c10d9cc24c732501c27a33c.jpg",
+    "address": "Гоце Делчев, Струмица",
+    "lat": "41.4382",
+    "lon": "22.6457",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4214,
+    "name": "КЈУБИ Македонија",
+    "image": "https://www.stb.com.mk/media/1090/qbemacedoniaf7d13ef79e965b5e7242ea65c03eb6c1.jpg",
+    "address": "11 Октомври бр. 25, Скопје",
+    "lat": "41.9895",
+    "lon": "21.4363",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4205,
+    "name": "Лисиче Т.Ц.- Елида Маркет",
+    "image": "https://www.stb.com.mk/media/1526/atm-novo-lisice-2018.jpg",
+    "address": "ТЦ - Лисиче бул. 12-та Македонска бригада бр. 13а",
+    "lat": "41.9746",
+    "lon": "21.4721",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4203,
+    "name": "Мега Фешн - Орце Николов",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "Ул.”Орце Николов” бр.188, 1000, Скопје",
+    "lat": "42.0063",
+    "lon": "21.4069",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4288,
+    "name": "Населба \"Баби 5\" - Штип",
+    "image": "https://www.stb.com.mk/media/1017/babi5region-stip61250_naselba_babi_stip.jpg",
+    "address": "Лески бр. 80, Штип",
+    "lat": "41.7583",
+    "lon": "22.2033",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 8982,
+    "name": "Охрид, Техномаркет 171",
+    "image": "",
+    "address": "ул. 7-ми Ноември бр.286, Охрид",
+    "lat": "41.122672",
+    "lon": "20.810634",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4241,
+    "name": "Парфимерија Јувена",
+    "image": "https://www.stb.com.mk/media/1085/perfumeshopjuvena7b09869e9bbfe37430bd5609648db123.jpg",
+    "address": "ул. Моша Пијаде бб, Охрид",
+    "lat": "41.1147",
+    "lon": "20.8003",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4255,
+    "name": "Прилеп Точила",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. Кузман Јосифовски  б.б  Прилеп",
+    "lat": "41.3505",
+    "lon": "21.5424",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4252,
+    "name": "Прилеп Центар",
+    "image": "https://www.stb.com.mk/media/1088/prilepsub-branchb78593272c421c23fd4b2c8f0564610a.jpg",
+    "address": "ул. \"Јоска Јорданоски\" бр. 1 , Прилеп",
+    "lat": "41.3523",
+    "lon": "21.5676",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4306,
+    "name": "Пробиштип",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. Јоаким Стојковски бр. 69, Пробиштип",
+    "lat": "41.997",
+    "lon": "22.1845",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4207,
+    "name": "Радишани",
+    "image": "https://www.stb.com.mk/media/1091/radishani1562ad66085b42eb6d67d6e2a72ed04b.jpg",
+    "address": "Радишанска бр. 4, Скопје",
+    "lat": "42.0562",
+    "lon": "21.4515",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4208,
+    "name": "Рамстор",
+    "image": "https://www.stb.com.mk/media/1094/ramstoremallc81d496b41fc6e0a5f93f30bafd0a760.jpg",
+    "address": "ул.Мито Хаџивасилев бб, ТЦ Рамстор, Скопје",
+    "lat": "41.9921",
+    "lon": "21.4268",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4194,
+    "name": "Рамстор Family Shop",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "бул. Даме Груев бр.1, Скопје",
+    "lat": "41.9923",
+    "lon": "21.4339",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4269,
+    "name": "Росоман ",
+    "image": "https://www.stb.com.mk/media/1097/rosomanadd2ab77963f66786cf56209eed88b66.jpg",
+    "address": "ул. Пролетерска, Росоман",
+    "lat": "41.5166",
+    "lon": "21.9475",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4290,
+    "name": "Сењак - Штип",
+    "image": "https://www.stb.com.mk/media/1118/vasidoraprilepno_image.jpg",
+    "address": "ул. Борис Крајгер бб, Штип",
+    "lat": "41.7501",
+    "lon": "22.2002",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4176,
+    "name": "Скопје Сити Мол",
+    "image": "https://www.stb.com.mk/media/1101/skopjecitymall2040bba897320d93051ead7f049509da.jpg",
+    "address": "Љубљанска 4, Скопје",
+    "lat": "42.0045",
+    "lon": "21.3915",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4259,
+    "name": "Солун 53 маркет",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. Талја Бикова бб, Гевгелија",
+    "lat": "41.1432",
+    "lon": "22.5057",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4273,
+    "name": "Стар Дојран",
+    "image": "https://www.stb.com.mk/media/1105/stardojran30934_stardojran_atm.jpg",
+    "address": "Маршал Тито зграда 2, влез 3, приземје, Дојран",
+    "lat": "41.1848",
+    "lon": "22.7217",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4198,
+    "name": "Супер Тинекс Првомајска",
+    "image": "https://www.stb.com.mk/media/1109/supertinexprvomajska9b21ae7682da466a504f6b5ffba2c3ec.jpg",
+    "address": "ул. Првомајска  бр. 66, Скопје",
+    "lat": "41.9749",
+    "lon": "21.4534",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4210,
+    "name": "Кит Го - Тафталиџе",
+    "image": "https://www.stb.com.mk/media/1111/taftalidze-spmarket714dc1f5a692186c9d1241d03411db88.jpg",
+    "address": "ул. Московска бр. 22, Скопје",
+    "lat": "42.001",
+    "lon": "21.39",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4299,
+    "name": "Тетово Веро",
+    "image": "https://www.stb.com.mk/media/1032/dautikomerc-tetovo5a11b6064035d22d9fca30dad15a20b5.jpg",
+    "address": "Бул. Видое Смиелвски Бато 7",
+    "lat": "42.006936",
+    "lon": "20.980626",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4197,
+    "name": "Тинекс Годел",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. Перо Наков бр. 108, Скопје",
+    "lat": "41.9964",
+    "lon": "21.4778",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4188,
+    "name": "Тинекс Злокуќани",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. ”Скупи” бр. 28, Скопје",
+    "lat": "42.0138",
+    "lon": "21.3916",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4184,
+    "name": "Тинекс Раде Кончар",
+    "image": "https://www.stb.com.mk/media/1118/vasidoraprilepno_image.jpg",
+    "address": "Тинекс - Раде Кончар, Скопје",
+    "lat": "41.9822",
+    "lon": "21.4531",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4196,
+    "name": "Тинекс Хром",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. Новопроектирана бб, Скопје",
+    "lat": "42.0018",
+    "lon": "21.3766",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4193,
+    "name": "Тобако - Скопје",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. Ѓорче Петров бр.7, Скопје",
+    "lat": "42.0067",
+    "lon": "21.3615",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4291,
+    "name": "Туш маркет",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. Автокоманда бр.1 Штип",
+    "lat": "41.7442",
+    "lon": "22.1976",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4312,
+    "name": "Туш Маркет Куманово",
+    "image": "https://www.stb.com.mk/media/1116/tushmarketkumanovoe552f74fb1ac0ded27e834dad28f51b6.jpg",
+    "address": "ул. \"Октомвриска Револуција\", Куманово",
+    "lat": "42.1347",
+    "lon": "21.729",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4284,
+    "name": "Струмица - КИСИ",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. Младинска бр. 1",
+    "lat": "41.442339",
+    "lon": "22.63314",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4185,
+    "name": "ТЦ Зебра",
+    "image": "https://www.stb.com.mk/media/1118/vasidoraprilepno_image.jpg",
+    "address": "ул. Васил Ѓоргов бр. 16, Скопје",
+    "lat": "41.9928",
+    "lon": "21.4197",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4297,
+    "name": "ТЦ Палма Мол Тетово",
+    "image": "https://www.stb.com.mk/media/1102/smpalmamalltetovo0cb3ed46ebef7ce9d3bacdb0676fcdc9.jpg",
+    "address": "ул. Скопски Пат бр. 8  Тетово",
+    "lat": "42.004",
+    "lon": "20.9895",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4187,
+    "name": "ТЦ Сарај",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "ул. Сарајска бр. 2, Скопје",
+    "lat": "42.0036",
+    "lon": "21.3318",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4225,
+    "name": "Филијала Автокоманда",
+    "image": "https://www.stb.com.mk/media/1016/avtokomandabranch2b2a146ae032dd1de04a522f397480db.jpg",
+    "address": "Јани Лукровски 5, Скопје",
+    "lat": "42.003",
+    "lon": "21.4642",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4220,
+    "name": "Филијала Аеродром",
+    "image": "https://www.stb.com.mk/media/1011/aerodrombranch26ed8218ef1a05ad5847b774916625f4.jpg",
+    "address": "1000 Скопје, бул. Јане Сандански блок 3, ламела 6",
+    "lat": "41.9883",
+    "lon": "21.4553",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4175,
+    "name": "Филијала Алуминка ",
+    "image": "https://www.stb.com.mk/media/1012/aluminkabranchc186d03e132779e894ee5dd08abd347a.jpg",
+    "address": "Партизанска бр. 70б, Скопје",
+    "lat": "42.0037",
+    "lon": "21.3946",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4285,
+    "name": "Филијала Берово",
+    "image": "https://www.stb.com.mk/media/1019/berovobranch11018_berovo_atm.jpg",
+    "address": "Маршал Тито бр. 107, Берово",
+    "lat": "41.7077",
+    "lon": "22.8564",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4226,
+    "name": "Бит Пазар",
+    "image": "https://www.stb.com.mk/media/1023/bitpazarçranch790b152ba672d7dbb4cb3157e59ce343.jpg",
+    "address": "Решад Џафер бр. 13, Скопје",
+    "lat": "42.0014",
+    "lon": "21.4396",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4249,
+    "name": "Филијала Битола",
+    "image": "https://www.stb.com.mk/media/1021/bitolabranch33789_bitola_shiroksokak_atm.jpeg",
+    "address": "Широк сокак 62, Битола",
+    "lat": "41.0273",
+    "lon": "21.3364",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4275,
+    "name": "Филијала Богданци",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "Маршал Тито бр. 85, Богданци",
+    "lat": "41.2034",
+    "lon": "22.5756",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4209,
+    "name": "Филијала Бутел",
+    "image": "https://www.stb.com.mk/media/1026/butelbranch49320a1b13041c63a1b4a03bfa7279dc.jpg",
+    "address": "Ул. Бутелска бр.4, Скопје",
+    "lat": "42.0304",
+    "lon": "21.4445",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4227,
+    "name": "Филијала Буњаковец",
+    "image": "https://www.stb.com.mk/media/1024/bunjakovecbranch50b8739c202914d3794fb325c5690cce.jpg",
+    "address": "ТЦ Буњаковец, Партизански одреди бр.17 лок.25, Скопје",
+    "lat": "41.999",
+    "lon": "21.4201",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4281,
+    "name": "Филијала Валандово",
+    "image": "https://www.stb.com.mk/media/1117/valandovobranch29817_valandovo_atm.jpg",
+    "address": "6 Ноември бр. 42, Валандово",
+    "lat": "41.3169",
+    "lon": "22.561",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4317,
+    "name": "Филијала Велес",
+    "image": "https://www.stb.com.mk/media/1121/velesbranch20d7b7217d925f9da386dfdfd0a1764c.jpg",
+    "address": "8-ми Септември бр. 67, Велес",
+    "lat": "41.7148",
+    "lon": "21.784",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4222,
+    "name": "Филијала ВЕРО Центар",
+    "image": "https://www.stb.com.mk/media/1123/verocenterbranchbcb4121dc87aca1c49f269a56971ac12.jpg",
+    "address": "Бул. Кочо Рацин бр 1, Скопје",
+    "lat": "41.9929",
+    "lon": "21.4417",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4228,
+    "name": "Филијала Веропулос",
+    "image": "https://www.stb.com.mk/media/1124/veropulosbranch18e0e3d6fd1375c52aa12d5f7f61220c.jpg",
+    "address": "Капиштец, Т. Гологанов бр.76, Скопје",
+    "lat": "41.9972",
+    "lon": "21.4047",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4199,
+    "name": "Филијала Визбегово",
+    "image": "https://www.stb.com.mk/media/1127/vizbegovobranch43d0390dd2f6fd14cbbd587a9c708ddd.jpg",
+    "address": "Ул. Јадранска Магистрала бр. 114, Скопје",
+    "lat": "42.0436",
+    "lon": "21.3914",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4301,
+    "name": "Филијала Виница",
+    "image": "https://www.stb.com.mk/media/1126/vinicabranch26267d7b72dbf67ce2d3b109790a5214.jpg",
+    "address": "Маршал Тито бр. 6, Виница",
+    "lat": "41.8824",
+    "lon": "22.5049",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4261,
+    "name": "Филијала Гевгелија",
+    "image": "https://www.stb.com.mk/media/1040/gevgelijabranch4904e739724d6fb6c2fcee594d0f7f0e.jpg",
+    "address": "ул. 7-ми Ноември бр 19А, Гевгелија",
+    "lat": "41.1403",
+    "lon": "22.5016",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4280,
+    "name": "Филијала Гостивар",
+    "image": "",
+    "address": "Мајор Чеде Филиповски бр.156, Гостивар",
+    "lat": "41.792796",
+    "lon": "20.906503",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4229,
+    "name": "Филијала ГТЦ приземје",
+    "image": "https://www.stb.com.mk/media/1100/shoppingcenter-groundfloorbranchbdf556cd5e953c03edee630f225d6257.jpg",
+    "address": "11 Октомври бр. 7, Скопје",
+    "lat": "41.995",
+    "lon": "21.4336",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4257,
+    "name": "Филијала Дебар",
+    "image": "https://www.stb.com.mk/media/1033/debarbranch9b871301b79d9d49ce6c1dbee511d4ae.jpg",
+    "address": "Вељко Влаховиќ бр. 146, Дебар",
+    "lat": "41.522",
+    "lon": "20.5267",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4307,
+    "name": "Филијала Делчево",
+    "image": "https://www.stb.com.mk/media/1034/delcevobranch62551_delcevo_atm.jpg",
+    "address": "Орце Николов бр. 2, Делчево",
+    "lat": "41.9674",
+    "lon": "22.7746",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4230,
+    "name": "Филијала Драчево - Cash In",
+    "image": "https://www.stb.com.mk/media/1037/drachevobranch52738_dracevo_filijala.jpg",
+    "address": "Иван Хаџиниколов бр. 95, Драчево, Скопје",
+    "lat": "41.9388",
+    "lon": "21.5177",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4213,
+    "name": "Филијала Илинден ",
+    "image": "https://www.stb.com.mk/media/1048/ilindene81bf08f7df4e3b7a3881942bc229d7d.jpg",
+    "address": "ул. 2, бр. 4, Населба Илинден, Скопје",
+    "lat": "41.9962",
+    "lon": "21.57",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4263,
+    "name": "Филијала Кавадарци",
+    "image": "https://www.stb.com.mk/media/1054/kavadarcibranch7728_kavadarci_filijala_ilindenska_br_1.jpg",
+    "address": "Илинденска бр. 1, Кавадарци",
+    "lat": "41.4338",
+    "lon": "22.0117",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4232,
+    "name": "Филијала Капиштец",
+    "image": "https://www.stb.com.mk/media/1052/kapishtecbranch895d6cc66d63e30a41fa21468548d371.jpg",
+    "address": "Народен фронт, ТЦ Беверли Хилс",
+    "lat": "41.9939",
+    "lon": "21.4163",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4233,
+    "name": "Филијала Кисела вода",
+    "image": "https://www.stb.com.mk/media/1058/kiselavodabranch72736_kisela_voda_atm.jpg",
+    "address": "Божидар Аџија бр. 1, Скопје",
+    "lat": "41.981",
+    "lon": "21.4405",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4270,
+    "name": "Филијала Кичево",
+    "image": "https://www.stb.com.mk/media/1057/kicevobranch4f55b0ccc9088e038603082faeddfbde.jpg",
+    "address": "Бул. Ослободување бр. 77, Кичево",
+    "lat": "41.5126",
+    "lon": "20.954",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4189,
+    "name": "Филијала Клиники ",
+    "image": "https://www.stb.com.mk/media/1059/klinikibranchca7bfb6ba45a47253a6dabcc5cc1d1cb.jpg",
+    "address": "Мајка Тереза бр. 20, Скопје",
+    "lat": "41.9902",
+    "lon": "21.4207",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4304,
+    "name": "Филијала Кочани",
+    "image": "https://www.stb.com.mk/media/1061/kocanibranche895137e89156172f30e3f542682fc71.jpg",
+    "address": "Маршал Тито бр. 44, Кочани",
+    "lat": "41.9185",
+    "lon": "22.4105",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4314,
+    "name": "Филијала Крива Паланкa",
+    "image": "https://www.stb.com.mk/media/1064/krivapalankafilijala8dabdd2322556e1fd5cade57f4aa9359.jpg",
+    "address": "Јоаким Осоговски бр. 183, Крива Паланка",
+    "lat": "42.2057",
+    "lon": "22.3344",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4256,
+    "name": "Филијала Крушево",
+    "image": "https://www.stb.com.mk/media/1065/krusevobranch8247_krusevo_atm.jpg",
+    "address": "ул. Благој Целев бр. 3, Крушево",
+    "lat": "41.3678",
+    "lon": "21.2489",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4310,
+    "name": "Филијала Куманово",
+    "image": "https://www.stb.com.mk/media/1066/kumanovobranch2872d57bd0b5ff585f7a6dfb5becdc12.jpg",
+    "address": "Партизанска бр. 2, Куманово",
+    "lat": "42.1357",
+    "lon": "21.7207",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4313,
+    "name": "Филијала Македонска Каменица",
+    "image": "https://www.stb.com.mk/media/1071/makedonskakamenicabranch71086_mak_kamenica_atm.jpg",
+    "address": "ул. Маршал Титo бр. 7, Македонска Каменица",
+    "lat": "42.0223",
+    "lon": "22.5901",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4234,
+    "name": "Филијала Макпетрол ",
+    "image": "https://www.stb.com.mk/media/1072/makpetrolbranch6b7fc8fb009676a73e619a5a2db40b84.jpg",
+    "address": "Св. Кирил и Методиј бр. 4, Скопје",
+    "lat": "41.9903",
+    "lon": "21.4316",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4174,
+    "name": "Филијала Мајка Тереза ",
+    "image": "https://www.stb.com.mk/media/1070/majkaterezabranch41569706e277f45f79671b7744e827af.jpg",
+    "address": "Македонија бр.16, Скопје",
+    "lat": "41.994",
+    "lon": "21.4309",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4179,
+    "name": "Филијала Маџари",
+    "image": "https://www.stb.com.mk/media/1069/madzaribranch30146b3333b32a000ee0409872cae6de.jpg",
+    "address": "Благоја Стевковски бр. 49, Скопје",
+    "lat": "41.996513",
+    "lon": "21.498542",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4182,
+    "name": "Филијала Младина",
+    "image": "https://www.stb.com.mk/media/1076/mladinabranch61bb29280fc5549bf77afeef5508bfba.jpg",
+    "address": "11 Октомври бр.7, Скопје",
+    "lat": "41.9956",
+    "lon": "21.4336",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4267,
+    "name": "Филијала Неготино",
+    "image": "https://www.stb.com.mk/media/1078/negotinobranch72ecaca4fe67ba95ca91dff7497f738d.jpg",
+    "address": "Јане Сандански бр. 2, Неготино",
+    "lat": "41.4838",
+    "lon": "22.0904",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4235,
+    "name": "Филијала Ново Лисиче ",
+    "image": "https://www.stb.com.mk/media/1080/novolisicebranchc2f7fdcfc6a29c085cc1f42f93568380.jpg",
+    "address": "Видое Смилевски Бато бр. 55/1, Скопје",
+    "lat": "41.9812",
+    "lon": "21.4753",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4274,
+    "name": "Филијала Ново Село",
+    "image": "https://www.stb.com.mk/media/1081/novoselobranch48736_novo_selo_atm.jpg",
+    "address": "Маршал Тито бр. 49, Ново Село",
+    "lat": "41.4143",
+    "lon": "22.8793",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4238,
+    "name": "Филијала Охрид",
+    "image": "https://www.stb.com.mk/media/1083/ohridbranchdb612fc6916efb3a764cab0aaa0f9552.jpg",
+    "address": "Ул. Димитар Влахов бр.2",
+    "lat": "41.114411",
+    "lon": "20.800885",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4300,
+    "name": "Филијала Пехчево",
+    "image": "https://www.stb.com.mk/media/1084/pehcevobranch70125_pehcevo_atm.jpg",
+    "address": "ул. Борис Кидрич бр. 6Г, Пехчево",
+    "lat": "41.762",
+    "lon": "22.8853",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4236,
+    "name": "Филијала Порта Влае ",
+    "image": "https://www.stb.com.mk/media/1087/portavlaebranch862cbedac4d538524971dfdb4496a081.jpg",
+    "address": "Ѓ. Петров бр.1 згр.Б1 влез 1 лок 12, Скопје",
+    "lat": "42.008",
+    "lon": "21.3686",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4305,
+    "name": "Филијала Пробиштип",
+    "image": "https://www.stb.com.mk/media/1089/probistipbranch43965_probistip_filijala.jpg",
+    "address": "ул. Јаким Спиров бр. 3, Пробиштип",
+    "lat": "41.9998",
+    "lon": "22.1796",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4286,
+    "name": "Филијала Радовиш ",
+    "image": "https://www.stb.com.mk/media/1093/img_20190530_134253.jpg",
+    "address": "ул. 22 Октомври бр. 42а, Радовиш",
+    "lat": "41.6372",
+    "lon": "22.4626",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4202,
+    "name": "Филијала Расадник",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "Христо Татарчев бр.43 А локал 12  и локал  13",
+    "lat": "41.9758",
+    "lon": "21.4435",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4201,
+    "name": "Филијала Реонски Центар Аеродром",
+    "image": "https://www.stb.com.mk/media/1118/vasidoraprilepno_image.jpg",
+    "address": "Ул. 1613 бр.2",
+    "lat": "41.9812",
+    "lon": "21.4706",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4245,
+    "name": "Филијала Ресен",
+    "image": "https://www.stb.com.mk/media/1096/resenbranch22227_resen_filijala_bankomat.jpg",
+    "address": "ул. Маршал Тито бр. 15, Ресен",
+    "lat": "41.0904",
+    "lon": "21.0129",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4293,
+    "name": "Филијала Свети Николе",
+    "image": "https://www.stb.com.mk/media/1110/svetinikolebranch5063b5e9198a2bdf51e97e4adb6614ed.jpg",
+    "address": "ул. Маршал Тито бр. 1, Свети Николе",
+    "lat": "41.8634",
+    "lon": "21.9419",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4244,
+    "name": "Филијала Струга",
+    "image": "https://www.stb.com.mk/media/3477/струга-филиjала.jpg",
+    "address": "Маршал Тито бр. 54, Струга",
+    "lat": "41.1778",
+    "lon": "20.6758",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4282,
+    "name": "Филијала Струмица",
+    "image": "https://www.stb.com.mk/media/1108/strumicabranchdfc07eb738013047e7fa9005edee4e08.jpg",
+    "address": "Ленинова бр. 19, Струмица",
+    "lat": "41.4394",
+    "lon": "22.6386",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4294,
+    "name": "Филијала Тетово",
+    "image": "https://www.stb.com.mk/media/1112/tetovobranch7ebe2dab92667b2d8285dd232b74a898.jpg",
+    "address": "Бул. Илирија бр. 32, Тетово",
+    "lat": "42.009002",
+    "lon": "20.97181",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4295,
+    "name": "Филијала Тетово Нова ",
+    "image": "https://www.stb.com.mk/media/1113/tetovosub-branch417e0af7e08de44353a73463d18b3178.jpg",
+    "address": "29 Ноември бр.1 Тетово",
+    "lat": "42.006836",
+    "lon": "20.968348",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4237,
+    "name": "Филијала Топанско поле",
+    "image": "https://www.stb.com.mk/media/1115/topanskopolebranch42689_topansko_pole_atm.jpg",
+    "address": "ТЦ Васил Главинов бб, Скопје",
+    "lat": "42.0171",
+    "lon": "21.4341",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4239,
+    "name": "Охрид Туристичка",
+    "image": "https://www.stb.com.mk/media/1082/ohrid-turistickabranch415be83bb629a8e471ceac3fb3cee374.jpg",
+    "address": "7 -ми Ноември бр.1",
+    "lat": "41.117362",
+    "lon": "20.802245",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4190,
+    "name": "Филијала Црниче ",
+    "image": "https://www.stb.com.mk/media/1142/crnicebranch355a9c3e107269d2996a306ec902b98e.jpg",
+    "address": "Антон Попов бр. 1, Скопје",
+    "lat": "41.9877",
+    "lon": "21.4327",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4216,
+    "name": "Филијала Чаир",
+    "image": "https://www.stb.com.mk/media/1029/chairbranch9cd2d4c6bb41faab06d8e2a437988c5b.jpg",
+    "address": "Христијан Тодоровски Карпош бр. 5, Скопје",
+    "lat": "42.0206",
+    "lon": "21.448",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4217,
+    "name": "Филијала Ченто",
+    "image": "https://www.stb.com.mk/media/1030/chentobranchaf229a51ecf32dc2335d42997c84aa00.jpg",
+    "address": "Јужноморавски бригади бр. 3, Скопје",
+    "lat": "42.0065",
+    "lon": "21.5025",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4292,
+    "name": "Филијала Штип",
+    "image": "https://www.stb.com.mk/media/1106/stipbranch39137_shtip_filijala.jpg",
+    "address": "Јосиф Ковачев бр. 8, Штип",
+    "lat": "41.7381",
+    "lon": "22.1949",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4224,
+    "name": "Филијала Ѓорче Петров",
+    "image": "https://www.stb.com.mk/media/1041/gjorcepetrovbranch4151_gjorce_atm.jpg",
+    "address": "Ѓорче Петров бр. 54",
+    "lat": "42.0069",
+    "lon": "21.3592",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4231,
+    "name": "Филијала Јане Сандански",
+    "image": "https://www.stb.com.mk/media/1050/janesandanskiçranchaeb76f58e4e991c9c8dd623967f83d8d.jpg",
+    "address": "Бул. Јане Сандански бр. 24",
+    "lat": "41.9865",
+    "lon": "21.4637",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 4260,
+    "name": "Хотел Фламинго",
+    "image": "https://www.stb.com.mk/media/1079/no_image.jpg",
+    "address": "Граничен премин Богородица бр.13, Гевгелија",
+    "lat": "41.1352",
+    "lon": "22.5455",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 4186,
+    "name": "Штулов Универзитет Скопје",
+    "image": "https://www.stb.com.mk/media/1098/seeuniversityskopje9c0bad304520ea6bbdbed7e569b42c5b.jpg",
+    "address": "ул. Гоце Делчев бб, Скопје",
+    "lat": "42.0005",
+    "lon": "21.4369",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 11064,
+    "name": "Веро Џамбо Тетово",
+    "image": "",
+    "address": "ул. 113 бр.3 Тетово",
+    "lat": "41.999455",
+    "lon": "20.958571",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 11065,
+    "name": "Боговиње Тетово",
+    "image": "",
+    "address": "ул. 101 бр.100 Боговиње",
+    "lat": "41.918805",
+    "lon": "20.913031",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 16526,
+    "name": "Ист Гејт Мол - Скопје",
+    "image": "",
+    "address": "Беласица 2",
+    "lat": "41.997448",
+    "lon": "21.451249",
+    "isCashIn": "CashIn: да"
+  },
+  {
+    "id": 26601,
+    "name": "Тинекс - Тафталиџе",
+    "image": "",
+    "address": "Ул. Прашка, бр. 15, Скопје",
+    "lat": "41.998598",
+    "lon": "21.39677",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26603,
+    "name": "Градски пазар Куманово",
+    "image": "",
+    "address": "ул. Христијан Тодоровски - Карпош",
+    "lat": "42.133192",
+    "lon": "21.712428",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26606,
+    "name": "Негорци",
+    "image": "",
+    "address": "ул. Башут бб",
+    "lat": "41.179339",
+    "lon": "22.480089",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26607,
+    "name": "Охрид Мол",
+    "image": "",
+    "address": "ул. 15ти Корпус",
+    "lat": "41.12436",
+    "lon": "20.812721",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26608,
+    "name": "Охрид Зелен Пазар",
+    "image": "",
+    "address": "Бул. Туристичка 77",
+    "lat": "41.11752",
+    "lon": "20.799774",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26609,
+    "name": "Охрид Трудбеник",
+    "image": "",
+    "address": "ул. Никола Карев бр. 46",
+    "lat": "41.109932",
+    "lon": "20.812662",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26610,
+    "name": "Охрид Кеј ",
+    "image": "",
+    "address": "Ул. Кеј Македонија, 21",
+    "lat": "41.110141",
+    "lon": "20.804344",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26641,
+    "name": "Битола - ТЦ Блис",
+    "image": "",
+    "address": "Илинденска бр. 1-г",
+    "lat": "41.039001",
+    "lon": "21.34645",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26642,
+    "name": "Битола - Марди",
+    "image": "",
+    "address": "бул. Филип 2 Македонски, бр. 52",
+    "lat": "41.032894",
+    "lon": "21.336932",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26643,
+    "name": "Куманово - Индустриска зона Карпош",
+    "image": "",
+    "address": "ул. 7, бр. 16",
+    "lat": "42.156276",
+    "lon": "21.728227",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26644,
+    "name": "Кипер Ченто",
+    "image": "",
+    "address": "Спиро Црне бр. 3",
+    "lat": "42.011264",
+    "lon": "21.510402",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26645,
+    "name": "Лептокарија",
+    "image": "",
+    "address": "Партизански Одреди бр. 64",
+    "lat": "42.003292",
+    "lon": "21.398712",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26646,
+    "name": "Цементарница Усје",
+    "image": "",
+    "address": "Борис Трајковски бр. 94",
+    "lat": "41.970354",
+    "lon": "21.457584",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26647,
+    "name": "Карпош 4",
+    "image": "",
+    "address": "Партизански Одреди 125",
+    "lat": "42.003935",
+    "lon": "21.386159",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26657,
+    "name": "Врапчиште",
+    "image": "",
+    "address": "с. Врапчиште, Гостивар",
+    "lat": "41.839765",
+    "lon": "20.885554",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26658,
+    "name": "Петровец",
+    "image": "",
+    "address": "с. Петровец, Скопје",
+    "lat": "41.939237",
+    "lon": "21.615817",
+    "isCashIn": "CashIn: не"
+  },
+  {
+    "id": 26661,
+    "name": "Македонски Брод",
+    "image": "",
+    "address": "ул. Партизанска",
+    "lat": "41.510252",
+    "lon": "21.216361",
+    "isCashIn": "CashIn: не"
+  }
+]

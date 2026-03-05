@@ -1,0 +1,165 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_Layout.cshtml";
+    var heroSlides = Model.Value<BlockListModel>("heroSlides")?.Select(x => x.Content);
+    var featureIcons = Model.Value<BlockListModel>("featureIconLinks")?.Select(x => x.Content);
+    var applyImg = Model.Value<MediaWithCrops>("applyOnlineImage");
+    var applyLinks = Model.Value<IEnumerable<Link>>("applyOnlineUrl");
+    var applyUrl = applyLinks?.FirstOrDefault()?.Url ?? "/appForm/";
+
+    // Latest 3 news for the home widget
+    var newsRoot = Umbraco.ContentAtRoot()
+        .SelectMany(r => r.DescendantsOrSelf())
+        .FirstOrDefault(c => c.ContentType.Alias == "newsListingPage");
+    var latestNews = newsRoot?.Children()
+        .Where(c => c.ContentType.Alias == "newsDetailPage")
+        .OrderByDescending(c => c.Value<DateTime>("publishDate"))
+        .Take(3)
+        .ToList();
+}
+
+<!-- Hero Carousel -->
+@if (heroSlides != null && heroSlides.Any())
+{
+    <div id="homeMainSlider" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            @{ int idx = 0; }
+            @foreach (var _ in heroSlides)
+            {
+                <li data-target="#homeMainSlider" data-slide-to="@idx" class="@(idx == 0 ? "active" : "")"></li>
+                idx++;
+            }
+        </ol>
+        <div class="carousel-inner">
+            @{ idx = 0; }
+            @foreach (var slide in heroSlides)
+            {
+                var desktopImg = slide.Value<MediaWithCrops>("desktopImage");
+                var heading = slide.Value<string>("slideHeading");
+                var subheading = slide.Value<string>("slideSubheading");
+                var ctaText = slide.Value<string>("slideCtaText");
+                var ctaLinks = slide.Value<IEnumerable<Link>>("slideCtaUrl");
+                var ctaUrl = ctaLinks?.FirstOrDefault()?.Url;
+
+                <div class="carousel-item @(idx == 0 ? "active" : "")">
+                    @if (desktopImg != null)
+                    {
+                        <img src="@desktopImg.MediaUrl()" class="d-block w-100" alt="@heading">
+                    }
+                    @if (!string.IsNullOrEmpty(heading))
+                    {
+                        <div class="carousel-caption carousel-caption-left2">
+                            <h3>@heading</h3>
+                            <hr/>
+                            @if (!string.IsNullOrEmpty(subheading))
+                            {
+                                <h4>@subheading</h4>
+                            }
+                            @if (!string.IsNullOrEmpty(ctaText) && !string.IsNullOrEmpty(ctaUrl))
+                            {
+                                <a href="@ctaUrl" class="btn btn-primary">@ctaText</a>
+                            }
+                        </div>
+                    }
+                </div>
+                idx++;
+            }
+        </div>
+        <a class="carousel-control-prev" href="#homeMainSlider" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </a>
+        <a class="carousel-control-next" href="#homeMainSlider" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </a>
+    </div>
+}
+
+<!-- "What Do I Need?" Icon Grid -->
+@if (featureIcons != null && featureIcons.Any())
+{
+    <div class="container-fluid home-what-i-need py-4">
+        <div class="row justify-content-center">
+            @foreach (var icon in featureIcons)
+            {
+                var iconClass = icon.Value<string>("iconMdiClass") ?? "mdi-help-circle";
+                var label = icon.Value<string>("label");
+                var color = icon.Value<string>("iconColor") ?? "#0056a6";
+                var linkUrls = icon.Value<IEnumerable<Link>>("linkUrl");
+                var url = linkUrls?.FirstOrDefault()?.Url ?? "#";
+
+                <div class="col-4 col-sm-3 col-md-2 col-lg-1 text-center mb-3 win-icon-row">
+                    <a href="@url" class="d-block">
+                        <span class="win-icon-circle" style="background-color:@color;">
+                            <i class="mdi @iconClass"></i>
+                        </span>
+                        <span class="d-block mt-1 small">@label</span>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<!-- 3-column Home Block -->
+<div class="container-fluid py-4">
+    <div class="row home-block-main">
+
+        <!-- Apply Online Card -->
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                @if (applyImg != null)
+                {
+                    <img src="@applyImg.MediaUrl()" class="card-img-top" alt="Аплицирај онлајн">
+                }
+                <div class="card-body text-center">
+                    <h5 class="card-title">Аплицирај онлајн</h5>
+                    <a href="@applyUrl" class="btn btn-primary w-100">Аплицирај сега</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Currency Widget -->
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-header">Курсна листа</div>
+                <div class="card-body p-2">
+                    @await Html.PartialAsync("_CurrencyWidget")
+                </div>
+            </div>
+        </div>
+
+        <!-- Latest News -->
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-header">Последни вести</div>
+                <div class="card-body p-2">
+                    @if (latestNews != null && latestNews.Any())
+                    {
+                        <ul class="list-unstyled mb-0">
+                            @foreach (var news in latestNews)
+                            {
+                                var thumb = news.Value<MediaWithCrops>("thumbnailImage");
+                                <li class="mb-2 pb-2 border-bottom">
+                                    <a href="@news.Url()" class="d-block">
+                                        @if (thumb != null)
+                                        {
+                                            <img src="@thumb.MediaUrl()" class="img-fluid mb-1" alt="@news.Name">
+                                        }
+                                        <strong>@news.Name</strong>
+                                    </a>
+                                    <small class="text-muted">@(news.Value<DateTime>("publishDate").ToString("dd.MM.yyyy"))</small>
+                                    
+                                </li>
+                            }
+                        </ul>
+                    }
+                    <a href="/novosti/" class="btn btn-sm btn-outline-primary w-100 mt-2">Сите вести</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

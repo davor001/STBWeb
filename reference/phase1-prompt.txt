@@ -1,0 +1,192 @@
+I have an Umbraco 15 / .NET 9 project at d:/Projects/STBWeb that needs to be rebuilt and then used to reimplement the website at https://www.stb.com.mk/. The Azure deployment URL is https://stbweb.azurewebsites.net/ and the GitHub repo is https://github.com/bojan-eftimoski/STBWeb.
+In reference/stb-crawl/ I have a full mirror of the current site (601 HTML pages, 627 images, 470 PDFs/docs, 91 JS files, 79 CSS files). The full site analysis is in reference/site-analysis.md — READ IT FIRST for complete context on templates, components, document types, URL structure, and dependencies.
+
+CRITICAL: PROGRESS TRACKING & CONTEXT MANAGEMENT
+Before you do ANYTHING else, create reference/PROGRESS.md with this structure:
+markdown# STBWeb Implementation Progress
+
+## Current Status
+- **Current Phase:** SUB-PHASE 0 — Project Initialization
+- **Status:** IN PROGRESS
+- **Last Updated:** [timestamp]
+- **Last Completed Action:** [description]
+
+## Phase Checklist
+- [ ] SUB-PHASE 0: Project Initialization (.NET 9 + Umbraco 15)
+- [ ] SUB-PHASE 1A: Static Assets
+- [ ] SUB-PHASE 1B: Document Types (Code-First)
+- [ ] SUB-PHASE 1C: Master Layout & Shared Partial Views
+- [ ] SUB-PHASE 1D: Page Template Views
+- [ ] SUB-PHASE 1E: Content Tree Seeding
+- [ ] SUB-PHASE 1F: Media Migration
+
+## Detailed Log
+[entries added as work progresses]
+
+## Errors & Fixes
+[any issues encountered and how they were resolved]
+
+## Files Created
+[list of all files created/modified]
+
+## Resume Instructions
+If you are a new Claude session reading this file:
+1. Read this PROGRESS.md fully
+2. Read reference/site-analysis.md for site context
+3. Check which phase is marked as current
+4. Read the "Last Completed Action" to know exactly where to pick up
+5. Continue from that exact point
+6. Do NOT redo completed phases
+UPDATE reference/PROGRESS.md after EVERY significant action (every file created, every build, every phase completion). This is your lifeline if the context window fills up.
+If your context window is getting full, write a detailed status to PROGRESS.md including the exact next step to take, then tell the user: "Context is getting full. Start a new session with: claude --dangerously-skip-permissions -p 'Read reference/PROGRESS.md and reference/site-analysis.md. Continue from where the previous session left off.'"
+
+SUB-PHASE 0 — PROJECT INITIALIZATION
+The current project may be broken or misconfigured. Reinitialize it properly.
+
+Check what .NET SDK versions are installed locally:
+
+bash   dotnet --list-sdks
+
+Check if the current project builds:
+
+bash   dotnet build
+
+If the build fails OR the project is empty/misconfigured, reinitialize:
+
+bash   # Preserve reference/ folder and .git
+   # Move reference/ folder out temporarily if needed
+   
+   # Install/update Umbraco templates
+   dotnet new install Umbraco.Templates
+   
+   # Create fresh Umbraco 15 project with .NET 9
+   dotnet new umbraco -n STBWeb --friendly-name "Admin" --email "admin@stb.com.mk" --password "Admin1234!" --development-database-type SQLite
+   
+   # If the above creates a subfolder, move contents to project root
+   # Restore reference folder if it was moved
+
+Use whatever .NET 9 SDK is available (9.x). Use the latest Umbraco 15.x templates.
+Verify the project builds and runs:
+
+bash   dotnet build
+   dotnet run
+
+Once running, stop it and commit:
+
+bash   git add -A && git commit -m "Phase 0: Fresh Umbraco 15 / .NET 9 project initialized"
+
+Update PROGRESS.md: Mark SUB-PHASE 0 as complete.
+
+
+SUB-PHASE 1A — STATIC ASSETS
+Copy all static assets from reference/stb-crawl/ into wwwroot/, preserving folder structure:
+reference/stb-crawl/assets/css/        → wwwroot/assets/css/
+reference/stb-crawl/assets/js/         → wwwroot/assets/js/
+reference/stb-crawl/assets/images/     → wwwroot/assets/images/
+reference/stb-crawl/scripts/           → wwwroot/scripts/
+reference/stb-crawl/js/               → wwwroot/js/
+reference/stb-crawl/css/              → wwwroot/css/
+reference/stb-crawl/content/Images/   → wwwroot/content/Images/
+DO NOT copy: _next/ folder, HTML files, files over 50MB.
+Verify key files exist: wwwroot/assets/js/app.min.js, wwwroot/assets/css/icons.min.css, wwwroot/scripts/Calculators/Calculators.js.
+Run dotnet build. Commit: git add -A && git commit -m "Phase 1A: Static assets copied".
+Update PROGRESS.md.
+
+SUB-PHASE 1B — DOCUMENT TYPES (CODE-FIRST)
+Create all document types programmatically via a migration component at Migrations/DocumentTypeMigration.cs. Use IContentTypeService. Make it idempotent.
+Compositions:
+SEOComposition (seoComposition): seoTitle (Textstring), seoDescription (Textarea), ogImage (Media Picker)
+HeroBannerComposition (heroBannerComposition): heroBannerImage (Media Picker), heroBannerHeading (Textstring), heroBannerSubheading (Textstring), heroCtaText (Textstring), heroCtaLink (URL Picker)
+SidebarComposition (sidebarComposition): showSidebar (True/False default true), sidebarRelatedLinks (Multi URL Picker), sidebarPromoItems (Block List → PromoItem)
+Document Types:
+
+HomePage — Compositions: SEO. Properties: heroSlides (Block List → HeroSlide), featureIconLinks (Block List → FeatureIconLink), applyOnlineImage (Media), applyOnlineUrl (URL), promoBanner1 (Content Picker), promoBanner2 (Content Picker). Root: YES. Children: SectionRoot, NewsListingPage, SubBrandHomePage, GenericContentPage.
+SectionRoot — Compositions: SEO, HeroBanner. Properties: bodyContent (RTE). Children: SectionRoot, ProductDetailPage, ProductListingPage, GenericContentPage, ExchangeRatePage, LocationMapPage, CalculatorsPage, CorporateGovernancePage, NewsListingPage.
+ProductDetailPage — Compositions: SEO, HeroBanner, Sidebar. Properties: tabProductInfo (RTE), tabPricing (RTE), tabCriteriaAndDocs (RTE), tabSecurity (RTE), tabInterestRates (RTE), applyOnlineUrl (URL), faqItems (Block List → FAQItem). Children: none.
+ProductListingPage — Compositions: SEO, HeroBanner, Sidebar. Properties: bodyContent (RTE). Children: ProductDetailPage, SectionRoot.
+NewsListingPage — Compositions: SEO, HeroBanner. Properties: newsPerPage (Numeric, default 9). Children: NewsDetailPage.
+NewsDetailPage — Compositions: SEO. Properties: publishDate (Date), summary (Textarea), thumbnailImage (Media), articleBody (RTE). Children: none.
+GenericContentPage — Compositions: SEO, HeroBanner, Sidebar. Properties: bodyContent (RTE), documentDownloads (Block List → DocumentLink). Children: GenericContentPage, SectionRoot.
+ExchangeRatePage — Compositions: SEO, HeroBanner, Sidebar. Properties: rateApiEndpoint (Textstring). Children: none.
+LocationMapPage — Compositions: SEO, HeroBanner. Properties: mapType (Dropdown: branches/atms/regional-centres), locationsApiEndpoint (Textstring), mapDefaultCenter (Textstring). Children: none.
+CalculatorsPage — Compositions: SEO, HeroBanner, Sidebar. Properties: calculatorConfig (Textarea). Children: none.
+CorporateGovernancePage — Compositions: SEO, HeroBanner, Sidebar. Properties: managementBoard (Block List → PersonProfile), supervisoryBoard (Block List → PersonProfile), orgChartImage (Media), governanceDocs (Block List → DocumentLink). Children: GenericContentPage.
+SubBrandHomePage — Compositions: SEO. Properties: subbrandKey (Dropdown: topsi/goldenclub), themeCssClass (Text), logo (Media), heroSlides (Block List → HeroSlide), bodyContent (RTE). Children: GenericContentPage.
+
+Element Types:
+
+HeroSlide: desktopImage, mobileImage (Media), slideHeading, slideSubheading, slideCtaText (Text), slideCtaUrl (URL)
+FeatureIconLink: iconMdiClass, label, iconColor (Text), linkUrl (URL)
+FAQItem: question (Text), answer (RTE)
+DocumentLink: docLabel (Text), docFile (Media)
+PersonProfile: photo (Media), role, fullName (Text), biography (RTE)
+PromoItem: promoTitle (Text), promoLink (URL), promoImage (Media)
+NewsTickerItem: tickerText (Text), tickerLink (URL)
+
+Enable culture variants (mk + en) on ALL types.
+Run dotnet build. Commit. Update PROGRESS.md.
+
+SUB-PHASE 1C — MASTER LAYOUT & SHARED PARTIAL VIEWS
+Read reference/stb-crawl/index.html. Reproduce exact HTML structure in Razor.
+Create:
+
+Views/_Layout.cshtml — Full master layout matching crawled site (head with CSS/fonts/analytics, body with partial renders, scripts at bottom)
+Views/_TopsiLayout.cshtml — TOPSI layout using /css/topsi.css (ref: reference/stb-crawl/topsi/index.html)
+Views/_GoldenClubLayout.cshtml — GoldenClub layout using /css/GoldenClub.css
+Views/Partials/_TopBar.cshtml — Logo, lang switcher mk/en, segment tabs, phone +02 3100 109, search, e-banking link
+Views/Partials/_MainNavigation.cshtml — Full mega menu, 3-level dropdowns, context-aware
+Views/Partials/_Footer.cshtml — 4-column links, social, app badges, NBG
+Views/Partials/_NewsTicker.cshtml — jConveyorTicker scroller
+Views/Partials/_CurrencyWidget.cshtml — Exchange rate mini-table with flags
+Views/Partials/_Breadcrumb.cshtml — Bootstrap breadcrumb from ancestors
+Views/Partials/_Sidebar.cshtml — Apply CTA, related links, promo offers, contact
+Views/Partials/_SearchPanel.cshtml — Slide-in search
+Views/Partials/_CookieConsent.cshtml — GDPR modal (#GdprModal, #settingsModal)
+Views/Partials/_MobileAppBanners.cshtml — Dismissible app store alerts
+
+Use EXACT CSS class names from crawled HTML.
+Run dotnet build. Commit. Update PROGRESS.md.
+
+SUB-PHASE 1D — PAGE TEMPLATE VIEWS
+Razor views for every doc type. Reference crawled HTML.
+
+Views/HomePage.cshtml ← index.html (carousel, ticker, icon grid, 3-col widgets, promos, FAQ)
+Views/ProductDetailPage.cshtml ← any product (breadcrumb, hero, tabs, FAQ, sidebar)
+Views/ProductListingPage.cshtml ← any listing (child product cards)
+Views/NewsListingPage.cshtml ← novosti/index.html (card grid, pagination)
+Views/NewsDetailPage.cshtml ← any article (body + sidebar)
+Views/GenericContentPage.cshtml ← generic pages (RTE + optional sidebar)
+Views/ExchangeRatePage.cshtml ← exchange rate (datepicker, AJAX container)
+Views/LocationMapPage.cshtml ← branch locator (maps, filters)
+Views/CalculatorsPage.cshtml ← calculators (selector, form)
+Views/CorporateGovernancePage.cshtml ← governance (tabs, profiles)
+Views/SubBrandHomePage.cshtml ← detect subbrandKey, use appropriate layout
+
+Block List partials in Views/Partials/BlockList/:
+HeroSlide, FeatureIconLink, FAQItem, DocumentLink, PersonProfile, PromoItem, NewsTickerItem
+Run dotnet build. Commit. Update PROGRESS.md.
+
+SUB-PHASE 1E — CONTENT TREE SEEDING
+Create Migrations/SeedContentMigration.cs using IContentService. Idempotent. Full content tree per site-analysis.md section 4 hierarchy and section 5 URLs:
+Home → Население (all products), Правни лица (all subsections), Финансиски пазари, За банката, Маркетинг и ООП, СБ Локации, Новости (20 articles), Останати содржини, TOPSI, GoldenClub.
+For each node: match URL segments to current site, extract content from crawled HTML, set mk + en variants, publish.
+Run dotnet build && dotnet run. Verify in backoffice. Commit. Update PROGRESS.md.
+
+SUB-PHASE 1F — MEDIA MIGRATION
+Create Migrations/SeedMediaMigration.cs. Upload all images + PDFs from crawl to Umbraco Media Library. Maintain folder structure. Idempotent. Log every 50 files.
+Run dotnet build && dotnet run. Verify in backoffice. Commit. Update PROGRESS.md.
+
+RULES:
+
+ZERO manual Umbraco backoffice work — everything via code
+dotnet build after EVERY sub-phase — fix errors before proceeding
+Umbraco 15 APIs only (not legacy v8/v10)
+EXACT CSS classes from crawled HTML
+Culture variants: mk (default) + en (secondary)
+Skip /docs/ (Next.js) and /appForm/ (Phase 2)
+UPDATE reference/PROGRESS.md after every significant action
+git commit after every passing build
+Do NOT ask questions — read crawled files, make reasonable decisions
+If context filling up → write to PROGRESS.md → tell user to start new session
+
+Start with creating PROGRESS.md, then SUB-PHASE 0. Go.

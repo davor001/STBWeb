@@ -1,0 +1,87 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var showSidebar = Model?.Value<bool>("showSidebar") ?? true;
+    var applyOnlineLinks = Model?.Value<IEnumerable<Umbraco.Cms.Core.Models.Link>>("applyOnlineUrl");
+    var applyOnlineUrl = applyOnlineLinks?.FirstOrDefault()?.Url ?? "/appForm/";
+    var relatedLinks = Model?.Value<IEnumerable<Umbraco.Cms.Core.Models.Link>>("sidebarRelatedLinks");
+}
+@if (showSidebar)
+{
+    <div class="col-md-4 col-xl-3">
+        <!-- Apply Online CTA -->
+        <div class="card mb-3">
+            <div class="card-body text-center">
+                <i class="mdi mdi-file-document-edit-outline" style="font-size:2rem;"></i>
+                <h5 class="card-title mt-2">Аплицирај онлајн</h5>
+                <a href="@applyOnlineUrl" class="btn btn-primary w-100">
+                    Аплицирај сега
+                </a>
+            </div>
+        </div>
+
+        <!-- Related Links -->
+        @if (relatedLinks != null && relatedLinks.Any())
+        {
+            <div class="card mb-3">
+                <div class="card-header">Може да ве интересира</div>
+                <div class="card-body p-2">
+                    <ul class="list-unstyled mb-0">
+                        @foreach (var link in relatedLinks)
+                        {
+                            <li class="py-1">
+                                <a href="@link.Url" target="@(link.Target ?? "_self")">
+                                    <i class="mdi mdi-chevron-right"></i> @link.Name
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+
+        <!-- Promo Items -->
+        @{
+            var promoItemsBlock = Model?.Value<Umbraco.Cms.Core.Models.Blocks.BlockListModel>("sidebarPromoItems");
+            var promoItems = promoItemsBlock?.Select(x => x.Content);
+        }
+        @if (promoItems != null && promoItems.Any())
+        {
+            foreach (var promo in promoItems)
+            {
+                var promoTitle = promo.Value<string>("promoTitle");
+                var promoLinkItems = promo.Value<IEnumerable<Umbraco.Cms.Core.Models.Link>>("promoLink");
+                var promoLink = promoLinkItems?.FirstOrDefault()?.Url;
+                var promoImage = promo.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("promoImage");
+                
+                <div class="card mb-3 bg-info text-white">
+                    <div class="card-body text-center">
+                        @if (promoImage != null)
+                        {
+                            <img src="@promoImage.MediaUrl()" class="img-fluid mb-2 rounded" alt="@promoTitle">
+                        }
+                        <h6 class="mt-1">@promoTitle</h6>
+                        @if (!string.IsNullOrEmpty(promoLink))
+                        {
+                            <a href="@promoLink" class="btn btn-sm btn-light w-100 mt-2">Дознај повеќе</a>
+                        }
+                    </div>
+                </div>
+            }
+        }
+
+        <!-- Contact Card -->
+        <div class="card mb-3">
+            <div class="card-body text-center">
+                <i class="mdi mdi-phone" style="font-size:2rem;"></i>
+                <h5 class="mt-2">Контакт центар</h5>
+                <a href="tel:+38923100109" class="btn btn-outline-primary w-100 mb-2">
+                    <i class="mdi mdi-phone"></i> + (02)3100 109
+                </a>
+                <a href="mailto:info@stb.com.mk" class="btn btn-outline-secondary w-100">
+                    <i class="mdi mdi-email"></i> info@stb.com.mk
+                </a>
+            </div>
+        </div>
+    </div>
+}

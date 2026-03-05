@@ -1,0 +1,30 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@{
+    var content = Model.Content;
+    var desktopImg = content.Value<MediaWithCrops>("desktopImage");
+    var heading = content.Value<string>("slideHeading");
+    var subheading = content.Value<string>("slideSubheading");
+    var ctaText = content.Value<string>("slideCtaText");
+    var ctaLinks = content.Value<IEnumerable<Link>>("slideCtaUrl");
+    var ctaUrl = ctaLinks?.FirstOrDefault()?.Url;
+}
+<div class="carousel-item">
+    @if (desktopImg != null)
+    {
+        <img src="@desktopImg.MediaUrl()" class="d-block w-100" alt="@heading">
+    }
+    @if (!string.IsNullOrEmpty(heading))
+    {
+        <div class="carousel-caption carousel-caption-left2">
+            <h3>@heading</h3>
+            <hr/>
+            @if (!string.IsNullOrEmpty(subheading)) { <h4>@subheading</h4> }
+            @if (!string.IsNullOrEmpty(ctaText) && !string.IsNullOrEmpty(ctaUrl))
+            {
+                <a href="@ctaUrl" class="btn btn-primary">@ctaText</a>
+            }
+        </div>
+    }
+</div>

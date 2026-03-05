@@ -1,0 +1,134 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_Layout.cshtml";
+    var heroBannerImage = Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("heroBannerImage");
+    var heroBannerHeading = Model.Value<string>("heroBannerHeading") ?? "Корпоративно управување";
+    var managementBoard = Model.Value<Umbraco.Cms.Core.Models.Blocks.BlockListModel>("managementBoard");
+    var supervisoryBoard = Model.Value<Umbraco.Cms.Core.Models.Blocks.BlockListModel>("supervisoryBoard");
+    var orgChartImage = Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("orgChartImage");
+    var governanceDocs = Model.Value<Umbraco.Cms.Core.Models.Blocks.BlockListModel>("governanceDocs");
+}
+
+@if (heroBannerImage != null)
+{
+    <div class="row mb-0">
+        <div class="col position-relative">
+            <img src="@heroBannerImage.MediaUrl()" class="w-100" alt="@heroBannerHeading" style="max-height:250px;object-fit:cover;">
+            <div class="carousel-caption carousel-caption-left2">
+                <h3>@heroBannerHeading</h3>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container-fluid py-3">
+    @await Html.PartialAsync("_Breadcrumb")
+
+    <div class="row">
+        <div class="col-md-8 col-xl-9">
+            <ul class="nav nav-tabs nav-bordered mb-3" id="govTabs">
+                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-management">Менаџмент</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-supervisory">Надзорен одбор</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-orgchart">Организациона структура</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Management Board -->
+                <div class="tab-pane fade show active" id="tab-management">
+                    <div class="row">
+                        @if (managementBoard != null)
+                        {
+                            foreach (var block in managementBoard)
+                                var person = block.Content;
+                            {
+                                var photo = person.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("photo");
+                                var name = person.Value<string>("fullName");
+                                var role = person.Value<string>("role");
+                                var bio = person.Value<Umbraco.Cms.Core.Strings.IHtmlEncodedString>("biography");
+                                <div class="col-md-4 mb-4 text-center">
+                                    @if (photo != null)
+                                    {
+                                        <img src="@photo.MediaUrl()" class="img-fluid rounded-circle mb-2" style="width:120px;height:120px;object-fit:cover;" alt="@name">
+                                    }
+                                    <p class="text-muted small mb-1">@role</p>
+                                    <h5>@name</h5>
+                                    @if (bio != null && !string.IsNullOrWhiteSpace(bio.ToString()))
+                                    {
+                                        <div class="small text-left">@bio</div>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Supervisory Board -->
+                <div class="tab-pane fade" id="tab-supervisory">
+                    <div class="row">
+                        @if (supervisoryBoard != null)
+                        {
+                            foreach (var block in supervisoryBoard)
+                                var person = block.Content;
+                            {
+                                var photo = person.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("photo");
+                                var name = person.Value<string>("fullName");
+                                var role = person.Value<string>("role");
+                                var bio = person.Value<Umbraco.Cms.Core.Strings.IHtmlEncodedString>("biography");
+                                <div class="col-md-4 mb-4 text-center">
+                                    @if (photo != null)
+                                    {
+                                        <img src="@photo.MediaUrl()" class="img-fluid rounded-circle mb-2" style="width:120px;height:120px;object-fit:cover;" alt="@name">
+                                    }
+                                    <p class="text-muted small mb-1">@role</p>
+                                    <h5>@name</h5>
+                                    @if (bio != null && !string.IsNullOrWhiteSpace(bio.ToString()))
+                                    {
+                                        <div class="small text-left">@bio</div>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Org Chart -->
+                <div class="tab-pane fade" id="tab-orgchart">
+                    @if (orgChartImage != null)
+                    {
+                        <img src="@orgChartImage.MediaUrl()" class="img-fluid" alt="Организациона структура">
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar with governance docs -->
+        <div class="col-md-4 col-xl-3">
+            @if (governanceDocs != null && governanceDocs.Any())
+            {
+                <div class="card mb-3">
+                    <div class="card-header">Документи</div>
+                    <div class="card-body p-2">
+                        <ul class="list-unstyled mb-0">
+                            @foreach (var block in governanceDocs)
+                                var doc = block.Content;
+                            {
+                                var label = doc.Value<string>("docLabel");
+                                var file = doc.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("docFile");
+                                if (file != null)
+                                {
+                                    <li class="py-1">
+                                        <a href="@file.MediaUrl()" target="_blank">
+                                            <i class="mdi mdi-file-pdf-outline text-danger"></i> @(label ?? file.Name)
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+            @await Html.PartialAsync("_Sidebar")
+        </div>
+    </div>
+</div>

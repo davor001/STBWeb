@@ -1,0 +1,159 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_Layout";
+    
+    // Page properties
+    var pageTitle = Model?.Value<string>("title") ?? "Резултати од пребарувањето";
+    
+    // Get results from ViewData if provided by the SiteSearchController
+    var searchQuery = ViewData["SearchQuery"]?.ToString() ?? Context.Request.Query["q"].ToString();
+    var searchResults = ViewData["SearchResults"] as List<STBWeb.Controllers.SearchResultViewModel> ?? new List<STBWeb.Controllers.SearchResultViewModel>();
+    var totalResults = searchResults.Count;
+
+    // Fallbacks for properties that might not exist yet (retained as they are used later)
+    var heroBannerImage = Model?.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("heroBannerImage");
+    var heroBannerHeading = Model?.Value<string>("heroBannerHeading") ?? pageTitle;
+}
+
+@if (heroBannerImage != null)
+{
+    <div class="row mb-0">
+        <div class="col position-relative">
+            <img src="@heroBannerImage.MediaUrl()" class="w-100" alt="@heroBannerHeading" style="max-height:250px;object-fit:cover;">
+            <div class="carousel-caption carousel-caption-left2">
+                <h3>@heroBannerHeading</h3>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container-fluid py-3 pb-5">
+    
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 font-weight-bold" style="color:#EC008C;">@heroBannerHeading</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content Area -->
+        <div class="col-md-8 col-xl-9">
+            
+            <!-- Search Form -->
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-body bg-light rounded">
+                    <form action="/search" method="get" class="mb-0">
+                        <div class="input-group input-group-lg">
+                            <input type="text" name="q" class="form-control" placeholder="Внесете клучен збор за пребарување..." value="@searchQuery" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary px-4" type="submit" style="background-color: #EC008C; border-color: #EC008C;">
+                                    <i class="mdi mdi-magnify"></i> Пребарај
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Search Results Context -->
+            <div class="row align-items-center mb-4">
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <p class="mb-0 text-muted">
+                        @if (!string.IsNullOrWhiteSpace(searchQuery))
+                        {
+                            @:Пронајдени се <strong class="stb-text-blue">@totalResults</strong> резултати за <strong class="text-dark">"@searchQuery"</strong>
+                        }
+                        else
+                        {
+                            @:Внесете термин за пребарување во полето погоре.
+                        }
+                    </p>
+                </div>
+            </div>
+
+            <!-- Search Results List -->
+            <div class="search-results-list">
+                @if (searchResults.Any())
+                {
+                    foreach (var item in searchResults)
+                    {
+                        <div class="card shadow-sm border-0 mb-4 search-result-card transition-hover">
+                            <div class="card-body p-4">
+                                <h3 class="h5 mb-2">
+                                    <a href="@item.Url" class="text-decoration-none stb-text-blue stretched-link">
+                                        @item.Title
+                                    </a>
+                                </h3>
+                                <div class="mb-2 small text-success">
+                                    <i class="mdi mdi-link-variant me-1"></i> @item.Url
+                                </div>
+                                <p class="text-muted mb-0">
+                                    @item.Summary
+                                </p>
+                            </div>
+                        </div>
+                    }
+                }
+                else if (!string.IsNullOrWhiteSpace(searchQuery))
+                {
+                    <div class="alert bg-light border-0 p-5 text-center doc-download-card">
+                        <i class="mdi mdi-file-search-outline display-4 text-muted mb-3 d-block"></i>
+                        <h4 class="h5 text-dark">Нема пронајдено резултати</h4>
+                        <p class="text-muted mb-0">Ве молиме обидете се со друг термин за пребарување или проверете дали зборот е правилно напишан.</p>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination Placeholder -->
+            @if (searchResults.Any())
+            {
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled"><a class="page-link" href="#">Претходна</a></li>
+                        <li class="page-item active"><a class="page-link" href="#" style="background-color: #EC008C; border-color: #EC008C;">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Следна</a></li>
+                    </ul>
+                </nav>
+            }
+            else if (string.IsNullOrWhiteSpace(searchQuery))
+            {
+                <div class="alert alert-info" role="alert" style="background-color: rgba(236,0,140,0.1); border-color: rgba(236,0,140,0.2); color: #b7006d;">
+                    <i class="mdi mdi-information-outline me-2"></i> Ве молиме внесете поим за пребарување во полето погоре.
+                </div>
+            }
+
+        </div>
+
+        <!-- Sidebar Area -->
+        <div class="col-md-4 col-xl-3 d-print-none mt-4 mt-md-0">
+            <!-- Reuse generic sidebar if needed, or put a promotional banner -->
+            <div class="card shadow-sm border-0">
+                <div class="card-body bg-light">
+                    <h5 class="header-title mb-3">Најчесто пребарувани</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><a href="/search?q=кредит"><i class="mdi mdi-chevron-right text-primary"></i> Кредит</a></li>
+                        <li class="mb-2"><a href="/search?q=сметка"><i class="mdi mdi-chevron-right text-primary"></i> Трансакциска сметка</a></li>
+                        <li class="mb-2"><a href="/search?q=банкомат"><i class="mdi mdi-chevron-right text-primary"></i> Банкомат / ATM</a></li>
+                        <li class="mb-2"><a href="/search?q=ebanking"><i class="mdi mdi-chevron-right text-primary"></i> e-banking</a></li>
+                        <li class="mb-0"><a href="/search?q=картичка"><i class="mdi mdi-chevron-right text-primary"></i> Кредитна картичка</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card mt-4 border-0 text-white" style="background-color: #EC008C;">
+                <div class="card-body text-center py-4">
+                    <i class="mdi mdi-phone-in-talk display-4 mb-3"></i>
+                    <h5 class="text-white">Контакт Центар</h5>
+                    <p class="mb-3">Не го најдовте тоа што го барате? Контактирајте не директно.</p>
+                    <a href="tel:+38923100109" class="btn btn-light w-100 fw-bold text-dark">
+                        <i class="mdi mdi-phone me-1"></i> +389 (0)2 3100-109
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

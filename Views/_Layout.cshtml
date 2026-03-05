@@ -1,0 +1,107 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var cultureName = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var isEnglish = cultureName == "en";
+    var langAttr = isEnglish ? "en" : "MK";
+
+    var seoTitle = Model?.Value<string>("seoTitle");
+    var seoDesc = Model?.Value<string>("seoDescription");
+    var ogImageMedia = Model?.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("ogImage");
+    var ogImage = ogImageMedia?.MediaUrl();
+    var pageTitle = string.IsNullOrWhiteSpace(seoTitle) ? Model?.Name : seoTitle;
+}
+<!DOCTYPE html>
+<html lang="@langAttr">
+<head>
+    <!-- Google Tag Manager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VNYDDYL1MY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-VNYDDYL1MY');
+    </script>
+
+    <meta charset="utf-8" />
+    <title>@pageTitle - Стопанска Банка</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="@(seoDesc ?? pageTitle)"/>
+    <meta name="google-site-verification" content="0-t73Vga6CCUhM-pB-Ie14sZgVF0owG8azIsDs7w6Sk" />
+
+    <meta property="og:title" content="@pageTitle"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:url" content="https://www.stb.com.mk@(Context.Request.Path)"/>
+    @if (!string.IsNullOrEmpty(ogImage))
+    {
+        <meta property="og:image" content="@ogImage"/>
+    }
+    <meta property="og:description" content="@(seoDesc ?? pageTitle)"/>
+
+    <link rel="icon" href="/images/favicon.png" type="image/png" />
+
+    <!-- Vendor CSS -->
+    <link href="/assets/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    <!-- App CSS -->
+    <!-- MDI Icons — CDN font source (local icons.min.css has class defs but font files are missing) -->
+    <link href="https://cdn.jsdelivr.net/npm/@@mdi/font@@2.3.54/css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/css/app.css" rel="stylesheet" type="text/css" />
+    <link href="/css/tableHover.css" rel="stylesheet" type="text/css" />
+    <link href="/css/app_variant.css?v=1.1" rel="stylesheet" type="text/css" />
+    <link href="/css/open-sans-font.css" rel="stylesheet" type="text/css" />
+    <link href="/css/jConveyorTicker.css" rel="stylesheet" type="text/css" />
+
+    <script src="/scripts/MasterTop.js"></script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('consent', 'default', { ad_storage: 'denied', analytics_storage: 'denied' });
+    </script>
+
+    @RenderSection("Head", required: false)
+</head>
+
+<body data-layout="topnav">
+    <div class="wrapper">
+        <div class="content-page">
+            <div class="content" id="master_page_content">
+
+                @await Html.PartialAsync("_TopBar")
+                @await Html.PartialAsync("_MainNavigation")
+                @await Html.PartialAsync("_NewsTicker")
+
+                @RenderBody()
+
+                @await Html.PartialAsync("_Footer")
+
+            </div>
+        </div>
+    </div>
+    <!-- END wrapper -->
+
+    @await Html.PartialAsync("_MobileAppBanners")
+    @await Html.PartialAsync("_SearchPanel")
+    @await Html.PartialAsync("_CookieConsent")
+
+    <!-- jQuery (CDN with local fallback) -->
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.0.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
+
+    <script src="/assets/js/app.min.js"></script>
+    <script src="/scripts/jquery.jConveyorTicker.min.js"></script>
+    <script src="/scripts/MasterEnd.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

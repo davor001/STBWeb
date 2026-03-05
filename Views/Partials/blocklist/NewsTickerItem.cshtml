@@ -1,0 +1,16 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@{
+    var content = Model.Content;
+    var text = content.Value<string>("tickerText");
+    var link = content.Value<string>("tickerLink");
+}
+<li>
+    @if (!string.IsNullOrEmpty(link))
+    {
+        <a href="@link">@text</a>
+    }
+    else
+    {
+        @text
+    }
+</li>

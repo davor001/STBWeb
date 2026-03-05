@@ -1,0 +1,30 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>
+@{
+    var content = Model.Content;
+    var title = content.Value<string>("promoTitle");
+    var promoLinks = content.Value<IEnumerable<Link>>("promoLink");
+    var link = promoLinks?.FirstOrDefault()?.Url;
+    var image = content.Value<MediaWithCrops>("promoImage");
+}
+<div class="col-md-4 mb-3">
+    <div class="card">
+        @if (image != null)
+        {
+            <img src="@image.MediaUrl()" class="card-img-top" alt="@title" style="height:130px;object-fit:cover;">
+        }
+        <div class="card-body">
+            <h5 class="card-title">
+                @if (!string.IsNullOrEmpty(link))
+                {
+                    <a href="@link">@title</a>
+                }
+                else
+                {
+                    @title
+                }
+            </h5>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+/* jConveyorTicker.css - News ticker styles */
+.js-conveyor-example {
+    overflow: hidden;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 6px 0;
+    position: relative;
+}
+
+    .js-conveyor-example .conveyor-content {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        white-space: nowrap;
+        animation: ticker-scroll 30s linear infinite;
+    }
+
+        .js-conveyor-example .conveyor-content li {
+            display: inline-block;
+            padding: 0 25px;
+            flex-shrink: 0;
+        }
+
+            .js-conveyor-example .conveyor-content li a {
+                color: #333;
+                font-size: 13px;
+                text-decoration: none;
+            }
+
+                .js-conveyor-example .conveyor-content li a:hover {
+                    color: #0056a6;
+                }
+
+@keyframes ticker-scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}

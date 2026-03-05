@@ -1,0 +1,125 @@
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_Layout.cshtml";
+    var heroBannerImage = Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("heroBannerImage");
+    var heroBannerHeading = Model.Value<string>("heroBannerHeading") ?? "Калкулатори";
+}
+
+@if (heroBannerImage != null)
+{
+    <div class="row mb-0">
+        <div class="col position-relative">
+            <img src="@heroBannerImage.MediaUrl()" class="w-100" alt="@heroBannerHeading" style="max-height:250px;object-fit:cover;">
+            <div class="carousel-caption carousel-caption-left2">
+                <h3>@heroBannerHeading</h3>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container-fluid py-3">
+    @await Html.PartialAsync("_Breadcrumb")
+
+    <div class="row">
+        <div class="col-md-8 col-xl-9">
+            <h3>Калкулатори</h3>
+
+            <!-- Calculator selector -->
+            <div class="mb-4">
+                <label for="SelectCalculator">Одберете производ:</label>
+                <select id="SelectCalculator" class="form-control">
+                    <option value="">-- Одберете --</option>
+                    <option value="1">Потрошувачки кредит до 1.500.000 МКД</option>
+                    <option value="2">Потрошувачки кредит до 80.000 ЕУР</option>
+                    <option value="3">Потрошувачки кредит преку трговска мрежа</option>
+                    <option value="4">Станбен кредит</option>
+                    <option value="5">Автомобилски кредит</option>
+                    <option value="6">Орочен депозит – Премиум</option>
+                    <option value="7">Орочен депозит – ЕвроБонус</option>
+                    <option value="8">Микро бизнис кредит (правни лица)</option>
+                    <option value="9">Орочен депозит 12/13</option>
+                    <option value="10">Орочен депозит 18/20</option>
+                </select>
+            </div>
+
+            <!-- Calculator form area (dynamically loaded) -->
+            @await Html.PartialAsync("Partials/_CalculatorsForms")
+        </div>
+
+        @await Html.PartialAsync("_Sidebar")
+    </div>
+</div>
+
+@section Scripts {
+    <script src="/css/rangeslider.css" type="text/css"></script>
+    <script>
+        var kamata1 = 0.35;
+        var kamata2 = 0.26;
+        var kamata3 = 0.35;
+        var kamata4 = 0.26;
+        var kamata5 = 0.35;
+        var kamata6 = 0.26;
+        var kamata7 = 0.35;
+        var kamata8 = 0.28;
+        var kamata9 = 0.35;
+        var kamata10 = 0.35;
+        var kamata11 = 0.45;
+        var kamata12 = 0.01;
+        var kamata13 = 0.03;
+        var kamata14 = 0.05;
+        var kamata15 = 0.10;
+        var kamata16 = 0.01;
+        var kamata17 = 0.03;
+        var kamata18 = 0.05;
+        var kamata19 = 0.01;
+        var kamata20 = 0.05;
+        var kamata21 = 0.10;
+        var kamata22 = 0.01;
+        var kamata23 = 0.03;
+        var kamata24 = 0.05;
+        var kamata25 = 0.01;
+        var kamata26 = 0.05;
+        var kamata27 = 0.10;
+        var kamata28 = 0.46;
+        var kamata29 = 0.23;
+        var kamata30 = 0.9;
+        var kamata31 = 0.36;
+        var maksiRata = 0;
+        var kamata33 = 0; 
+        var kamata34 = 0; 
+        var EURKurs = 61.5;
+
+        var warningMsg1 = 'Кредитот е надвор од дозволената рамка!';
+        var warningMsg2 = 'Минимална месечна рата е 20 EUR!';
+        var warningMsg3 = 'Внесете износ!';
+        var warningMsg4 = 'Minimum amount for MKD deposit is MKD 30,000!';
+        var warningMsg5 = 'Минималниот износ за девизниот депозит е 500 евра!';
+        var warningMsg6 = 'Учеството мора да биде најмалку 20% од вредноста на возилото!';
+        var warningMsg7 = 'Минималниот износ за Премиум е 35.000 денари!';
+        var warningMsg8 = 'Минималниот износ за Евро Бонус е 1.000 EUR!';
+        var warningMsg9 = 'Минималниот износ за денарскиот депозит е 12.000 денари!';
+        var warningMsg10 = 'Минималниот износ за девизниот депозит е 200 евра!';
+        var warningMsg11 = 'Учеството мора да биде најмалку 25% од вредноста на возилото!';
+        var warningMsg12 = 'Учеството мора да биде најмалку 20% од вредноста на возилото!';
+
+        var mkd = 'МКД';
+        var denari = 'денари';
+        var SelectCalculator = document.getElementById('SelectCalculator');
+
+        var calcs=[{"Id":1,"Title":"Ненаменски потрошувачки кредит до 1.500.000 денари","Link":""},{"Id":2,"Title":"Ненамески потрошувачки кредит до 80.000 евра","Link":""},{"Id":3,"Title":"Потрошувачки кредит преку трговска мрежа","Link":""},{"Id":4,"Title":"Станбен кредит","Link":""},{"Id":5,"Title":"Автомобилски кредит","Link":""},{"Id":6,"Title":"Орочен депозит – Премиум","Link":""},{"Id":21,"Title":"Орочен депозит – Евро Бонус","Link":""},{"Id":7,"Title":"Микро бизнис кредит за правни лица","Link":""},{"Id":8,"Title":"Орочен депозит 12/13","Link":""},{"Id":9,"Title":"Орочен депозит 18/20","Link":""}];
+    </script>
+    <script src="/scripts/Calculators/Calculators.js?v=22"></script>
+    <script>
+        document.getElementById('SelectCalculator').addEventListener('change', function() {
+            if (typeof select_calc === 'function') {
+                select_calc();
+            }
+        });
+        
+        // Initial call to set up the first state
+        if (typeof select_calc === 'function') {
+            select_calc();
+        }
+    </script>
+}
