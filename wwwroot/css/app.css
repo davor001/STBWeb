@@ -1,7 +1,13 @@
 /*
  * STBWeb - app.css
  * Bootstrap 4.6 (imported via CDN) + Custom STB Theme
- * This file replaces the original compiled app.css from the legacy site.
+ * Color scheme matching live stb.com.mk:
+ *   - Nav: white/light gray background, dark text
+ *   - Primary accent (magenta/pink): #EC008C
+ *   - Secondary accent (gold/yellow): #D4A843
+ *   - Text dark: #333 / #555
+ *   - Nav text: #555
+ *   - Footer: dark navy #1a1a2e
  */
 
 /* === Bootstrap 4.6 === */
@@ -21,11 +27,11 @@ body {
 }
 
 a {
-    color: #0056a6;
+    color: #EC008C;
 }
 
     a:hover {
-        color: #003d75;
+        color: #c0006f;
         text-decoration: none;
     }
 
@@ -34,7 +40,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .stb-text-blue {
-    color: #0056a6 !important;
+    color: #EC008C !important;
 }
 
 .header-title {
@@ -59,7 +65,7 @@ h1, h2, h3, h4, h5, h6 {
    ============================================================ */
 .topnav-navbar {
     background: #fff;
-    border-bottom: 2px solid #0056a6;
+    border-bottom: 1px solid #e9e9e9;
     padding: 0.4rem 0;
     z-index: 1030;
 }
@@ -105,7 +111,7 @@ h1, h2, h3, h4, h5, h6 {
 
         .topbar-right-menu .nav-link.active {
             font-weight: 700;
-            color: #0056a6;
+            color: #EC008C;
         }
 
 .topnav-category {
@@ -113,7 +119,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .topnav-phone {
-    color: #0056a6;
+    color: #333;
     font-weight: 600;
 }
 
@@ -142,31 +148,33 @@ h1, h2, h3, h4, h5, h6 {
     display: block;
     width: 22px;
     height: 2px;
-    background: #0056a6;
+    background: #555;
     margin: 5px 0;
     transition: .3s;
 }
 
 /* ============================================================
-   4. MAIN NAVIGATION
+   4. MAIN NAVIGATION  (matches live stb.com.mk — light bg,
+      dark text, magenta hover)
    ============================================================ */
 .topnav {
-    background: #0056a6;
+    background: #f8f8f8;
+    border-bottom: 1px solid #e0e0e0;
     z-index: 1020;
 }
 
 .topnav-menu .navbar-nav .nav-link {
-    color: rgba(255,255,255,0.9);
+    color: #555;
     padding: 0.7rem 1rem;
     font-size: 13px;
     font-weight: 600;
-    text-transform: uppercase;
+    text-transform: none;
 }
 
     .topnav-menu .navbar-nav .nav-link:hover,
     .topnav-menu .navbar-nav .nav-item.active > .nav-link {
-        color: #fff;
-        background: rgba(255,255,255,0.1);
+        color: #EC008C;
+        background: transparent;
     }
 
 .topnav .dropdown-menu {
@@ -184,8 +192,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
     .topnav .dropdown-item:hover {
-        background: #f0f6fc;
-        color: #0056a6;
+        background: #fef0f7;
+        color: #EC008C;
     }
 
 .arrow-none::after {
@@ -206,6 +214,38 @@ h1, h2, h3, h4, h5, h6 {
 .logo-sticky {
     display: none;
 }
+
+/* e-registration & e-najava buttons (matching live site:
+   gold/yellow for registration, magenta for login) */
+.btn-eregistration {
+    background-color: #D4A843;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+}
+
+    .btn-eregistration:hover {
+        background-color: #c09735;
+        color: #fff;
+    }
+
+.btn-enajava {
+    background-color: #EC008C;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+}
+
+    .btn-enajava:hover {
+        background-color: #c0006f;
+        color: #fff;
+    }
 
 /* ============================================================
    5. HERO CAROUSEL
@@ -280,34 +320,53 @@ h1, h2, h3, h4, h5, h6 {
         }
 
             .conveyor-content li a:hover {
-                color: #0056a6;
+                color: #EC008C;
             }
 
 /* ============================================================
-   7. HOME PAGE — Icon Grid ("What Do I Need?")
+   7. HOME PAGE — Icon Grid ("ШТО МИ ТРЕБА?")
+   Matches live stb.com.mk: white bg, colorful circles, dark labels
    ============================================================ */
 .home-what-i-need {
-    background: #0056a6;
+    background: #fff;
+    border-top: 1px solid #e9e9e9;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.home-what-i-need-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
 .win-icon-row a {
-    color: #fff;
+    color: #555;
     text-decoration: none;
 }
 
     .win-icon-row a:hover {
-        opacity: 0.85;
+        color: #EC008C;
     }
 
 .win-icon-circle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     margin-bottom: 5px;
+    border: 2px solid transparent;
+    transition: transform 0.2s ease;
 }
+
+    .win-icon-circle:hover {
+        transform: scale(1.05);
+    }
 
     .win-icon-circle i {
         font-size: 28px;
@@ -323,7 +382,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .home-block-main .card-header {
-    background: #0056a6;
+    background: #EC008C;
     color: #fff;
     font-weight: 600;
     font-size: 14px;
@@ -346,12 +405,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
     .content-product h3 {
-        color: #0056a6;
+        color: #EC008C;
     }
 
 /* Tabs */
 .nav-tabs.nav-bordered {
-    border-bottom: 2px solid #0056a6;
+    border-bottom: 2px solid #EC008C;
 }
 
     .nav-tabs.nav-bordered .nav-link {
@@ -364,7 +423,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 
         .nav-tabs.nav-bordered .nav-link.active {
-            color: #0056a6;
+            color: #EC008C;
             border-color: #dee2e6 #dee2e6 #fff;
             background: #fff;
         }
@@ -382,7 +441,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
     .custom-accordion .card-header .btn-link {
-        color: #0056a6;
+        color: #EC008C;
         font-weight: 600;
         text-decoration: none;
         font-size: 14px;
@@ -427,7 +486,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
     .news-cards .card-title a:hover {
-        color: #0056a6;
+        color: #EC008C;
     }
 
 /* ============================================================
@@ -448,7 +507,7 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,86,166,0.95);
+    background: rgba(236,0,140,0.95);
     z-index: 9999;
     display: none;
 }
@@ -593,7 +652,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
     .location-item:hover {
-        background: #f0f6fc;
+        background: #fef0f7;
     }
 
 .custom-cursor {

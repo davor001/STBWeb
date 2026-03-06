@@ -1,14 +1,16 @@
-/* app_variant.css - STB theme overrides and variant styles */
+/* app_variant.css - STB theme overrides matching live stb.com.mk */
+/* Primary accent: #EC008C (magenta/pink) */
+/* Secondary: #D4A843 (gold) */
 
-/* Blue gradient header bar */
+/* Light gradient header bar */
 .topnav-navbar {
-    background: linear-gradient(135deg, #fff 0%, #f8fbff 100%);
+    background: linear-gradient(135deg, #fff 0%, #fefcfd 100%);
 }
 
-/* Active nav highlighting */
+/* Active nav highlighting — magenta underline */
 .topnav-menu .navbar-nav .nav-item.active > .nav-link {
-    background: rgba(255,255,255,0.15);
-    border-bottom: 3px solid #fff;
+    color: #EC008C;
+    border-bottom: 3px solid #EC008C;
 }
 
 /* Card hover enhancements */
@@ -20,15 +22,45 @@
         box-shadow: 0 4px 16px rgba(0,0,0,.12);
     }
 
-/* Button brand color */
+/* Button brand color — magenta/pink */
 .btn-primary {
-    background-color: #0056a6;
-    border-color: #0056a6;
+    background-color: #EC008C;
+    border-color: #EC008C;
 }
 
     .btn-primary:hover {
-        background-color: #003d75;
-        border-color: #003d75;
+        background-color: #c0006f;
+        border-color: #c0006f;
+    }
+
+    .btn-primary:focus,
+    .btn-primary.focus {
+        background-color: #c0006f;
+        border-color: #c0006f;
+        box-shadow: 0 0 0 0.2rem rgba(236, 0, 140, 0.5);
+    }
+
+    .btn-primary:not(:disabled):not(.disabled):active,
+    .btn-primary:not(:disabled):not(.disabled).active {
+        background-color: #a00060;
+        border-color: #a00060;
+    }
+
+/* Outline primary button */
+.btn-outline-primary {
+    color: #EC008C;
+    border-color: #EC008C;
+}
+
+    .btn-outline-primary:hover {
+        background-color: #EC008C;
+        border-color: #EC008C;
+        color: #fff;
+    }
+
+    .btn-outline-primary:focus,
+    .btn-outline-primary.focus {
+        box-shadow: 0 0 0 0.2rem rgba(236, 0, 140, 0.5);
     }
 
 /* Breadcrumb styling */
@@ -37,3 +69,63 @@
     padding: 0.5rem 0;
     font-size: 13px;
 }
+
+/* Link colors */
+a.text-primary {
+    color: #EC008C !important;
+}
+
+    a.text-primary:hover {
+        color: #c0006f !important;
+    }
+
+/* Badge primary */
+.badge-primary {
+    background-color: #EC008C;
+}
+
+/* Nav pills active */
+.nav-pills .nav-link.active {
+    background-color: #EC008C;
+}
+
+/* Pagination active */
+.page-item.active .page-link {
+    background-color: #EC008C;
+    border-color: #EC008C;
+}
+
+.page-link {
+    color: #EC008C;
+}
+
+    .page-link:hover {
+        color: #c0006f;
+    }
+
+/* Selection color */
+::selection {
+    background: rgba(236, 0, 140, 0.15);
+}
+
+/* Cookie consent button overrides */
+.gdpr .btn-success,
+.gdpr .btn-primary {
+    background-color: #EC008C;
+    border-color: #EC008C;
+}
+
+    .gdpr .btn-success:hover,
+    .gdpr .btn-primary:hover {
+        background-color: #c0006f;
+        border-color: #c0006f;
+    }
+
+/* e-najava link styling */
+.ebank-btn {
+    color: #EC008C;
+}
+
+    .ebank-btn:hover {
+        color: #c0006f;
+    }
