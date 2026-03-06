@@ -1,11 +1,46 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
     var home = Model.Root();
-    // Match by content type alias instead of name - much more reliable
-    // Top-level sectionRoot nodes are the nav items
     var topLevelNavItems = home.Children
         .Where(x => x.IsVisible() && x.ContentType.Alias == "sectionRoot")
         .ToList();
+
+    // Map romanized Umbraco node names to Cyrillic display names
+    // This handles the case where Umbraco content nodes are named in Latin
+    var cyrillicNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "Naselenie",          "НАСЕЛЕНИЕ" },
+        { "NASELENIE",          "НАСЕЛЕНИЕ" },
+        { "Pravni Lica",        "ПРАВНИ ЛИЦА" },
+        { "PRAVNI LICA",        "ПРАВНИ ЛИЦА" },
+        { "Finansiski Pazari",  "ФИНАНСИСКИ ПАЗАРИ" },
+        { "FINANSISKI PAZARI",  "ФИНАНСИСКИ ПАЗАРИ" },
+        { "Za Bankata",         "ЗА БАНКАТА" },
+        { "ZA BANKATA",         "ЗА БАНКАТА" },
+        { "Marketing i OOP",    "МАРКЕТИНГ И ООП" },
+        { "MARKETING I OOP",    "МАРКЕТИНГ И ООП" },
+        { "SB Lokacii",         "СБ ЛОКАЦИИ" },
+        { "SB LOKACII",         "СБ ЛОКАЦИИ" },
+        { "Ostanati Sodrzini",  "ОСТАНАТИ СОДРЖИНИ" },
+        { "OSTANATI SODRZINI",  "ОСТАНАТИ СОДРЖИНИ" }
+    };
+
+    // Helper: get Cyrillic display name, or fall back to the original Name
+    // Also checks the "navDisplayName" property if it exists on the node
+    Func<Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent, string> getDisplayName = (node) =>
+    {
+        // First check if a custom navDisplayName property exists
+        var customName = node.Value<string>("navDisplayName");
+        if (!string.IsNullOrWhiteSpace(customName))
+            return customName;
+
+        // Then check our mapping dictionary
+        if (cyrillicNames.TryGetValue(node.Name.Trim(), out var cyrillic))
+            return cyrillic;
+
+        // Fallback to original name
+        return node.Name;
+    };
 }
 <div class="topnav d-print-none" id="navbar">
     <div class="container-fluid">
@@ -35,12 +70,13 @@
                         var isActive = Model.AncestorsOrSelf().Any(a => a.Id == navItem.Id);
                         var activeClass = isActive ? "active" : "";
                         var children = navItem.Children.Where(x => x.IsVisible()).ToList();
+                        var displayName = isEnglish ? navItem.Name : getDisplayName(navItem);
                         
                         if (children.Any())
                         {
                             <li class="nav-item dropdown @activeClass">
                                 <a class="nav-link dropdown-toggle arrow-none" href="@navItem.Url()" id="nav_@navItem.Id" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    @navItem.Name <div class="arrow-down d-lg-none"></div>
+                                    @displayName <div class="arrow-down d-lg-none"></div>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="nav_@navItem.Id">
                                     @foreach (var child in children)
@@ -49,7 +85,7 @@
                                         if (subChildren.Any())
                                         {
                                             <div class="dropdown">
-                                                <a class="dropdown-item dropdown-toggle arrow-none" href="@child.Url()" id="nav_@child.Id" role="button" data-toggle="dropdown">@child.Name<div class="arrow-down"></div></a>
+                                                <a class="dropdown-item dropdown-toggle arrow-none" href="@child.Url()" id="nav_@child.Id" role="button" data-toggle="dropdown">@(isEnglish ? child.Name : getDisplayName(child))<div class="arrow-down"></div></a>
                                                 <div class="dropdown-menu" aria-labelledby="nav_@child.Id">
                                                     @foreach (var subChild in subChildren)
                                                     {
@@ -57,18 +93,18 @@
                                                         if (subSubChildren.Any())
                                                         {
                                                             <div class="dropdown">
-                                                                <a class="dropdown-item dropdown-toggle arrow-none" href="@subChild.Url()" id="nav_@subChild.Id" role="button" data-toggle="dropdown">@subChild.Name<div class="arrow-down"></div></a>
+                                                                <a class="dropdown-item dropdown-toggle arrow-none" href="@subChild.Url()" id="nav_@subChild.Id" role="button" data-toggle="dropdown">@(isEnglish ? subChild.Name : getDisplayName(subChild))<div class="arrow-down"></div></a>
                                                                 <div class="dropdown-menu" aria-labelledby="nav_@subChild.Id">
                                                                     @foreach (var ssc in subSubChildren)
                                                                     {
-                                                                        <a href="@ssc.Url()" class="dropdown-item">@ssc.Name</a>
+                                                                        <a href="@ssc.Url()" class="dropdown-item">@(isEnglish ? ssc.Name : getDisplayName(ssc))</a>
                                                                     }
                                                                 </div>
                                                             </div>
                                                         }
                                                         else
                                                         {
-                                                            <a href="@subChild.Url()" class="dropdown-item">@subChild.Name</a>
+                                                            <a href="@subChild.Url()" class="dropdown-item">@(isEnglish ? subChild.Name : getDisplayName(subChild))</a>
                                                         }
                                                     }
                                                 </div>
@@ -76,7 +112,7 @@
                                         }
                                         else
                                         {
-                                            <a href="@child.Url()" class="dropdown-item">@child.Name</a>
+                                            <a href="@child.Url()" class="dropdown-item">@(isEnglish ? child.Name : getDisplayName(child))</a>
                                         }
                                     }
                                 </div>
@@ -85,14 +121,14 @@
                         else
                         {
                             <li class="nav-item @activeClass">
-                                <a class="nav-link" href="@navItem.Url()">@navItem.Name</a>
+                                <a class="nav-link" href="@navItem.Url()">@displayName</a>
                             </li>
                         }
                     }
 
                     <!-- e-banking CTA -->
                     <li class="nav-item d-none d-lg-block ml-auto">
-                        <a class="btn btn-primary btn-sm mt-1" href="https://ebank.stb.com.mk">
+                        <a class="btn btn-enajava btn-sm mt-1" href="https://ebank.stb.com.mk">
                             <i class="mdi mdi-key mr-1"></i> e-најава
                         </a>
                     </li>
