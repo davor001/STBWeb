@@ -3,7 +3,8 @@
 @using Umbraco.Cms.Core.Models
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
-    Layout = "_Layout.cshtml";
+    //C:\Users\UserUser\Desktop\Projects\STBWeb-main\Views\
+    Layout = "~/Views/_Layout.cshtml";
     var heroSlides = Model.Value<BlockListModel>("heroSlides")?.Select(x => x.Content);
     var featureIcons = Model.Value<BlockListModel>("featureIconLinks")?.Select(x => x.Content);
     var applyImg = Model.Value<MediaWithCrops>("applyOnlineImage");
