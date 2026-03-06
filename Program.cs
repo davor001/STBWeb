@@ -10,7 +10,8 @@ WebApplication app = builder.Build();
 
 await app.BootUmbracoAsync();
 
-// Serve static files from wwwroot/ BEFORE Umbraco routing
+// Serve static files from 
+// wwwroot/ BEFORE Umbraco routing
 app.UseStaticFiles();
 
 app.UseUmbraco()
