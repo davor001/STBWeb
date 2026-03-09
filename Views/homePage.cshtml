@@ -1,14 +1,10 @@
-﻿@{
-	Layout = "_Layout.cshtml@await Html.PartialAsync("_TopBar")";
-}
-@using Umbraco.Cms.Core.Models.PublishedContent
+﻿@using Umbraco.Cms.Core.Models.PublishedContent
 @using Umbraco.Cms.Core.Models.Blocks
 @using Umbraco.Cms.Core.Models
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
-    //C:\Users\UserUser\Desktop\Projects\STBWeb-main\Views\
-Layout = "~/Views/_Layout.cshtml";
-var heroSlides = Model.Value<BlockListModel>("heroSlides")?.Select(x => x.Content);
+    Layout = "~/Views/_Layout.cshtml";
+    var heroSlides = Model.Value<BlockListModel>("heroSlides")?.Select(x => x.Content);
     var featureIcons = Model.Value<BlockListModel>("featureIconLinks")?.Select(x => x.Content);
     var applyImg = Model.Value<MediaWithCrops>("applyOnlineImage");
     var applyLinks = Model.Value<IEnumerable<Link>>("applyOnlineUrl");

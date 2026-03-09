@@ -6,15 +6,15 @@
         .ToList();
 
     // Map romanized Umbraco node names to Cyrillic display names
-    // This handles the case where Umbraco content nodes are named in Latin
-var cyrillicNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-cyrillicNames["NASELENIE"] = "НАСЕЛЕНИЕ";
-cyrillicNames["PRAVNI LICA"] = "ПРАВНИ ЛИЦА";
-cyrillicNames["FINANSISKI PAZARI"] = "ФИНАНСИСКИ ПАЗАРИ";
-cyrillicNames["ZA BANKATA"] = "ЗА БАНКАТА";
-cyrillicNames["MARKETING I OOP"] = "МАРКЕТИНГ И ООП";
-cyrillicNames["SB LOKACII"] = "СБ ЛОКАЦИИ";
-cyrillicNames["OSTANATI SODRZINI"] = "ОСТАНАТИ СОДРЖИНИ";
+    // Uses indexer assignment so duplicate keys just overwrite (no crash)
+    var cyrillicNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    cyrillicNames["NASELENIE"]         = "НАСЕЛЕНИЕ";
+    cyrillicNames["PRAVNI LICA"]       = "ПРАВНИ ЛИЦА";
+    cyrillicNames["FINANSISKI PAZARI"] = "ФИНАНСИСКИ ПАЗАРИ";
+    cyrillicNames["ZA BANKATA"]        = "ЗА БАНКАТА";
+    cyrillicNames["MARKETING I OOP"]   = "МАРКЕТИНГ И ООП";
+    cyrillicNames["SB LOKACII"]        = "СБ ЛОКАЦИИ";
+    cyrillicNames["OSTANATI SODRZINI"] = "ОСТАНАТИ СОДРЖИНИ";
 
     // Helper: get Cyrillic display name, or fall back to the original Name
     // Also checks the "navDisplayName" property if it exists on the node
