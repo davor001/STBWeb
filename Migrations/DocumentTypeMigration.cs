@@ -22,6 +22,7 @@ public class DocumentTypeMigrationComposer : IComposer
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, DocumentTypeMigrationHandler>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, ContentSeederHandler>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, MediaSeederHandler>();
+        builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, HomepageContentImporterHandler>();
     }
 }
 

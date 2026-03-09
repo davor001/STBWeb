@@ -1,32 +1,324 @@
-﻿@using Umbraco.Cms.Core.Models.PublishedContent
-@using Umbraco.Cms.Core.Models.Blocks
 @using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Strings
+@inject STBWeb.Services.HomepageFallbackService HomepageFallbackService
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
     Layout = "~/Views/_Layout.cshtml";
-    var heroSlides = Model.Value<BlockListModel>("heroSlides")?.Select(x => x.Content);
-    var featureIcons = Model.Value<BlockListModel>("featureIconLinks")?.Select(x => x.Content);
-    var applyImg = Model.Value<MediaWithCrops>("applyOnlineImage");
-    var applyLinks = Model.Value<IEnumerable<Link>>("applyOnlineUrl");
-    var applyUrl = applyLinks?.FirstOrDefault()?.Url ?? "/appForm/";
 
-    // Latest 3 news for the home widget
+    string ResolveFallbackMediaUrl(string? localPath, string? remoteUrl = null)
+    {
+        if (!string.IsNullOrWhiteSpace(localPath))
+        {
+            return "/" + localPath.Replace("\\", "/").TrimStart('/');
+        }
+
+        return remoteUrl ?? string.Empty;
+    }
+
+    string NormalizeFallbackUrl(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+        {
+            return string.Empty;
+        }
+
+        var trimmed = url.Trim();
+        if (trimmed.StartsWith("#", StringComparison.Ordinal))
+        {
+            return trimmed;
+        }
+
+        if (trimmed.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
+        {
+            return string.Empty;
+        }
+
+        if (trimmed.StartsWith("//", StringComparison.Ordinal))
+        {
+            if (Uri.TryCreate($"https:{trimmed}", UriKind.Absolute, out var protocolRelativeUri))
+            {
+                return protocolRelativeUri.Host.Equals("stb.com.mk", StringComparison.OrdinalIgnoreCase) ||
+                       protocolRelativeUri.Host.Equals("www.stb.com.mk", StringComparison.OrdinalIgnoreCase)
+                    ? $"{(string.IsNullOrWhiteSpace(protocolRelativeUri.AbsolutePath) ? "/" : protocolRelativeUri.AbsolutePath)}{protocolRelativeUri.Query}{protocolRelativeUri.Fragment}"
+                    : trimmed;
+            }
+
+            return string.Empty;
+        }
+
+        if (Uri.TryCreate(trimmed, UriKind.Absolute, out var absoluteUri))
+        {
+            return absoluteUri.Host.Equals("stb.com.mk", StringComparison.OrdinalIgnoreCase) ||
+                   absoluteUri.Host.Equals("www.stb.com.mk", StringComparison.OrdinalIgnoreCase)
+                ? $"{(string.IsNullOrWhiteSpace(absoluteUri.AbsolutePath) ? "/" : absoluteUri.AbsolutePath)}{absoluteUri.Query}{absoluteUri.Fragment}"
+                : trimmed;
+        }
+
+        if (!Uri.TryCreate(trimmed, UriKind.Relative, out _))
+        {
+            return string.Empty;
+        }
+
+        if (trimmed.StartsWith("?", StringComparison.Ordinal))
+        {
+            return trimmed;
+        }
+
+        while (trimmed.StartsWith("./", StringComparison.Ordinal))
+        {
+            trimmed = trimmed[2..];
+        }
+
+        while (trimmed.StartsWith("../", StringComparison.Ordinal))
+        {
+            trimmed = trimmed[3..];
+        }
+
+        return "/" + trimmed.TrimStart('/');
+    }
+
+    string GetPublishedMediaUrl(MediaWithCrops? media) => media?.MediaUrl() ?? string.Empty;
+
+    string GetNewsExcerpt(IPublishedContent newsItem)
+    {
+        var summary = newsItem.Value<string>("summary");
+        if (!string.IsNullOrWhiteSpace(summary))
+        {
+            return summary.Trim();
+        }
+
+        var articleBody = newsItem.Value<IHtmlEncodedString>("articleBody")?.ToString();
+        if (string.IsNullOrWhiteSpace(articleBody))
+        {
+            return string.Empty;
+        }
+
+        return articleBody.StripHtml().Truncate(160);
+    }
+
+    MediaWithCrops? GetPromoImage(IPublishedContent? promoNode)
+    {
+        if (promoNode == null)
+        {
+            return null;
+        }
+
+        var mediaAliases = new[]
+        {
+            "promoImage",
+            "logo",
+            "thumbnailImage",
+            "heroBannerImage",
+            "bannerImage",
+            "productBannerImage",
+            "applyOnlineImage",
+            "desktopImage"
+        };
+
+        foreach (var alias in mediaAliases)
+        {
+            var media = promoNode.Value<MediaWithCrops>(alias);
+            if (media != null)
+            {
+                return media;
+            }
+        }
+
+        var firstHeroSlide = promoNode.Value<BlockListModel>("heroSlides")?.FirstOrDefault()?.Content;
+        return firstHeroSlide?.Value<MediaWithCrops>("desktopImage")
+            ?? firstHeroSlide?.Value<MediaWithCrops>("mobileImage");
+    }
+
+    // Temporary homepage verification fallback. Prefer Umbraco data and only fill missing homepage sections from scraped-data/homepage.json.
+    var homepageFallback = HomepageFallbackService.GetData();
+
+    var umbracoHeroSlides = Model.Value<BlockListModel>("heroSlides")?
+        .Select(x => x.Content)
+        .OfType<IPublishedContent>()
+        .ToList() ?? new List<IPublishedContent>();
+    var heroSlides = umbracoHeroSlides.Any()
+        ? umbracoHeroSlides.Select(slide => (
+            Heading: slide.Value<string>("slideHeading") ?? string.Empty,
+            Subheading: slide.Value<string>("slideSubheading") ?? string.Empty,
+            CtaText: slide.Value<string>("slideCtaText") ?? string.Empty,
+            CtaUrl: slide.Value<IEnumerable<Link>>("slideCtaUrl")?.FirstOrDefault()?.Url ?? string.Empty,
+            DesktopImageUrl: GetPublishedMediaUrl(slide.Value<MediaWithCrops>("desktopImage")),
+            MobileImageUrl: GetPublishedMediaUrl(slide.Value<MediaWithCrops>("mobileImage"))
+        )).ToList()
+        : homepageFallback.HeroSlides.Select(slide => (
+            Heading: slide.SlideHeading,
+            Subheading: slide.SlideSubheading,
+            CtaText: slide.SlideCtaText,
+            CtaUrl: NormalizeFallbackUrl(slide.SlideCtaUrl),
+            DesktopImageUrl: ResolveFallbackMediaUrl(slide.DesktopImageLocalPath, slide.DesktopImageUrl),
+            MobileImageUrl: ResolveFallbackMediaUrl(slide.MobileImageLocalPath, slide.MobileImageUrl)
+        )).ToList();
+
+    var umbracoFeatureIcons = Model.Value<BlockListModel>("featureIconLinks")?
+        .Select(x => x.Content)
+        .OfType<IPublishedContent>()
+        .ToList() ?? new List<IPublishedContent>();
+    var featureIcons = umbracoFeatureIcons.Any()
+        ? umbracoFeatureIcons.Select(icon => (
+            Label: icon.Value<string>("label") ?? string.Empty,
+            LinkUrl: icon.Value<IEnumerable<Link>>("linkUrl")?.FirstOrDefault()?.Url ?? "#",
+            IconMdiClass: icon.Value<string>("iconMdiClass") ?? "mdi-help-circle",
+            IconColor: icon.Value<string>("iconColor") ?? "#0056a6"
+        )).ToList()
+        : homepageFallback.FeatureIconLinks.Select(icon => (
+            Label: icon.Label,
+            LinkUrl: NormalizeFallbackUrl(icon.LinkUrl),
+            IconMdiClass: string.IsNullOrWhiteSpace(icon.IconMdiClass) ? "mdi-help-circle" : icon.IconMdiClass,
+            IconColor: string.IsNullOrWhiteSpace(icon.IconColor) ? "#0056a6" : icon.IconColor
+        ))
+        .Select(icon => (
+            Label: icon.Label,
+            LinkUrl: string.IsNullOrWhiteSpace(icon.LinkUrl) ? "#" : icon.LinkUrl,
+            IconMdiClass: icon.IconMdiClass,
+            IconColor: icon.IconColor
+        ))
+        .ToList();
+
+    var applyImageUrl = GetPublishedMediaUrl(Model.Value<MediaWithCrops>("applyOnlineImage"));
+    if (string.IsNullOrWhiteSpace(applyImageUrl))
+    {
+        applyImageUrl = ResolveFallbackMediaUrl(homepageFallback.ApplyOnline.ImageLocalPath, homepageFallback.ApplyOnline.ImageUrl);
+    }
+
+    var applyUrl = Model.Value<IEnumerable<Link>>("applyOnlineUrl")?.FirstOrDefault()?.Url;
+    if (string.IsNullOrWhiteSpace(applyUrl))
+    {
+        applyUrl = NormalizeFallbackUrl(homepageFallback.ApplyOnline.TargetUrl);
+    }
+
+    if (string.IsNullOrWhiteSpace(applyUrl))
+    {
+        applyUrl = "/appForm/";
+    }
+
+    var promoBanners = new[]
+        {
+            Model.Value<IPublishedContent>("promoBanner1"),
+            Model.Value<IPublishedContent>("promoBanner2")
+        }
+        .OfType<IPublishedContent>()
+        .Select(promoNode => (
+            Name: promoNode.Name,
+            Url: promoNode.Url() ?? string.Empty,
+            ImageUrl: GetPublishedMediaUrl(GetPromoImage(promoNode))
+        ))
+        .Where(promo =>
+            !string.IsNullOrWhiteSpace(promo.Name) ||
+            !string.IsNullOrWhiteSpace(promo.Url) ||
+            !string.IsNullOrWhiteSpace(promo.ImageUrl))
+        .ToList();
+
+    if (promoBanners.Count < 2)
+    {
+        var existingPromoUrls = new HashSet<string>(promoBanners.Select(x => x.Url), StringComparer.OrdinalIgnoreCase);
+
+        foreach (var promo in homepageFallback.PromoBanners)
+        {
+            if (promoBanners.Count >= 2)
+            {
+                break;
+            }
+
+            var normalizedPromoUrl = NormalizeFallbackUrl(promo.TargetUrl);
+            if (!string.IsNullOrWhiteSpace(normalizedPromoUrl) && existingPromoUrls.Contains(normalizedPromoUrl))
+            {
+                continue;
+            }
+
+            var imageUrl = ResolveFallbackMediaUrl(promo.ImageLocalPath, promo.ImageUrl);
+            if (string.IsNullOrWhiteSpace(promo.Name) &&
+                string.IsNullOrWhiteSpace(normalizedPromoUrl) &&
+                string.IsNullOrWhiteSpace(imageUrl))
+            {
+                continue;
+            }
+
+            promoBanners.Add((promo.Name, normalizedPromoUrl, imageUrl));
+
+            if (!string.IsNullOrWhiteSpace(normalizedPromoUrl))
+            {
+                existingPromoUrls.Add(normalizedPromoUrl);
+            }
+        }
+    }
+
     var newsRoot = Umbraco.ContentAtRoot()
         .SelectMany(r => r.DescendantsOrSelf())
         .FirstOrDefault(c => c.ContentType.Alias == "newsListingPage");
-    var latestNews = newsRoot?.Children()
-        .Where(c => c.ContentType.Alias == "newsDetailPage")
-        .OrderByDescending(c => c.Value<DateTime>("publishDate"))
-        .Take(3)
-        .ToList();
+    var latestNews = new List<(string Title, string Url, string PublishDate, string Excerpt, string ThumbnailUrl)>();
+
+    if (newsRoot != null)
+    {
+        foreach (var news in newsRoot.Children()
+            .Where(c => c.ContentType.Alias == "newsDetailPage")
+            .OrderByDescending(c => c.Value<DateTime>("publishDate"))
+            .Take(5))
+        {
+            var publishDate = news.HasValue("publishDate")
+                ? news.Value<DateTime>("publishDate").ToString("dd.MM.yyyy")
+                : string.Empty;
+
+            latestNews.Add((
+                Title: news.Name,
+                Url: news.Url() ?? string.Empty,
+                PublishDate: publishDate,
+                Excerpt: GetNewsExcerpt(news),
+                ThumbnailUrl: GetPublishedMediaUrl(news.Value<MediaWithCrops>("thumbnailImage"))
+            ));
+        }
+    }
+
+    if (latestNews.Count < 5)
+    {
+        var existingNewsUrls = new HashSet<string>(latestNews.Select(x => x.Url), StringComparer.OrdinalIgnoreCase);
+
+        foreach (var news in homepageFallback.LatestNews)
+        {
+            if (latestNews.Count >= 5)
+            {
+                break;
+            }
+
+            var normalizedNewsUrl = NormalizeFallbackUrl(news.Url);
+            if (string.IsNullOrWhiteSpace(normalizedNewsUrl) || existingNewsUrls.Contains(normalizedNewsUrl))
+            {
+                continue;
+            }
+
+            latestNews.Add((
+                Title: news.Title,
+                Url: normalizedNewsUrl,
+                PublishDate: news.PublishDate,
+                Excerpt: news.Excerpt,
+                ThumbnailUrl: ResolveFallbackMediaUrl(news.ThumbnailLocalPath, news.ThumbnailUrl)
+            ));
+
+            existingNewsUrls.Add(normalizedNewsUrl);
+        }
+    }
+
+    var allNewsUrl = newsRoot?.Url();
+    if (string.IsNullOrWhiteSpace(allNewsUrl))
+    {
+        allNewsUrl = "/novosti/";
+    }
 }
 
 <!-- Hero Carousel -->
-@if (heroSlides != null && heroSlides.Any())
+@if (heroSlides.Any())
 {
     <div id="homeMainSlider" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
-            @{ int idx = 0; }
+            @{
+                var idx = 0;
+            }
             @foreach (var _ in heroSlides)
             {
                 <li data-target="#homeMainSlider" data-slide-to="@idx" class="@(idx == 0 ? "active" : "")"></li>
@@ -34,33 +326,38 @@
             }
         </ol>
         <div class="carousel-inner">
-            @{ idx = 0; }
+            @{
+                idx = 0;
+            }
             @foreach (var slide in heroSlides)
             {
-                var desktopImg = slide.Value<MediaWithCrops>("desktopImage");
-                var heading = slide.Value<string>("slideHeading");
-                var subheading = slide.Value<string>("slideSubheading");
-                var ctaText = slide.Value<string>("slideCtaText");
-                var ctaLinks = slide.Value<IEnumerable<Link>>("slideCtaUrl");
-                var ctaUrl = ctaLinks?.FirstOrDefault()?.Url;
+                var slideImageUrl = !string.IsNullOrWhiteSpace(slide.DesktopImageUrl)
+                    ? slide.DesktopImageUrl
+                    : slide.MobileImageUrl;
 
                 <div class="carousel-item @(idx == 0 ? "active" : "")">
-                    @if (desktopImg != null)
+                    @if (!string.IsNullOrWhiteSpace(slideImageUrl))
                     {
-                        <img src="@desktopImg.MediaUrl()" class="d-block w-100" alt="@heading">
+                        <picture>
+                            @if (!string.IsNullOrWhiteSpace(slide.MobileImageUrl))
+                            {
+                                <source media="(max-width: 767.98px)" srcset="@slide.MobileImageUrl">
+                            }
+                            <img src="@slideImageUrl" class="d-block w-100" alt="@(string.IsNullOrWhiteSpace(slide.Heading) ? Model.Name : slide.Heading)">
+                        </picture>
                     }
-                    @if (!string.IsNullOrEmpty(heading))
+                    @if (!string.IsNullOrEmpty(slide.Heading))
                     {
                         <div class="carousel-caption carousel-caption-left2">
-                            <h3>@heading</h3>
-                            <hr/>
-                            @if (!string.IsNullOrEmpty(subheading))
+                            <h3>@slide.Heading</h3>
+                            <hr />
+                            @if (!string.IsNullOrEmpty(slide.Subheading))
                             {
-                                <h4>@subheading</h4>
+                                <h4>@slide.Subheading</h4>
                             }
-                            @if (!string.IsNullOrEmpty(ctaText) && !string.IsNullOrEmpty(ctaUrl))
+                            @if (!string.IsNullOrEmpty(slide.CtaText) && !string.IsNullOrEmpty(slide.CtaUrl))
                             {
-                                <a href="@ctaUrl" class="btn btn-primary">@ctaText</a>
+                                <a href="@slide.CtaUrl" class="btn btn-primary">@slide.CtaText</a>
                             }
                         </div>
                     }
@@ -78,24 +375,18 @@
 }
 
 <!-- "What Do I Need?" Icon Grid -->
-@if (featureIcons != null && featureIcons.Any())
+@if (featureIcons.Any())
 {
     <div class="container-fluid home-what-i-need py-4">
         <div class="row justify-content-center">
             @foreach (var icon in featureIcons)
             {
-                var iconClass = icon.Value<string>("iconMdiClass") ?? "mdi-help-circle";
-                var label = icon.Value<string>("label");
-                var color = icon.Value<string>("iconColor") ?? "#0056a6";
-                var linkUrls = icon.Value<IEnumerable<Link>>("linkUrl");
-                var url = linkUrls?.FirstOrDefault()?.Url ?? "#";
-
                 <div class="col-4 col-sm-3 col-md-2 col-lg-1 text-center mb-3 win-icon-row">
-                    <a href="@url" class="d-block">
-                        <span class="win-icon-circle" style="background-color:@color;">
-                            <i class="mdi @iconClass"></i>
+                    <a href="@icon.LinkUrl" class="d-block">
+                        <span class="win-icon-circle" style="background-color:@icon.IconColor;">
+                            <i class="mdi @icon.IconMdiClass"></i>
                         </span>
-                        <span class="d-block mt-1 small">@label</span>
+                        <span class="d-block mt-1 small">@icon.Label</span>
                     </a>
                 </div>
             }
@@ -110,9 +401,9 @@
         <!-- Apply Online Card -->
         <div class="col-md-4 mb-3">
             <div class="card h-100">
-                @if (applyImg != null)
+                @if (!string.IsNullOrWhiteSpace(applyImageUrl))
                 {
-                    <img src="@applyImg.MediaUrl()" class="card-img-top" alt="Аплицирај онлајн">
+                    <img src="@applyImageUrl" class="card-img-top" alt="Аплицирај онлајн">
                 }
                 <div class="card-body text-center">
                     <h5 class="card-title">Аплицирај онлајн</h5>
@@ -136,30 +427,74 @@
             <div class="card h-100">
                 <div class="card-header">Последни вести</div>
                 <div class="card-body p-2">
-                    @if (latestNews != null && latestNews.Any())
+                    @if (latestNews.Any())
                     {
                         <ul class="list-unstyled mb-0">
                             @foreach (var news in latestNews)
                             {
-                                var thumb = news.Value<MediaWithCrops>("thumbnailImage");
                                 <li class="mb-2 pb-2 border-bottom">
-                                    <a href="@news.Url()" class="d-block">
-                                        @if (thumb != null)
+                                    <a href="@news.Url" class="d-block">
+                                        @if (!string.IsNullOrWhiteSpace(news.ThumbnailUrl))
                                         {
-                                            <img src="@thumb.MediaUrl()" class="img-fluid mb-1" alt="@news.Name">
+                                            <img src="@news.ThumbnailUrl" class="img-fluid mb-1" alt="@news.Title">
                                         }
-                                        <strong>@news.Name</strong>
+                                        <strong>@news.Title</strong>
                                     </a>
-                                    <small class="text-muted">@(news.Value<DateTime>("publishDate").ToString("dd.MM.yyyy"))</small>
-                                    
+                                    @if (!string.IsNullOrWhiteSpace(news.PublishDate))
+                                    {
+                                        <small class="text-muted d-block">@news.PublishDate</small>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(news.Excerpt))
+                                    {
+                                        <p class="small text-muted mb-0 mt-1">@news.Excerpt</p>
+                                    }
                                 </li>
                             }
                         </ul>
                     }
-                    <a href="/novosti/" class="btn btn-sm btn-outline-primary w-100 mt-2">Сите вести</a>
+                    <a href="@allNewsUrl" class="btn btn-sm btn-outline-primary w-100 mt-2">Сите вести</a>
                 </div>
             </div>
         </div>
 
     </div>
 </div>
+
+@if (promoBanners.Any())
+{
+    <div class="container-fluid pb-4">
+        <div class="row">
+            @foreach (var promo in promoBanners)
+            {
+                var hasPromoUrl = !string.IsNullOrWhiteSpace(promo.Url);
+
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        @if (!string.IsNullOrWhiteSpace(promo.ImageUrl))
+                        {
+                            if (hasPromoUrl)
+                            {
+                                <a href="@promo.Url" class="d-block text-center p-3">
+                                    <img src="@promo.ImageUrl" class="img-fluid" alt="@promo.Name" style="max-height:180px;object-fit:contain;">
+                                </a>
+                            }
+                            else
+                            {
+                                <div class="text-center p-3">
+                                    <img src="@promo.ImageUrl" class="img-fluid" alt="@promo.Name" style="max-height:180px;object-fit:contain;">
+                                </div>
+                            }
+                        }
+                        <div class="card-body text-center">
+                            <h5 class="card-title mb-3">@promo.Name</h5>
+                            @if (hasPromoUrl)
+                            {
+                                <a href="@promo.Url" class="btn btn-outline-primary">Дознај повеќе</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

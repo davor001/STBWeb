@@ -1,0 +1,171 @@
+{
+  "heroSlides": [
+    {
+      "slideHeading": "Твојот Apple уред, твоја картичка",
+      "slideSubheading": "Apple Pay",
+      "slideCtaText": "Дознај повеќе",
+      "slideCtaUrl": "https://www.stb.com.mk/naselenie/karticki/apple-pay/",
+      "desktopImageUrl": "https://www.stb.com.mk/media/4935/1600x544-tvoj-apple-ured-web.png",
+      "mobileImageUrl": "https://www.stb.com.mk/media/4933/500x250-tvoj-apple-ured-web.png",
+      "desktopImageLocalPath": "scraped-media/homepage/hero/01-desktop-1600x544-tvoj-apple-ured-web.png",
+      "mobileImageLocalPath": "scraped-media/homepage/hero/01-mobile-500x250-tvoj-apple-ured-web.png"
+    },
+    {
+      "slideHeading": "Електронско ажурирање податоци",
+      "slideSubheading": "Ажурирање на клиент со OneID",
+      "slideCtaText": "Дознај повеќе",
+      "slideCtaUrl": "https://www.stb.com.mk/naselenie/digitalno-bankarstvo/azuriranje-na-klient-so-oneid/",
+      "desktopImageUrl": "https://www.stb.com.mk/media/4919/oneid_1600x544px.png",
+      "mobileImageUrl": "https://www.stb.com.mk/media/4918/oneid_500x250px.png",
+      "desktopImageLocalPath": "scraped-media/homepage/hero/02-desktop-oneid_1600x544px.png",
+      "mobileImageLocalPath": "scraped-media/homepage/hero/02-mobile-oneid_500x250px.png"
+    },
+    {
+      "slideHeading": "Станбен кредит",
+      "slideSubheading": "со промотивни услови",
+      "slideCtaText": "Дознај повеќе",
+      "slideCtaUrl": "https://www.stb.com.mk/naselenie/krediti/stanbeni-krediti/glavni-karakteristiki/",
+      "desktopImageUrl": "https://www.stb.com.mk/media/4274/stanben-kredit-web-1600x544_1.jpg",
+      "mobileImageUrl": "https://www.stb.com.mk/media/4273/stanben-500x250.jpg",
+      "desktopImageLocalPath": "scraped-media/homepage/hero/03-desktop-stanben-kredit-web-1600x544_1.jpg",
+      "mobileImageLocalPath": "scraped-media/homepage/hero/03-mobile-stanben-500x250.jpg"
+    },
+    {
+      "slideHeading": "Обезбеден потрошувачки кредит",
+      "slideSubheading": "за вашите големи планови",
+      "slideCtaText": "Дознај повеќе",
+      "slideCtaUrl": "https://www.stb.com.mk/naselenie/krediti/potroshuvacki-kredit/potroshuvacki-obezbeden-kredit/",
+      "desktopImageUrl": "https://www.stb.com.mk/media/4272/potroshuvacki-obezbedenweb-1600x544_1.jpg",
+      "mobileImageUrl": "https://www.stb.com.mk/media/4275/potroshuvacki-obezbeden500x250.jpg",
+      "desktopImageLocalPath": "scraped-media/homepage/hero/04-desktop-potroshuvacki-obezbedenweb-1600x544_1.jpg",
+      "mobileImageLocalPath": "scraped-media/homepage/hero/04-mobile-potroshuvacki-obezbeden500x250.jpg"
+    },
+    {
+      "slideHeading": "Потрошувачки кредити",
+      "slideSubheading": "за се што ќе посакате",
+      "slideCtaText": "Дознај повеќе",
+      "slideCtaUrl": "https://www.stb.com.mk/naselenie/krediti/potroshuvacki-kredit/do-1-500-000-denari-25-000-evra/",
+      "desktopImageUrl": "https://www.stb.com.mk/media/4279/potroshuvacki-neobezbedenweb-1600x544_1.jpg",
+      "mobileImageUrl": "https://www.stb.com.mk/media/4278/potroshuvacki-neobezbeden500x250.jpg",
+      "desktopImageLocalPath": "scraped-media/homepage/hero/05-desktop-potroshuvacki-neobezbedenweb-1600x544_1.jpg",
+      "mobileImageLocalPath": "scraped-media/homepage/hero/05-mobile-potroshuvacki-neobezbeden500x250.jpg"
+    }
+  ],
+  "featureIconLinks": [
+    {
+      "label": "Локации",
+      "linkUrl": "https://www.stb.com.mk/sb-lokacii/mreza-na-filijali/",
+      "iconMdiClass": "mdi-map-marker-radius",
+      "iconColor": "#6b5eae"
+    },
+    {
+      "label": "Картички",
+      "linkUrl": "https://www.stb.com.mk/naselenie/karticki/",
+      "iconMdiClass": "mdi-credit-card",
+      "iconColor": "#0acf97"
+    },
+    {
+      "label": "Кредити",
+      "linkUrl": "https://www.stb.com.mk/naselenie/krediti/",
+      "iconMdiClass": "mdi-currency-eur",
+      "iconColor": "#02a8b5"
+    },
+    {
+      "label": "Осигурување",
+      "linkUrl": "https://www.stb.com.mk/naselenie/osiguruvanje/",
+      "iconMdiClass": "mdi-home-lock",
+      "iconColor": "#fa5c7c"
+    },
+    {
+      "label": "Брокер",
+      "linkUrl": "https://www.stb.com.mk/finansiski-pazari/brokerski-uslugi/",
+      "iconMdiClass": "mdi-account-star",
+      "iconColor": "#313a46"
+    },
+    {
+      "label": "Калкулатори",
+      "linkUrl": "https://www.stb.com.mk/ostanati-sodrzini/kalkulatori/",
+      "iconMdiClass": "mdi-calculator",
+      "iconColor": "#02a8b5"
+    },
+    {
+      "label": "Продажба на имот",
+      "linkUrl": "https://www.stb.com.mk/ostanati-sodrzini/prodazba-na-imot/prodazba-na-imot-na-bankata/",
+      "iconMdiClass": "mdi-home-outline",
+      "iconColor": "#0acf97"
+    },
+    {
+      "label": "Информативни формулари",
+      "linkUrl": "https://www.stb.com.mk/naselenie/informativni-formulari-za-kreditni-proizvodi/",
+      "iconMdiClass": "mdi-information-variant",
+      "iconColor": "#313a46"
+    },
+    {
+      "label": "Кариера",
+      "linkUrl": "https://www.stb.com.mk/kariera-vo-stb/kariera-vo-stb/",
+      "iconMdiClass": "mdi-account-edit",
+      "iconColor": "#6b5eae"
+    }
+  ],
+  "applyOnline": {
+    "imageUrl": "https://www.stb.com.mk/media/2070/alo-kredit_500x207.jpg",
+    "imageLocalPath": "scraped-media/homepage/apply/alo-kredit_500x207.jpg",
+    "targetUrl": "https://www.stb.com.mk/appForm/potrosuvacki-kredit-bez-obezbeduvanje-1500000"
+  },
+  "promoBanners": [
+    {
+      "name": "topsi.mk",
+      "targetUrl": "https://www.stb.com.mk/topsi/",
+      "imageUrl": "https://www.stb.com.mk/media/2051/topsi_739x306.jpg",
+      "imageLocalPath": "scraped-media/homepage/promo/topsi.mk-topsi_739x306.jpg"
+    },
+    {
+      "name": "Golden Club",
+      "targetUrl": "https://www.stb.com.mk/goldenclub/doma/",
+      "imageUrl": "https://www.stb.com.mk/media/2052/golden-club_739x306.jpg",
+      "imageLocalPath": "scraped-media/homepage/promo/golden-club-golden-club_739x306.jpg"
+    }
+  ],
+  "latestNews": [
+    {
+      "title": "Сонуваме Менуваме vol.7 со 2 претстави во Скопје",
+      "url": "https://www.stb.com.mk/novosti/sonuvame-menuvame-vol-7-so-2-pretstavi-vo-skopje/",
+      "publishDate": "03.03.2026",
+      "excerpt": "Изминатиот викенд Националната опера и балет беше исполнета со радост, енергија и силни инклузивни пораки. Банката со голема гордост ги пром...",
+      "thumbnailUrl": "https://www.stb.com.mk/media/1851/defaultnews.png",
+      "thumbnailLocalPath": "scraped-media/homepage/news/defaultnews.png"
+    },
+    {
+      "title": "Најава за планирани активности и прекини - 4.3.2026",
+      "url": "https://www.stb.com.mk/novosti/najava-za-planirani-aktivnosti-i-prekini-4-3-2026/",
+      "publishDate": "03.03.2026",
+      "excerpt": "Најава за планирани активности и прекини Почитувани клиенти, Ве известуваме дека во раните утрински часови на 04.03 во план е рутин...",
+      "thumbnailUrl": "https://www.stb.com.mk/media/1851/defaultnews.png",
+      "thumbnailLocalPath": "scraped-media/homepage/news/defaultnews.png"
+    },
+    {
+      "title": "Најава за планирани активности и прекини",
+      "url": "https://www.stb.com.mk/novosti/najava-za-planirani-aktivnosti-i-prekini/",
+      "publishDate": "27.02.2026",
+      "excerpt": "Ве известуваме дека согласно со планираните активности за редовни системски надградби и одржувања во недела 01.3.2026 во раните утрински час...",
+      "thumbnailUrl": "https://www.stb.com.mk/media/1851/defaultnews.png",
+      "thumbnailLocalPath": "scraped-media/homepage/news/defaultnews.png"
+    },
+    {
+      "title": "Засилена автентикација при електронски плаќања",
+      "url": "https://www.stb.com.mk/novosti/zasilena-avtentikacija-pri-elektronski-plakjanja/",
+      "publishDate": "17.02.2026",
+      "excerpt": "Го споделуваме соопштението од Македонската банкарска асоцијација со кое се информира јавноста дека, согласно Законот за платежни услуги и п...",
+      "thumbnailUrl": "https://www.stb.com.mk/media/1851/defaultnews.png",
+      "thumbnailLocalPath": "scraped-media/homepage/news/defaultnews.png"
+    },
+    {
+      "title": "Финансиски резултати за 2025 година",
+      "url": "https://www.stb.com.mk/novosti/finansiski-rezultati-za-2025-godina/",
+      "publishDate": "30.01.2026",
+      "excerpt": "Врз основа на објавените неревидирани финансиски резултати објавени денес на Берзата, Стопанска банка оствари добивка пред оданочување и исп...",
+      "thumbnailUrl": "https://www.stb.com.mk/media/1851/defaultnews.png",
+      "thumbnailLocalPath": "scraped-media/homepage/news/defaultnews.png"
+    }
+  ]
+}
