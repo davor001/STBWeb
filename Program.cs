@@ -12,6 +12,11 @@ builder.CreateUmbracoBuilder()
 
 WebApplication app = builder.Build();
 
+// Ensure Umbraco's media directory exists before boot.
+// wwwroot/media/ is gitignored (content only), so it may be absent on a fresh Azure deploy.
+// PhysicalFileProvider throws DirectoryNotFoundException at startup if the path is missing.
+Directory.CreateDirectory(Path.Combine(app.Environment.WebRootPath, "media"));
+
 await app.BootUmbracoAsync();
 
 // Serve static files from wwwroot/ BEFORE Umbraco routing
