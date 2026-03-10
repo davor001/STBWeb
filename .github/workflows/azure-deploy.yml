@@ -22,7 +22,16 @@ jobs:
         
       - name: Publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-        
+
+      - name: Ensure media directory exists in publish output
+        # dotnet publish drops dotfiles via the StaticWebAssets pipeline, so wwwroot/media/
+        # (which contains only .gitkeep) is absent from the publish output. Without this
+        # directory Umbraco's PhysicalFileProvider throws DirectoryNotFoundException at startup.
+        # The csproj Content include is the primary fix; this step is a second safety net.
+        run: |
+          mkdir -p ${{env.DOTNET_ROOT}}/myapp/wwwroot/media
+          touch ${{env.DOTNET_ROOT}}/myapp/wwwroot/media/.gitkeep
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:

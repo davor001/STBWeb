@@ -12,7 +12,8 @@
       "Bash(grep -o '.dc-icon[^}]*}' \"C:/Users/User1/Desktop/STBWeb/reference/stb-homepage/homepage_files/app.css\" 2>/dev/null | head -5)",
       "Bash(grep -o '\\\\.digital-channels[^}]*}' \"C:/Users/User1/Desktop/STBWeb/reference/stb-homepage/homepage_files/app.css\" 2>/dev/null | head -5)",
       "Bash(grep -o '\\\\.block-title[^}]*}' \"C:/Users/User1/Desktop/STBWeb/reference/stb-homepage/homepage_files/app.css\" 2>/dev/null | head -5)",
-      "Bash(grep -o '\\\\.block-title[^}]*}' \"C:/Users/User1/Desktop/STBWeb/wwwroot/css/app.css\" 2>/dev/null | head -5)"
+      "Bash(grep -o '\\\\.block-title[^}]*}' \"C:/Users/User1/Desktop/STBWeb/wwwroot/css/app.css\" 2>/dev/null | head -5)",
+      "Bash(find /tmp/stbweb-pub -name \".gitkeep\" 2>/dev/null; echo \"---\"; find /tmp/stbweb-pub -name \".*\" 2>/dev/null | head -10)"
     ]
   }
 }
