@@ -1,0 +1,253 @@
+
+                window.onscroll = function() {
+    myFunction()
+};
+
+var navbar = document.getElementById("navbar");
+var masterpage = document.getElementById("master_page_content");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+    if (window.pageYOffset >= sticky) {
+        navbar.classList.add("sticky");
+        //masterpage.classList.add("has-padding");
+
+        //console.log("offsetHeight: " + offsetHeight);
+        if (window.innerWidth >= 992) {
+            var offsetHeight = navbar.offsetHeight;
+            masterpage.setAttribute("style", "padding-top: " + offsetHeight + "px");
+        }
+
+
+    } else {
+        navbar.classList.remove("sticky");
+        //masterpage.classList.remove("has-padding");
+        masterpage.setAttribute("style", "padding-top: 0px");
+    }
+}
+
+function EnableCookies() {
+    EnableAnalyticsCookies();
+    setCookie(keyCookie, 3, 100);
+}
+
+function EnableAnalyticsCookies() {
+    window[disableStr] = false;
+    var pageTracker = _gat._getTracker(gaProperty);
+    pageTracker._trackPageview();
+
+    fbq('consent', 'grant');
+
+    gtag('consent', 'update', {
+        ad_storage: 'granted',
+        analytics_storage: 'granted'
+    });
+    setCookie(keyCookie, 1, 100);
+}
+
+$('#newsSlider').on('slide.bs.carousel', function(e) {
+
+    var slideFrom = $(this).find('.active').index();
+    var slideTo = $(e.relatedTarget).index();
+
+    $("#newsSlider" + slideFrom).removeClass("active");
+    $("#newsSlider" + slideTo).addClass("active");
+
+    console.log(slideFrom + ' => ' + slideTo);
+});
+
+//cookieConsent
+//0 ne prifatil
+//1 samo analitycs
+//2 samo marketing
+//3 se prifatil
+//4 samo required
+
+$(document).ready(function() {
+
+    $('.newsTicker').easyTicker({
+        visible: 1,
+        direction: 'left',
+        interval: 4000
+    });
+    
+  
+    
+    
+    if (!cookieConsent) {
+        // Disable tracking if the opt-out cookie exists.
+        $('#GdprModal').show();
+
+    } else {
+     
+         if (cookieConsent == 3 || cookieConsent == 1)
+         {
+            document.getElementById("analyticsCookies").checked = true;
+         }
+         
+         if (cookieConsent == 3 || cookieConsent == 2)
+         {
+            document.getElementById("marketingCookies").checked = true;
+         }
+         
+     
+        $('#GdprModal').hide();
+    }
+
+    $("#noCookies").on("click", function(e) {
+        e.preventDefault();
+        setCookie(keyCookie, 0, 100);
+        $('#GdprModal').hide();
+
+    });
+
+
+    $("#allowCookies").on("click", function(e) {
+
+        e.preventDefault();
+        EnableCookies();
+        $('#GdprModal').hide();
+
+    });
+
+    $('#settingsModal').on('hidden.bs.modal', function() {
+        var cookieConsent = getCookie(keyCookie);
+        if (!cookieConsent) {
+            $('#GdprModal').show();
+        }
+    });
+
+    $("#allowSettingsCookies").on("click", function(e) {
+
+        e.preventDefault();
+        $('#settingsModal').modal('toggle');
+        $('#GdprModal').hide();
+
+        if ($('#marketingCookies').is(":checked") && $('#analyticsCookies').is(":checked")) {
+            EnableCookies();
+        } else if ($('#analyticsCookies').is(":checked")) {
+            EnableAnalyticsCookies();
+        } else if ($('#marketingCookies').is(":checked")) {
+            setCookie(keyCookie, 2, 100);
+        } else {
+            setCookie(keyCookie, 4, 100);
+        }
+
+    });
+    
+    $("#rejectCookies").on("click", function(e) {
+    e.preventDefault();
+    setCookie(keyCookie, 4, 100); // 4 = само неопходни колачиња
+    $('#GdprModal').hide();
+    });
+
+
+    $(".settingsCookies" ).click(function() {
+  
+   
+        $('#GdprModal').hide();
+        $('#settingsModal').modal('show');
+    });
+
+    $("#settingsCookies").on("click", function(e) {
+
+        e.preventDefault(); // prevent de default action, which is to submit
+        $('#GdprModal').hide();
+        $('#settingsModal').modal('show');
+
+    });
+
+    $(function() {
+        $('.js-conveyor-example').jConveyorTicker({
+            reverse_elm: true
+        });
+    });
+
+});
+
+
+
+function cookie() {
+    var x = getCookie("_mobile_app_popup ");
+    console.log(navigator.userAgent);
+
+
+    if (x == "" || x == null) {
+        console.log("Welcome to STB!");
+
+        var mobileOS = getMobileOperatingSystem();
+        switch (mobileOS) {
+            case "Android":
+                //console.log('Android!'); 
+
+                console.log('iOS!');
+
+                setTimeout(function() {
+                    var divb = document.getElementById("box_google_play");
+                    divb.setAttribute("style", "display: block;");
+                    //divb.classList.remove();
+                }, 2000);
+
+                setCookie("_mobile_app_popup ", "_mobile_app_popup ", 1);
+                break;
+            case "iOS":
+                //console.log('iOS!'); 
+
+                setTimeout(function() {
+                    var divb = document.getElementById("box_apple_store");
+                    divb.setAttribute("style", "display: block;");
+                    //divb.classList.remove();
+                }, 2000);
+
+                //divb.classList.add("d-block");
+                setCookie("_mobile_app_popup ", "_mobile_app_popup ", 1);
+                break;
+            default:
+                break;
+        }
+
+
+
+
+    } else if (x == "_mobile_app_popup ") {
+        console.log("You came back!");
+    }
+}
+
+if (cookieConsent && cookieConsent != 0) {
+    cookie();
+}
+
+$('#q').bind(('keydown'), function(e) {
+    if (e.keyCode == 13) return postSearch();
+});
+
+var postSearch = function() {
+    location.href = "/search/?query=" + $('#q').val() + "&new=1";
+    return false;
+}
+
+function getMobileOperatingSystem() {
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    // Windows Phone must come first because its UA also contains "Android"
+    if (/windows phone/i.test(userAgent)) {
+        return "Windows Phone";
+    }
+
+    if (/android/i.test(userAgent)) {
+        return "Android";
+    }
+
+    // iOS detection from: http://stackoverflow.com/a/9039885/177710
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return "iOS";
+    }
+
+    return "unknown";
+}
+
+
+$('.carousel').carousel({
+    interval: 5000
+})

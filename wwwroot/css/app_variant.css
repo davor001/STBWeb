@@ -2,11 +2,6 @@
 /* Primary accent: #EC008C (magenta/pink) */
 /* Secondary: #D4A843 (gold) */
 
-/* Light gradient header bar */
-.topnav-navbar {
-    background: linear-gradient(135deg, #fff 0%, #fefcfd 100%);
-}
-
 /* Active nav highlighting — magenta underline */
 .topnav-menu .navbar-nav .nav-item.active > .nav-link {
     color: #EC008C;
@@ -120,6 +115,44 @@ a.text-primary {
         background-color: #c0006f;
         border-color: #c0006f;
     }
+
+/* "Што ми треба?" icon grid — flex layout (win-icon-circle and link colors are in app.css) */
+.win-icon-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.win-icon-col {
+    flex: 0 0 calc(100% / 9);
+    max-width: calc(100% / 9);
+    text-align: center;
+    padding: 0 5px;
+}
+
+@media (max-width: 767px) {
+    .win-icon-row {
+        flex-wrap: wrap;
+    }
+
+    .win-icon-col {
+        flex: 0 0 33.333%;
+        max-width: 33.333%;
+        margin-bottom: 15px;
+    }
+}
+
+.win-icon {
+    display: block;
+}
+
+.icon-text {
+    display: block;
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
 
 /* e-najava link styling */
 .ebank-btn {

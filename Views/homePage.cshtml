@@ -374,22 +374,34 @@
     </div>
 }
 
-<!-- "What Do I Need?" Icon Grid -->
+<!-- News Ticker -->
+@await Html.PartialAsync("_NewsTicker")
+
+<!-- "Што ми треба?" Icon Grid -->
 @if (featureIcons.Any())
 {
-    <div class="container-fluid home-what-i-need py-4">
-        <div class="row justify-content-center">
-            @foreach (var icon in featureIcons)
-            {
-                <div class="col-4 col-sm-3 col-md-2 col-lg-1 text-center mb-3 win-icon-row">
-                    <a href="@icon.LinkUrl" class="d-block">
-                        <span class="win-icon-circle" style="background-color:@icon.IconColor;">
-                            <i class="mdi @icon.IconMdiClass"></i>
-                        </span>
-                        <span class="d-block mt-1 small">@icon.Label</span>
-                    </a>
+    <div class="home-what-i-need">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h3 class="home-what-i-need-title mb-2 mt-1">ШТО МИ ТРЕБА?</h3>
                 </div>
-            }
+                <div class="col-12">
+                    <div class="win-icon-row">
+                        @foreach (var icon in featureIcons)
+                        {
+                            <div class="win-icon-col">
+                                <a href="@icon.LinkUrl" class="win-icon">
+                                    <span class="win-icon-circle" style="background-color:@icon.IconColor;">
+                                        <i class="mdi @icon.IconMdiClass"></i>
+                                    </span>
+                                    <span class="icon-text">@icon.Label</span>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 }
@@ -416,7 +428,7 @@
         <div class="col-md-4 mb-3">
             <div class="card h-100">
                 <div class="card-header">Курсна листа</div>
-                <div class="card-body p-2">
+                <div class="card-body p-2 d-flex flex-column">
                     @await Html.PartialAsync("_CurrencyWidget")
                 </div>
             </div>
@@ -425,34 +437,72 @@
         <!-- Latest News -->
         <div class="col-md-4 mb-3">
             <div class="card h-100">
-                <div class="card-header">Последни вести</div>
-                <div class="card-body p-2">
+                <div class="card-body p-2 d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-baseline mb-1">
+                        <h4 class="header-title mt-0 mb-0">Соопштенија</h4>
+                        <a href="@allNewsUrl" class="text-nowrap small">Сите соопштенија &gt;</a>
+                    </div>
+
                     @if (latestNews.Any())
                     {
-                        <ul class="list-unstyled mb-0">
-                            @foreach (var news in latestNews)
-                            {
-                                <li class="mb-2 pb-2 border-bottom">
-                                    <a href="@news.Url" class="d-block">
-                                        @if (!string.IsNullOrWhiteSpace(news.ThumbnailUrl))
-                                        {
-                                            <img src="@news.ThumbnailUrl" class="img-fluid mb-1" alt="@news.Title">
-                                        }
-                                        <strong>@news.Title</strong>
-                                    </a>
-                                    @if (!string.IsNullOrWhiteSpace(news.PublishDate))
-                                    {
-                                        <small class="text-muted d-block">@news.PublishDate</small>
-                                    }
-                                    @if (!string.IsNullOrWhiteSpace(news.Excerpt))
-                                    {
-                                        <p class="small text-muted mb-0 mt-1">@news.Excerpt</p>
-                                    }
-                                </li>
-                            }
-                        </ul>
+                        <div id="newsSlider" class="carousel slide flex-grow-1 d-flex flex-column" data-ride="carousel" data-interval="false">
+                            <div class="carousel-inner">
+                                @{
+                                    var newsIdx = 0;
+                                }
+                                @foreach (var news in latestNews)
+                                {
+                                    <div class="carousel-item @(newsIdx == 0 ? "active" : "")">
+                                        <p class="home-news-title mt-2">
+                                            @if (!string.IsNullOrWhiteSpace(news.PublishDate))
+                                            {
+                                                <span class="news-title-date">@news.PublishDate</span>
+                                            }
+                                            @news.Title
+                                        </p>
+                                        <div class="row news-article">
+                                            <div class="col-auto">
+                                                <img alt="@news.Title" src="@(string.IsNullOrWhiteSpace(news.ThumbnailUrl) ? "/scraped-media/homepage/news/defaultnews.png" : news.ThumbnailUrl)">
+                                            </div>
+                                            <div class="col pl-0">
+                                                @if (!string.IsNullOrWhiteSpace(news.Excerpt))
+                                                {
+                                                    @news.Excerpt
+                                                }
+                                                <a href="@news.Url"> повеќе</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    newsIdx++;
+                                }
+                            </div>
+
+                            <div class="row mt-auto">
+                                <div class="col-12">
+                                    <div class="dataTables_paginate paging_simple_numbers text-center">
+                                        <ol class="pagination pagination-rounded mb-0 d-inline-flex">
+                                            <li class="paginate_button page-item previous">
+                                                <a href="#newsSlider" data-slide="prev" class="page-link" aria-label="Претходно">
+                                                    <i class="mdi mdi-chevron-left"></i>
+                                                </a>
+                                            </li>
+                                            @for (var pi = 0; pi < latestNews.Count; pi++)
+                                            {
+                                                <li id="newsSlider@(pi)" data-target="#newsSlider" data-slide-to="@pi" class="paginate_button page-item @(pi == 0 ? "active" : "")">
+                                                    <a href="#" class="page-link">@(pi + 1)</a>
+                                                </li>
+                                            }
+                                            <li class="paginate_button page-item next">
+                                                <a href="#newsSlider" data-slide="next" class="page-link" aria-label="Наредно">
+                                                    <i class="mdi mdi-chevron-right"></i>
+                                                </a>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
-                    <a href="@allNewsUrl" class="btn btn-sm btn-outline-primary w-100 mt-2">Сите вести</a>
                 </div>
             </div>
         </div>

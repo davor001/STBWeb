@@ -1,32 +1,96 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 
-<!-- Search Overlay Panel -->
-<div class="search-overlay" id="searchPanel" style="display: none;">
-    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-4" id="closeSearch" aria-label="Close"></button>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <!-- Directing to the Surface Controller using regular GET to matching route -->
-                <form action="/prebaruvanje" method="get" class="search-form-massive">
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-text bg-transparent border-light text-white border-end-0 pe-0">
-                            <i class="mdi mdi-magnify fs-3"></i>
-                        </span>
-                        <input type="text" name="q" class="form-control bg-transparent border-light border-start-0 text-white placeholder-white" placeholder="Што барате денеска?" autofocus>
-                        <button class="btn btn-outline-light px-4" type="submit">Барај</button>
+<!-- Right-side search/info panel -->
+<div class="right-bar" id="right-bar">
+    <div class="rightbar-title">
+        <button type="button" class="right-bar-toggle float-right" id="closeSearch" aria-label="Close">
+            <i class="mdi mdi-close"></i>
+        </button>
+        <h5 class="m-0">Пребарај</h5>
+    </div>
+    <div class="rightbar-content p-3">
+
+        <!-- Search form -->
+        <div class="app-search mb-3">
+            <form action="/prebaruvanje" method="get">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Пребарај...">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="mdi mdi-magnify"></i>
+                        </button>
                     </div>
-                    <div class="mt-4 text-center">
-                        <p class="text-white-50 small mb-2">Најчесто пребарувани:</p>
-                        <div class="d-flex flex-wrap justify-content-center gap-2">
-                            <a href="/prebaruvanje?q=Кредити" class="badge rounded-pill bg-white text-dark text-decoration-none px-3 py-2 fw-normal transition-hover">Кредити</a>
-                            <a href="/prebaruvanje?q=Курсна листа" class="badge rounded-pill bg-white text-dark text-decoration-none px-3 py-2 fw-normal transition-hover">Курсна листа</a>
-                            <a href="/prebaruvanje?q=Филијали" class="badge rounded-pill bg-white text-dark text-decoration-none px-3 py-2 fw-normal transition-hover">Филијали</a>
-                            <a href="/prebaruvanje?q=I-bank" class="badge rounded-pill bg-white text-dark text-decoration-none px-3 py-2 fw-normal transition-hover">I-bank</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
+
+        <!-- FAQ accordion -->
+        <h6 class="text-uppercase mb-2 mt-4" style="font-size:11px; letter-spacing:.05em; color:#98a6ad;">Најчести прашања</h6>
+        <div id="rightbar-faq" class="accordion">
+
+            <div class="card mb-1 shadow-none border">
+                <div class="card-header p-0" id="faq-h1">
+                    <a class="d-block p-2 text-dark" data-toggle="collapse" href="#faq-c1" aria-expanded="true">
+                        <i class="mdi mdi-help-circle-outline mr-1 text-primary"></i> Каде е најблиската филијала?
+                    </a>
+                </div>
+                <div id="faq-c1" class="collapse show" data-parent="#rightbar-faq">
+                    <div class="card-body p-2 small">
+                        Листата на сите филијали и банкомати може да ја најдете на страницата
+                        <a href="/za-bankata/mreza-na-filijali/">Мрежа на филијали</a>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-1 shadow-none border">
+                <div class="card-header p-0" id="faq-h2">
+                    <a class="d-block p-2 text-dark collapsed" data-toggle="collapse" href="#faq-c2">
+                        <i class="mdi mdi-help-circle-outline mr-1 text-primary"></i> Како да се пријавам во I-bank?
+                    </a>
+                </div>
+                <div id="faq-c2" class="collapse" data-parent="#rightbar-faq">
+                    <div class="card-body p-2 small">
+                        Посетете <a href="https://ibank.stb.com.mk" target="_blank" rel="noopener">ibank.stb.com.mk</a> и внесете ги вашите кориснички податоци.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-1 shadow-none border">
+                <div class="card-header p-0" id="faq-h3">
+                    <a class="d-block p-2 text-dark collapsed" data-toggle="collapse" href="#faq-c3">
+                        <i class="mdi mdi-help-circle-outline mr-1 text-primary"></i> Која е тековната каматна стапка?
+                    </a>
+                </div>
+                <div id="faq-c3" class="collapse" data-parent="#rightbar-faq">
+                    <div class="card-body p-2 small">
+                        Тековните каматни стапки се објавени во
+                        <a href="/finansiski-pazari/kursna-lista/">Курсна листа</a> и во условите за поедини производи.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-1 shadow-none border">
+                <div class="card-header p-0" id="faq-h4">
+                    <a class="d-block p-2 text-dark collapsed" data-toggle="collapse" href="#faq-c4">
+                        <i class="mdi mdi-help-circle-outline mr-1 text-primary"></i> Како да пријавам изгубена картичка?
+                    </a>
+                </div>
+                <div id="faq-c4" class="collapse" data-parent="#rightbar-faq">
+                    <div class="card-body p-2 small">
+                        Јавете се на нашиот Контакт центар: <strong>+(02) 3100 109</strong>, достапен 24/7.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Contact center box -->
+        <div class="mt-4 p-3 rounded text-white text-center" style="background:#EC008C;">
+            <p class="mb-1 small font-weight-bold">КОНТАКТ ЦЕНТАР</p>
+            <p class="mb-1" style="font-size:1.2rem; font-weight:700;">+(02) 3100 109</p>
+            <p class="mb-0 small">Работно време: 08:00 – 20:00</p>
+        </div>
+
     </div>
 </div>
-<div class="rightbar-overlay"></div>
+<div class="rightbar-overlay" id="rightbar-overlay"></div>

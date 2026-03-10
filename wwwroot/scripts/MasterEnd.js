@@ -2,25 +2,36 @@
 (function ($) {
     'use strict';
 
-    /* --- Search Panel Toggle --- */
-    var $searchPanel = $('#searchPanel');
+    /* --- Right-bar (search/info panel) Toggle --- */
+    function openRightBar() {
+        $('body').addClass('right-bar-enabled');
+        $('#right-bar').find('input[name="q"]').focus();
+    }
 
-    // Open search when clicking the search button/link in top bar
-    $(document).on('click', '[data-toggle="search"], .right-bar-toggle, #openSearch, a[href="#searchPanel"]', function (e) {
-        e.preventDefault();
-        $searchPanel.addClass('show').css('display', 'flex');
-        $searchPanel.find('input[name="q"]').focus();
+    function closeRightBar() {
+        $('body').removeClass('right-bar-enabled');
+    }
+
+    // Open: any search trigger in the top bar
+    $(document).on('click', '.right-bar-toggle, [data-toggle="search"], #openSearch', function (e) {
+        // The close button inside the panel also carries .right-bar-toggle — toggle accordingly
+        if ($(this).closest('#right-bar').length) {
+            closeRightBar();
+        } else {
+            e.preventDefault();
+            openRightBar();
+        }
     });
 
-    // Close search panel
-    $(document).on('click', '#closeSearch, .rightbar-overlay', function () {
-        $searchPanel.removeClass('show').css('display', 'none');
+    // Close: overlay click
+    $(document).on('click', '#rightbar-overlay', function () {
+        closeRightBar();
     });
 
-    // Close on Escape key
+    // Close: Escape key
     $(document).on('keydown', function (e) {
-        if (e.key === 'Escape' && $searchPanel.hasClass('show')) {
-            $searchPanel.removeClass('show').css('display', 'none');
+        if (e.key === 'Escape' && $('body').hasClass('right-bar-enabled')) {
+            closeRightBar();
         }
     });
 
@@ -59,14 +70,23 @@
         }
     });
 
-    /* --- News Ticker --- */
-    if ($.fn.jConveyorTicker && $('.js-conveyor-example').length) {
-        $('.js-conveyor-example').jConveyorTicker({ speed: 80 });
-    }
+    /* --- News Ticker ---
+         The local jquery.jConveyorTicker.min.js stub auto-inits itself on
+         DOMContentLoaded, so no explicit call is needed here. Calling it a
+         second time would clone the list items twice (4× total) and cause the
+         -50% CSS animation to scroll through two full copies per loop. */
 
     /* --- Carousel auto-init (Bootstrap 4) --- */
     if ($('#homeMainSlider').length) {
         $('#homeMainSlider').carousel({ interval: 5000, pause: 'hover' });
     }
+
+    /* --- News carousel: keep numbered pagination in sync with active slide --- */
+    $('#newsSlider').on('slide.bs.carousel', function (e) {
+        var slideFrom = $(this).find('.carousel-item.active').index();
+        var slideTo   = $(e.relatedTarget).index();
+        $('#newsSlider' + slideFrom).removeClass('active');
+        $('#newsSlider' + slideTo).addClass('active');
+    });
 
 })(jQuery);

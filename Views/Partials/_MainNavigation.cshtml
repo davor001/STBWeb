@@ -118,14 +118,31 @@
                     }
                     
 
-                    <!-- e-banking CTA  . -->
-                    <li class="nav-item d-none d-lg-block ml-auto">
+                </ul>
+
+                <!-- CTA buttons — right-aligned, match reference two-button layout -->
+                <ul class="navbar-nav list-unstyled mb-2 mb-lg-0 ml-auto navbar-right-secundary">
+                    <li class="nav-item">
+                        <a class="btn btn-eregistration btn-sm mt-1" href="https://epin.stb.com.mk/">e-регистрација</a>
+                    </li>
+                    <li class="nav-item d-none d-lg-block">
                         <a class="btn btn-enajava btn-sm mt-1" href="https://ebank.stb.com.mk">
                             <i class="mdi mdi-key mr-1"></i> e-најава
                         </a>
                     </li>
-
                 </ul>
+
+                <!-- Mobile language switcher (xs only — mirrors top bar which is d-none d-sm-block) -->
+                <ul class="navbar-nav list-unstyled mb-2 navbar-right-secundary d-sm-none">
+                    <li class="nav-item ml-auto">
+                        <a href="/" class="nav-link@(isEnglish ? "" : " active")">mk</a>
+                    </li>
+                    <li class="nav-link">|</li>
+                    <li class="nav-item mr-auto">
+                        <a href="/en/" class="nav-link@(isEnglish ? " active" : "")">en</a>
+                    </li>
+                </ul>
+
             </div>
         </nav>
     </div>

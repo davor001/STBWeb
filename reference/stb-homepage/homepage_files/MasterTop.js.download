@@ -1,0 +1,35 @@
+function getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    
+    if (parts.length >= 2) return parts.pop().split(";").shift();
+}
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires+"; path=/";
+}
+
+
+
+//0 ne prifatil
+//1 samo analitycs
+//2 samo marketing
+//3 se prifatil
+//4 samo required
+
+
+
+// Set to the same value as the web property used on the site
+var gaProperty = 'UA-16452799-1';
+var keyCookie = "_cookieConsent";
+var disableStr = 'ga-disable-' + gaProperty;
+var cookieConsent = getCookie(keyCookie);
+console.log("cookieConsent "+cookieConsent);
+if (!cookieConsent || !(cookieConsent == 1 || cookieConsent == 3)) {
+    // Disable tracking if the opt-out cookie exists.
+    window[disableStr] = true;
+
+}
