@@ -479,7 +479,7 @@ umbraco-package-schema.json
 /umbraco/Logs/
 
 # Media files
-/wwwroot/media/
+# /wwwroot/media/
 
 ## Reference crawl data (large local-only reference, not tracked in git)
 reference/stb-crawl/
