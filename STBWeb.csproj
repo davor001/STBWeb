@@ -28,4 +28,18 @@
 		<RazorCompileOnPublish>false</RazorCompileOnPublish>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<!--
+			dotnet publish silently drops all dotfiles (files starting with ".") from wwwroot/
+			via the StaticWebAssets pipeline. wwwroot/media/ contains only .gitkeep, so the
+			entire directory is absent from the publish output and therefore from every Azure
+			deploy package — causing Umbraco's PhysicalFileProvider to throw
+			DirectoryNotFoundException on startup.
+
+			Explicitly declaring the file as a Content item with CopyToPublishDirectory
+			overrides that exclusion and guarantees the directory exists in every package.
+		-->
+		<Content Include="wwwroot\media\.gitkeep" CopyToPublishDirectory="PreserveNewest" />
+	</ItemGroup>
+
 </Project>
