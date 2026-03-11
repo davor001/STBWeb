@@ -23,7 +23,8 @@
       "Bash(grep -o \"\\\\.btn-sm[^}]*}\" \"C:\\\\Users\\\\User1\\\\Desktop\\\\STBWeb\\\\reference\\\\stb-homepage\\\\homepage_files\\\\app.css\" 2>/dev/null | head -3)",
       "Bash(find /c/Users/User1/Desktop/STBWeb/reference -name \"*homepage*\" -o -name \"homepage*\" 2>/dev/null | head -20)",
       "Bash(grep -r \"position:\\\\s*fixed\\\\|position:\\\\s*absolute\" /c/Users/User1/Desktop/STBWeb/Views/Partials/*.cshtml 2>/dev/null | head -20)",
-      "Bash(grep -n \"col-auto\\\\|col-auto img\" /c/Users/User1/Desktop/STBWeb/wwwroot/css/*.css)"
+      "Bash(grep -n \"col-auto\\\\|col-auto img\" /c/Users/User1/Desktop/STBWeb/wwwroot/css/*.css)",
+      "Bash(grep -r \"Languages\\\\|Cultures\\\\|CultureRoute\" /c/Users/User1/Desktop/STBWeb --include=\"*.json\" --include=\"*.cs\" 2>/dev/null | grep -v \".bin\\\\|node_modules\\\\|\\\\.git\" | head -30)"
     ]
   }
 }
