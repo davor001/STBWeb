@@ -13,7 +13,17 @@
       "Bash(grep -o '\\\\.digital-channels[^}]*}' \"C:/Users/User1/Desktop/STBWeb/reference/stb-homepage/homepage_files/app.css\" 2>/dev/null | head -5)",
       "Bash(grep -o '\\\\.block-title[^}]*}' \"C:/Users/User1/Desktop/STBWeb/reference/stb-homepage/homepage_files/app.css\" 2>/dev/null | head -5)",
       "Bash(grep -o '\\\\.block-title[^}]*}' \"C:/Users/User1/Desktop/STBWeb/wwwroot/css/app.css\" 2>/dev/null | head -5)",
-      "Bash(find /tmp/stbweb-pub -name \".gitkeep\" 2>/dev/null; echo \"---\"; find /tmp/stbweb-pub -name \".*\" 2>/dev/null | head -10)"
+      "Bash(find /tmp/stbweb-pub -name \".gitkeep\" 2>/dev/null; echo \"---\"; find /tmp/stbweb-pub -name \".*\" 2>/dev/null | head -10)",
+      "Bash(find /tmp/stbweb-pub2 -name \"scraped*\" -o -name \"homepage.json\" 2>/dev/null | head -20)",
+      "Bash(find /tmp/stbweb-pub2 -path \"*umbraco*\" 2>/dev/null | head -20)",
+      "Bash(ls /tmp/stbweb-pub2/Umbraco*.dll 2>/dev/null | head -20)",
+      "Bash(find \"C:\\\\Users\\\\User1\\\\Desktop\\\\STBWeb\" -type f \\\\\\( -name \"*.cs\" -o -name \"*.cshtml\" -o -name \"*.json\" \\\\\\) ! -path \"*/bin/*\" ! -path \"*/obj/*\" ! -path \"*/.vs/*\" ! -path \"*/umbraco/*\" 2>/dev/null | head -50)",
+      "Bash(grep -o \"\\\\.btn-warning[^}]*}\" \"C:\\\\Users\\\\User1\\\\Desktop\\\\STBWeb\\\\reference\\\\stb-homepage\\\\homepage_files\\\\app.css\" 2>/dev/null | head -5)",
+      "Bash(grep -o \"\\\\.btn-primary[^}]*}\" \"C:\\\\Users\\\\User1\\\\Desktop\\\\STBWeb\\\\reference\\\\stb-homepage\\\\homepage_files\\\\app.css\" 2>/dev/null | head -5)",
+      "Bash(grep -o \"\\\\.btn-sm[^}]*}\" \"C:\\\\Users\\\\User1\\\\Desktop\\\\STBWeb\\\\reference\\\\stb-homepage\\\\homepage_files\\\\app.css\" 2>/dev/null | head -3)",
+      "Bash(find /c/Users/User1/Desktop/STBWeb/reference -name \"*homepage*\" -o -name \"homepage*\" 2>/dev/null | head -20)",
+      "Bash(grep -r \"position:\\\\s*fixed\\\\|position:\\\\s*absolute\" /c/Users/User1/Desktop/STBWeb/Views/Partials/*.cshtml 2>/dev/null | head -20)",
+      "Bash(grep -n \"col-auto\\\\|col-auto img\" /c/Users/User1/Desktop/STBWeb/wwwroot/css/*.css)"
     ]
   }
 }

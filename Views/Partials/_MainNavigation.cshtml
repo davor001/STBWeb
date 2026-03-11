@@ -1,20 +1,160 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
     var home = Model.Root();
+
+    // Primary nav: the 8 Население section items.
+    // New tree (after DB reset): these are direct children of Home.
+    // Old/existing tree: they live one level deeper under a "Naselenie" wrapper node.
+    // The fallback below handles both so the nav works without requiring a DB reset.
+    var primaryNavNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "Depoziti", "Krediti", "Karticki", "Smetki",
+        "Digitalno Bankarstvo", "Osiguruvanje", "Platezni Uslugi", "Ostanato"
+    };
+
     var topLevelNavItems = home.Children
-        .Where(x => x.IsVisible() && x.ContentType.Alias == "sectionRoot")
+        .Where(x => x.IsVisible() && primaryNavNames.Contains(x.Name))
         .ToList();
 
-    // Map romanized Umbraco node names to Cyrillic display names
-    // Uses indexer assignment so duplicate keys just overwrite (no crash)
+    // Fallback: existing DB still has old structure (Depoziti etc. under Naselenie).
+    // Show all visible children of Naselenie so the nav is never empty.
+    if (!topLevelNavItems.Any())
+    {
+        var naselenie = home.Children
+            .FirstOrDefault(x => x.ContentType.Alias == "sectionRoot" &&
+                                 x.Name.Equals("Naselenie", StringComparison.OrdinalIgnoreCase));
+        if (naselenie != null)
+            topLevelNavItems = naselenie.Children.Where(x => x.IsVisible()).ToList();
+    }
+
+    // Map romanized Umbraco node names to Cyrillic display names.
+    // Keys are the MK culture names set in ContentSeeder.cs (OrdinalIgnoreCase).
     var cyrillicNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-    cyrillicNames["NASELENIE"]         = "НАСЕЛЕНИЕ";
+
+    // ── Primary nav top-level ─────────────────────────────────────────────────
+    cyrillicNames["Depoziti"]             = "Депозити";
+    cyrillicNames["Krediti"]              = "Кредити";
+    cyrillicNames["Karticki"]             = "Картички";
+    cyrillicNames["Smetki"]               = "Сметки";
+    cyrillicNames["Digitalno Bankarstvo"] = "Дигитално банкарство";
+    cyrillicNames["Osiguruvanje"]         = "Осигурување";
+    cyrillicNames["Platezni Uslugi"]      = "Платежни услуги";
+    cyrillicNames["Ostanato"]             = "Останато";
+
+    // ── Deposits ──────────────────────────────────────────────────────────────
+    cyrillicNames["Za Depozitite"]    = "За депозитите";
+    cyrillicNames["Po Viduvanje"]     = "По видување";
+    cyrillicNames["Oroceni Depoziti"] = "Орочени депозити";
+    cyrillicNames["Shtedni Smetki"]   = "Штедни сметки";
+    cyrillicNames["Paket Plus"]       = "Пакет плус";
+    cyrillicNames["Fleksi Depozit"]   = "Флекси депозит";
+    cyrillicNames["18-20 Depozit"]    = "18/20 депозит";
+    cyrillicNames["12-13 Depozit"]    = "12/13 депозит";
+    cyrillicNames["6 i 9 Meseci Orocen Depozit"]           = "6 и 9 месеци орочен депозит";
+    cyrillicNames["Pcelka Detsko Shtedenje"]               = "Пчелка - Детско штедење";
+    cyrillicNames["Depozit Orocen Na 1 2 3 6 12 24 36 Meseci"] = "Депозит орочен на 1, 2, 3, 6, 12, 24, 36 месеци";
+    cyrillicNames["Premium"]          = "Премиум";
+    cyrillicNames["Moj Plan"]         = "Мој план";
+    cyrillicNames["Evrobonus"]        = "ЕвроБонус";
+
+    // ── Loans ─────────────────────────────────────────────────────────────────
+    cyrillicNames["Potroshuvacki Kredit"] = "Потрошувачки кредит";
+    cyrillicNames["Stanbeni Krediti"]     = "Станбени кредити";
+    cyrillicNames["Avtomobilski Kredit"]  = "Автомобилски кредит";
+    cyrillicNames["Do 1 500 000 Denari 25 000 Evra"]       = "До 1.500.000 денари / 25.000 евра";
+    cyrillicNames["Potroshuvacki Obezbeden Kredit"]        = "Потрошувачки Обезбеден кредит";
+    cyrillicNames["Moj Kesh"]                              = "Мој Кеш";
+    cyrillicNames["Namenski Potroshuvacki Kredit Preku Trgovci"]             = "Наменски потрошувачки кредит преку трговци";
+    cyrillicNames["Obezbeden Potroshuvacki Kredit Za Klienti So Stanben Kredit Vo SB"] = "Обезбеден потрошувачки кредит за клиенти со станбен кредит во СБ";
+    cyrillicNames["Glavni Karakteristiki"]             = "Главни карактеристики";
+    cyrillicNames["Karakteristiki Za Stanovi Vo Izgradba"] = "Карактеристики за станови во изградба";
+    cyrillicNames["So Zalog Na Vozilo"]                = "Со залог на возило";
+
+    // ── Cards ─────────────────────────────────────────────────────────────────
+    cyrillicNames["Kreditni Karticki"] = "Кредитни картички";
+    cyrillicNames["Debitni Karticki"]  = "Дебитни картички";
+    cyrillicNames["Promocii"]          = "Промоции";
+    cyrillicNames["Kupuvanje Na Rati Bez Kamata"]           = "Купување на рати БЕЗ КАМАТА";
+    cyrillicNames["Promo Kesh Vikend"]                      = "Промо КЕШ викенд";
+    cyrillicNames["Kesh Na Rati Bez Kamata"]                = "Кеш на рати без камата";
+    cyrillicNames["Uplata Na Gotovina Na Bankomat"]         = "Уплата на готовина на банкомат";
+    cyrillicNames["Visa Direct Isprati Pari Na Visa Karticka"] = "Visa Direct - Испрати пари на Visa картичка";
+    cyrillicNames["Bezbedno Plakjanje So Karticki"]         = "Безбедно плаќање со картички";
+    cyrillicNames["Visa Internet"]                          = "VISA Интернет";
+
+    // ── Accounts ──────────────────────────────────────────────────────────────
+    cyrillicNames["Platezni Smetki"]                    = "Платежни сметки";
+    cyrillicNames["Platezni Smetki So Osnovni Funkcii"] = "Платежни сметки со основни функции";
+    cyrillicNames["Precekoruvanje Na Smetka"]           = "Пречекорување на сметка";
+    cyrillicNames["Plata Plus"]                         = "Плата Плус";
+    cyrillicNames["Informacija Za Zakonot Za Platezni Uslugi"] = "Информација за Законот за платежни услуги и платни системи";
+    cyrillicNames["Alatka Za Prebaruvanje Smetki"]      = "Алатка за пребарување сметки";
+
+    // ── Digital Banking ───────────────────────────────────────────────────────
+    cyrillicNames["Azuriranje Na Klient So OneID"] = "Ажурирање на клиент со OneID";
+    cyrillicNames["E Registracija Reaktivacija"]   = "Е-регистрација / реактивација";
+    cyrillicNames["E Banking"]                     = "e-banking";
+    cyrillicNames["M Banking"]                     = "m-banking";
+    cyrillicNames["Brzi Plakjanja Topsi Pay"]      = "Брзи плаќања - Topsi Pay";
+    cyrillicNames["ATM Plakjanja"]                 = "ATM плаќања";
+    cyrillicNames["Korisni Video Upatstva"]        = "Корисни видео упатства";
+
+    // ── Insurance ─────────────────────────────────────────────────────────────
+    cyrillicNames["Osiguruvanje Vo Stopanska Banka"]   = "Осигурување во Стопанска Банка";
+    cyrillicNames["Kreditno Zivotno Osiguruvanje"]     = "Кредитно животно осигурување";
+    cyrillicNames["Riziko Zivotno Osiguruvanje"]       = "Ризико животно осигурување";
+    cyrillicNames["Penzisko Osiguruvanje"]             = "Пензиско осигурување";
+    cyrillicNames["Patnicko Osiguruvanje"]             = "Патничко осигурување";
+    cyrillicNames["Imotno Osiguruvanje"]               = "Имотно осигурување";
+    cyrillicNames["Avtomobilsko Osiguruvanje"]         = "Автомобилско осигурување";
+    cyrillicNames["Zdravstveno Osiguruvanje"]          = "Здравствено осигурување";
+    cyrillicNames["Osiguruvanje Od Nezgoda"]           = "Осигурување од незгода";
+    cyrillicNames["Osiguruvanje Na Otplata Na Kredit"] = "Осигурување на Отплата на Кредит";
+    cyrillicNames["Unit Link Zivotno Osiguruvanje"]    = "Унит Линк Животно Осигурување";
+
+    // ── Payment Services ──────────────────────────────────────────────────────
+    cyrillicNames["Platezni Uslugi Vo Zemjata"]  = "Платежни услуги во земјата";
+    cyrillicNames["Platezni Uslugi So Stranstvo"] = "Платежни услуги со странство";
+
+    // ── Останато ──────────────────────────────────────────────────────────────
+    cyrillicNames["Topsi Za Mladi"]                      = "ТОПСИ за млади";
+    cyrillicNames["Traen Nalog"]                         = "Траен налог";
+    cyrillicNames["Sefovi"]                              = "Сефови";
+    cyrillicNames["Tarifi Naselenie"]                    = "Тарифи Население";
+    cyrillicNames["Aplikacija Za Azuriranje Za Naselenie"] = "Апликација за ажурирање за население";
+    cyrillicNames["Standardna Tabela So Podatoci"]       = "Стандардна табела со податоци по одделни кредити и депозити";
+    cyrillicNames["Katce Za Korisnici"]                  = "Катче за корисници";
+    cyrillicNames["Zashtita Na Licni Podatoci"]          = "Заштита на лични податоци";
+    cyrillicNames["Portal Za Otvoreno Bankarstvo"]       = "Портал за отворено банкарство";
+
+    // ── Secondary sections (not in primary nav, kept for completeness) ────────
     cyrillicNames["PRAVNI LICA"]       = "ПРАВНИ ЛИЦА";
     cyrillicNames["FINANSISKI PAZARI"] = "ФИНАНСИСКИ ПАЗАРИ";
     cyrillicNames["ZA BANKATA"]        = "ЗА БАНКАТА";
     cyrillicNames["MARKETING I OOP"]   = "МАРКЕТИНГ И ООП";
     cyrillicNames["SB LOKACII"]        = "СБ ЛОКАЦИИ";
-    cyrillicNames["OSTANATI SODRZINI"] = "ОСТАНАТИ СОДРЖИНИ";
+    cyrillicNames["Kreditni Proizvodi"]      = "Кредитни производи";
+    cyrillicNames["Dokumentarno Rabotenje"]  = "Документарно работење";
+    cyrillicNames["E Commerce"]              = "Е-трговија";
+    cyrillicNames["Kursna Lista"]            = "Курсна листа";
+    cyrillicNames["Devizen Pazar"]           = "Девизен пазар";
+    cyrillicNames["Brokerski Uslugi"]        = "Брокерски услуги";
+    cyrillicNames["Drzavni Khartii Od Vrednost"] = "Државни хартии од вредност";
+    cyrillicNames["Menuvacko Rabotenje"]     = "Менувачко работење";
+    cyrillicNames["Profil Na Bankata"]       = "Профил на банката";
+    cyrillicNames["Korporativno Upravuvanje"] = "Корпоративно управување";
+    cyrillicNames["Odbor Za Revizija"]       = "Одбор за ревизија";
+    cyrillicNames["Za Akcionerite"]          = "За акционерите";
+    cyrillicNames["Podatoci I Izvestai"]     = "Податоци и извештаи";
+    cyrillicNames["Kamatni Stapki"]          = "Каматни стапки";
+    cyrillicNames["Glavni Korespodentni Banki"] = "Главни кореспондентни банки";
+    cyrillicNames["Kontakt"]                 = "Контакт";
+    cyrillicNames["Politika Za Privatnost I Kolacinja"] = "Политика за приватност и колачиња";
+    cyrillicNames["Mreza Na Filijali"]       = "Мрежа на филијали";
+    cyrillicNames["Mreza Na Bankomati"]      = "Мрежа на банкомати";
+    cyrillicNames["Regionalni Delovni Centri"] = "Регионални деловни центри";
+    cyrillicNames["Novosti"]                 = "Новости";
+    cyrillicNames["Kariera Vo STB"]          = "Кариера во СТБ";
 
     // Helper: get Cyrillic display name, or fall back to the original Name
     // Also checks the "navDisplayName" property if it exists on the node
@@ -122,7 +262,7 @@
 
                 <!-- CTA buttons — right-aligned, match reference two-button layout -->
                 <ul class="navbar-nav list-unstyled mb-2 mb-lg-0 ml-auto navbar-right-secundary">
-                    <li class="nav-item">
+                    <li class="nav-item mr-1">
                         <a class="btn btn-eregistration btn-sm mt-1" href="https://epin.stb.com.mk/">e-регистрација</a>
                     </li>
                     <li class="nav-item d-none d-lg-block">

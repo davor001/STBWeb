@@ -239,37 +239,41 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
 }
 
-/* e-registration & e-najava buttons (matching live site:
-   gold/yellow for registration, magenta for login) */
+/* e-registration & e-najava buttons — values taken directly from the
+   reference site's app.css (btn-warning / btn-primary overrides) */
 .btn-eregistration {
-    background-color: #D4A843;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 6px 14px;
+    background-color: #ffbc00;
+    border-color: #ffbc00;
+    color: #313a46;
+    border-radius: .15rem;
+    font-size: .875rem;
+    padding: .28rem .8rem;
+    line-height: 1.5;
 }
 
-    .btn-eregistration:hover {
-        background-color: #c09735;
-        color: #fff;
-    }
+.btn-eregistration:hover,
+.btn-eregistration:focus {
+    background-color: #d9a000;
+    border-color: #cc9600;
+    color: #313a46;
+}
 
 .btn-enajava {
-    background-color: #EC008C;
+    background-color: #ec008c;
+    border-color: #ec008c;
     color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 6px 14px;
+    border-radius: .15rem;
+    font-size: .875rem;
+    padding: .28rem .8rem;
+    line-height: 1.5;
 }
 
-    .btn-enajava:hover {
-        background-color: #c0006f;
-        color: #fff;
-    }
+.btn-enajava:hover,
+.btn-enajava:focus {
+    background-color: #c60075;
+    border-color: #b9006e;
+    color: #fff;
+}
 
 /* ============================================================
    5. HERO CAROUSEL
@@ -811,4 +815,36 @@ h1, h2, h3, h4, h5, h6 {
 .digital-channels .card{background-color:#fbfbfb}
 .digital-channels .card .header-title{font-size:1.2rem;text-align:center}
 .digital-channels .dc-icon{font-size:4rem}
+
+/* ── Responsive fixes ── */
+
+/* Nav link padding/size: shrink at medium viewports so 8 Cyrillic items fit */
+@media (min-width: 1200px) and (max-width: 1299.98px) {
+    .topnav-menu .navbar-nav .nav-link {
+        padding: 1rem 0.65rem;
+        font-size: 0.95rem;
+    }
+}
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .topnav-menu .navbar-nav .nav-link {
+        padding: 1rem 0.35rem;
+        font-size: 0.82rem;
+    }
+}
+
+/* Carousel captions: scale down on tablet, hide on mobile */
+@media (max-width: 991.98px) {
+    .carousel-caption-left2 {
+        max-width: 60%;
+        bottom: 10%;
+    }
+    .carousel-caption-left2 h3 { font-size: 1.2rem; }
+    .carousel-caption-left2 h4 { font-size: 0.85rem; }
+}
+@media (max-width: 575.98px) {
+    .carousel-caption-left2 { display: none; }
+}
+
+/* Prevent images from overflowing their containers */
+img { max-width: 100%; height: auto; }
 .digital-channels a{color:#98a6ad}

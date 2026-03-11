@@ -119,7 +119,7 @@ a.text-primary {
 /* "Што ми треба?" icon grid — flex layout (win-icon-circle and link colors are in app.css) */
 .win-icon-row {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: center;
     margin-top: 1rem;
     margin-bottom: 1rem;

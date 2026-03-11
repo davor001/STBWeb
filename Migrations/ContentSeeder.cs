@@ -45,6 +45,7 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
         {
             await EnsureLanguagesAsync();
             await SeedContentAsync();
+            EnsureOstanato(); // idempotent patch — adds missing section on every startup
             _logger.LogInformation("STBWeb: Content seeder finished.");
         }
         catch (Exception ex)
@@ -78,7 +79,12 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
     // -------------------------------------------------------------------------
     // Content tree
     // NOTE: MK names are Latin-transliterated so Umbraco generates correct slugs.
-    // e.g. "Naselenie" → slug "naselenie" → URL /naselenie/ (matches original site)
+    // e.g. "Depoziti" → slug "depoziti" → URL /depoziti/ (matches original site)
+    //
+    // PRIMARY NAV (items 1-8 below) are direct children of Home — this gives
+    // them top-level URLs (/depoziti/, /krediti/, etc.) matching stb.com.mk.
+    // Secondary sections (Pravni Lica, Finansiski Pazari, etc.) are also direct
+    // children of Home but are excluded from the primary nav via the nav view filter.
     // -------------------------------------------------------------------------
     private async Task SeedContentAsync()
     {
@@ -105,26 +111,18 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
         if (!saveResult.Success || home.Id <= 0)
         {
             _logger.LogError("CRITICAL ERROR: Failed to save Home node. Validation failed. Result: {@Result}", saveResult.Result);
-            return; // FATAL HALT: Do not proceed to child creation.
+            return;
         }
 
         var publishResult = _contentService.Publish(home, new[] { "*" });
         if (!publishResult.Success)
-        {
             _logger.LogWarning("WARNING: Failed to publish Home node. Result: {@Result}", publishResult.Result);
-        }
 
-        // Ensure Domains ONLY if home is validly saved
         await EnsureDomainsAsync(home.Key);
-
         var homeId = home.Id;
 
-        // ── INDIVIDUALS / НАСЕЛЕНИЕ ──────────────────────────────────────────
-        var indId = S("Individuals", "Naselenie", "Individuals", homeId, "sectionRoot");
-        if (indId <= 0) return;
-
-        //   Deposits
-        var depId = S("Deposits", "Depoziti", "Deposits", indId, "sectionRoot");
+        // ── 1. ДЕПОЗИТИ ───────────────────────────────────────────────────────
+        var depId = S("Deposits", "Depoziti", "Deposits", homeId, "sectionRoot");
         if (depId > 0)
         {
             S("About Deposits", "Za Depozitite", "About Deposits", depId, "genericContentPage");
@@ -151,8 +149,8 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             }
         }
 
-        //   Loans
-        var loansId = S("Loans", "Krediti", "Loans", indId, "sectionRoot");
+        // ── 2. КРЕДИТИ ────────────────────────────────────────────────────────
+        var loansId = S("Loans", "Krediti", "Loans", homeId, "sectionRoot");
         if (loansId > 0)
         {
             var conLoansId = S("Consumer Loans", "Potroshuvacki Kredit", "Consumer Loans", loansId, "sectionRoot");
@@ -162,7 +160,7 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
                 S("Secured Consumer Loan", "Potroshuvacki Obezbeden Kredit", "Secured Consumer Loan", conLoansId, "productDetailPage");
                 S("My Cash", "Moj Kesh", "My Cash", conLoansId, "productDetailPage");
                 S("Purpose Loan via Retailers", "Namenski Potroshuvacki Kredit Preku Trgovci", "Purpose Loan via Retailers", conLoansId, "productDetailPage");
-                S("Secured for Homeowners", "Obezbeden Potroshuvacki Kredit Za Klienti So Stanben Kredit", "Secured for Homeowners", conLoansId, "productDetailPage");
+                S("Secured for Homeowners", "Obezbeden Potroshuvacki Kredit Za Klienti So Stanben Kredit Vo SB", "Secured for Homeowners in SB", conLoansId, "productDetailPage");
             }
 
             var homeLoansId = S("Home Loans", "Stanbeni Krediti", "Home Loans", loansId, "sectionRoot");
@@ -174,21 +172,17 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
 
             var autoLoanId = S("Auto Loan", "Avtomobilski Kredit", "Auto Loan", loansId, "sectionRoot");
             if (autoLoanId > 0)
-            {
                 S("With Vehicle Pledge", "So Zalog Na Vozilo", "With Vehicle Pledge", autoLoanId, "productDetailPage");
-            }
         }
 
-        //   Cards
-        var cardsId = S("Cards", "Karticki", "Cards", indId, "sectionRoot");
+        // ── 3. КАРТИЧКИ ───────────────────────────────────────────────────────
+        var cardsId = S("Cards", "Karticki", "Cards", homeId, "sectionRoot");
         if (cardsId > 0)
         {
-
             var creditCardsId = S("Credit Cards", "Kreditni Karticki", "Credit Cards", cardsId, "sectionRoot");
             if (creditCardsId > 0)
             {
                 S("MasterCard Standard", "Mastercard Standard", "MasterCard Standard", creditCardsId, "productDetailPage");
-                S("VISA Star", "Visa Star", "VISA Star", creditCardsId, "productDetailPage");
                 S("VISA Vero", "Visa Vero", "VISA Vero", creditCardsId, "productDetailPage");
                 S("VISA Zero", "Visa Zero", "VISA Zero", creditCardsId, "productDetailPage");
                 S("VISA Gold Credit", "Visa Gold", "VISA Gold", creditCardsId, "productDetailPage");
@@ -200,8 +194,6 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
                 S("Mastercard Debit", "Mastercard Debit", "Mastercard Debit", debitCardsId, "productDetailPage");
                 S("Mastercard TOPSI", "Mastercard Topsi", "Mastercard TOPSI", debitCardsId, "productDetailPage");
                 S("Mastercard Platinum", "Mastercard Platinum", "Mastercard Platinum", debitCardsId, "productDetailPage");
-                S("VISA Classic", "Visa Classic", "VISA Classic", debitCardsId, "productDetailPage");
-                S("VISA Gold Debit", "Visa Gold Debit", "VISA Gold Debit", debitCardsId, "productDetailPage");
                 S("VISA Internet", "Visa Internet", "VISA Internet", debitCardsId, "productDetailPage");
             }
 
@@ -221,8 +213,8 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             S("Secure Payment", "Bezbedno Plakjanje So Karticki", "Secure Payment", cardsId, "productDetailPage");
         }
 
-        //   Accounts
-        var accId = S("Accounts", "Smetki", "Accounts", indId, "sectionRoot");
+        // ── 4. СМЕТКИ ────────────────────────────────────────────────────────
+        var accId = S("Accounts", "Smetki", "Accounts", homeId, "sectionRoot");
         if (accId > 0)
         {
             S("Payment Accounts", "Platezni Smetki", "Payment Accounts", accId, "productDetailPage");
@@ -233,21 +225,21 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             S("Account Search Tool", "Alatka Za Prebaruvanje Smetki", "Account Search Tool", accId, "genericContentPage");
         }
 
-        //   Digital Banking — Individuals
-        var digBankIndId = S("Digital Banking", "Digitalno Bankarstvo", "Digital Banking", indId, "sectionRoot");
-        if (digBankIndId > 0)
+        // ── 5. ДИГИТАЛНО БАНКАРСТВО ──────────────────────────────────────────
+        var digBankId = S("Digital Banking", "Digitalno Bankarstvo", "Digital Banking", homeId, "sectionRoot");
+        if (digBankId > 0)
         {
-            S("OneID Client Update", "Azuriranje Na Klient So OneID", "OneID Client Update", digBankIndId, "productDetailPage");
-            S("E-Registration", "E Registracija Reaktivacija", "E-Registration and Reactivation", digBankIndId, "genericContentPage");
-            S("E-Banking", "E Banking", "E-Banking", digBankIndId, "productDetailPage");
-            S("M-Banking", "M Banking", "M-Banking", digBankIndId, "productDetailPage");
-            S("TOPSI Pay", "Brzi Plakjanja Topsi Pay", "TOPSI Pay", digBankIndId, "productDetailPage");
-            S("ATM Payments", "ATM Plakjanja", "ATM Payments", digBankIndId, "productDetailPage");
-            S("Video Tutorials", "Korisni Video Upatstva", "Video Tutorials", digBankIndId, "genericContentPage");
+            S("OneID Client Update", "Azuriranje Na Klient So OneID", "OneID Client Update", digBankId, "productDetailPage");
+            S("E-Registration", "E Registracija Reaktivacija", "E-Registration and Reactivation", digBankId, "genericContentPage");
+            S("E-Banking", "E Banking", "E-Banking", digBankId, "productDetailPage");
+            S("M-Banking", "M Banking", "M-Banking", digBankId, "productDetailPage");
+            S("TOPSI Pay", "Brzi Plakjanja Topsi Pay", "TOPSI Pay", digBankId, "productDetailPage");
+            S("ATM Payments", "ATM Plakjanja", "ATM Payments", digBankId, "productDetailPage");
+            S("Video Tutorials", "Korisni Video Upatstva", "Video Tutorials", digBankId, "genericContentPage");
         }
 
-        //   Insurance
-        var insId = S("Insurance", "Osiguruvanje", "Insurance", indId, "sectionRoot");
+        // ── 6. ОСИГУРУВАЊЕ ────────────────────────────────────────────────────
+        var insId = S("Insurance", "Osiguruvanje", "Insurance", homeId, "sectionRoot");
         if (insId > 0)
         {
             S("Insurance Overview", "Osiguruvanje Vo Stopanska Banka", "Insurance Overview", insId, "genericContentPage");
@@ -263,8 +255,8 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             S("Unit-Link Life Insurance", "Unit Link Zivotno Osiguruvanje", "Unit-Link Life Insurance", insId, "productDetailPage");
         }
 
-        //   Payment Services — Individuals
-        var payServId = S("Payment Services", "Platezni Uslugi", "Payment Services", indId, "sectionRoot");
+        // ── 7. ПЛАТЕЖНИ УСЛУГИ ───────────────────────────────────────────────
+        var payServId = S("Payment Services", "Platezni Uslugi", "Payment Services", homeId, "sectionRoot");
         if (payServId > 0)
         {
             S("Domestic Payments", "Platezni Uslugi Vo Zemjata", "Domestic Payments", payServId, "productDetailPage");
@@ -272,7 +264,24 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             S("Western Union", "Western Union", "Western Union", payServId, "productDetailPage");
         }
 
-        // ── LEGAL ENTITIES / ПРАВНИ ЛИЦА ─────────────────────────────────────
+        // ── 8. ОСТАНАТО ──────────────────────────────────────────────────────
+        var ostId = S("Ostanato", "Ostanato", "Other", homeId, "sectionRoot");
+        if (ostId > 0)
+        {
+            S("TOPSI Za Mladi", "Topsi Za Mladi", "TOPSI for Youth", ostId, "genericContentPage");
+            S("Pension Insurance Link", "Penzisko Osiguruvanje", "Pension Insurance", ostId, "genericContentPage");
+            S("Standing Order", "Traen Nalog", "Standing Order", ostId, "genericContentPage");
+            S("Safe Deposit Boxes", "Sefovi", "Safe Deposit Boxes", ostId, "genericContentPage");
+            S("Population Tariffs", "Tarifi Naselenie", "Population Tariffs", ostId, "genericContentPage");
+            S("Client Update App", "Aplikacija Za Azuriranje Za Naselenie", "Client Update Application", ostId, "genericContentPage");
+            S("Standard Data Table", "Standardna Tabela So Podatoci", "Standard Data Table", ostId, "genericContentPage");
+            S("User Corner", "Katce Za Korisnici", "User Corner", ostId, "genericContentPage");
+            S("Data Protection", "Zashtita Na Licni Podatoci", "Data Protection", ostId, "genericContentPage");
+            S("Open Banking Portal", "Portal Za Otvoreno Bankarstvo", "Open Banking Portal", ostId, "genericContentPage");
+        }
+
+        // ── ПРАВНИ ЛИЦА ──────────────────────────────────────────────────────
+        // (Not in primary nav — accessed via segment switcher)
         var legalId = S("Legal Entities", "Pravni Lica", "Legal Entities", homeId, "sectionRoot");
         if (legalId > 0)
         {
@@ -285,7 +294,7 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             S("Documentary Banking", "Dokumentarno Rabotenje", "Documentary Banking", legalId, "genericContentPage");
         }
 
-        // ── FINANCIAL MARKETS / ФИНАНСИСКИ ПАЗАРИ ────────────────────────────
+        // ── ФИНАНСИСКИ ПАЗАРИ ─────────────────────────────────────────────────
         var finMktId = S("Financial Markets", "Finansiski Pazari", "Financial Markets", homeId, "sectionRoot");
         if (finMktId > 0)
         {
@@ -296,7 +305,7 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             S("Currency Exchange", "Menuvacko Rabotenje", "Currency Exchange", finMktId, "genericContentPage");
         }
 
-        // ── ABOUT BANK / ЗА БАНКАТА ──────────────────────────────────────────
+        // ── ЗА БАНКАТА ───────────────────────────────────────────────────────
         var aboutId = S("About Bank", "Za Bankata", "About Bank", homeId, "sectionRoot");
         if (aboutId > 0)
         {
@@ -313,7 +322,7 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             S("Privacy Policy", "Politika Za Privatnost I Kolacinja", "Privacy Policy and Cookies", aboutId, "genericContentPage");
         }
 
-        // ── MARKETING & CSR / МАРКЕТИНГ И ООП ───────────────────────────────
+        // ── МАРКЕТИНГ И ООП ───────────────────────────────────────────────────
         var mktId = S("Marketing and CSR", "Marketing I OOP", "Marketing and CSR", homeId, "sectionRoot");
         if (mktId > 0)
         {
@@ -327,7 +336,7 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             S("Vozi Pravo Vol 8", "Vozi Pravo Vozi Zdravo Vol 8", "Vozi Pravo Vozi Zdravo Vol 8", mktId, "genericContentPage");
         }
 
-        // ── LOCATIONS / МРЕЖА ────────────────────────────────────────────────
+        // ── СБ ЛОКАЦИИ ────────────────────────────────────────────────────────
         var locsId = S("SB Locations", "SB Lokacii", "Locations", homeId, "sectionRoot");
         if (locsId > 0)
         {
@@ -336,25 +345,9 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             S("Regional Business Centres", "Regionalni Delovni Centri", "Regional Business Centres", locsId, "locationMapPage");
         }
 
-        // ── NEWS / НОВОСТИ ────────────────────────────────────────────────────
+        // ── NEWS / CAREER / SUB-BRANDS ────────────────────────────────────────
         S("News", "Novosti", "News", homeId, "newsListingPage");
-
-        // ── CAREER / КАРИЕРА ─────────────────────────────────────────────────
         S("Career", "Kariera Vo STB", "Career", homeId, "genericContentPage");
-
-        // ── OTHER CONTENT / ОСТАНАТИ СОДРЖИНИ ────────────────────────────────
-        var otherId = S("Other Content", "Ostanati Sodrzini", "Other Content", homeId, "sectionRoot");
-        if (otherId > 0)
-        {
-            S("Calculators", "Kalkulatori", "Calculators", otherId, "calculatorsPage");
-            S("Property Sale", "Prodazba Na Imot", "Property Sale", otherId, "genericContentPage");
-            S("Tariffs", "Tarifi", "Tariffs", otherId, "genericContentPage");
-            S("User Corner", "Katce Za Korisnici", "User Corner", otherId, "genericContentPage");
-            S("Terms of Use", "Uslovi Za Koristenje", "Terms of Use", otherId, "genericContentPage");
-            S("Open Banking Portal", "Portal Za Otvoreno Bankarstvo", "Open Banking Portal", otherId, "genericContentPage");
-        }
-
-        // ── SUB-BRANDS ────────────────────────────────────────────────────────
         S("TOPSI", "Topsi", "TOPSI", homeId, "subBrandHomePage");
         S("GoldenClub", "Goldenclub", "GoldenClub", homeId, "subBrandHomePage");
 
@@ -373,6 +366,64 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             }
         };
         await _domainService.UpdateDomainsAsync(nodeKey, updateModel);
+    }
+
+    /// <summary>
+    /// Idempotent patch: creates the "Остanato" primary-nav section if it is absent
+    /// from the live content tree.  Works with both the old DB (where Depoziti etc.
+    /// are children of a "Naselenie" wrapper) and the new flat tree (where they are
+    /// direct children of Home).  Safe to call on every startup.
+    /// </summary>
+    private void EnsureOstanato()
+    {
+        var roots = _contentService.GetRootContent().ToList();
+        if (!roots.Any()) return; // full seed hasn't run yet — it will create Ostanato
+
+        var homeId = roots.First().Id;
+
+        // Find where the other primary-nav items live.
+        // Old tree: they are under a "Naselenie" sectionRoot child of Home.
+        // New tree: they are direct children of Home.
+        long _;
+        var homeChildren = _contentService.GetPagedChildren(homeId, 0L, 500, out _).ToList();
+
+        var naselenie = homeChildren.FirstOrDefault(x =>
+            string.Equals(x.Name, "Naselenie", StringComparison.OrdinalIgnoreCase));
+
+        int parentId;
+        IEnumerable<Umbraco.Cms.Core.Models.IContent> siblings;
+        if (naselenie != null)
+        {
+            parentId = naselenie.Id;
+            siblings = _contentService.GetPagedChildren(parentId, 0L, 500, out _);
+        }
+        else
+        {
+            parentId = homeId;
+            siblings = homeChildren;
+        }
+
+        // Already exists — nothing to do.
+        if (siblings.Any(x => string.Equals(x.Name, "Ostanato", StringComparison.OrdinalIgnoreCase)))
+            return;
+
+        _logger.LogInformation("STBWeb: 'Ostanato' section not found — creating under parent {ParentId}.", parentId);
+
+        var ostId = S("Ostanato", "Ostanato", "Other", parentId, "sectionRoot");
+        if (ostId <= 0) return;
+
+        S("TOPSI Za Mladi",         "Topsi Za Mladi",                        "TOPSI for Youth",           ostId, "genericContentPage");
+        S("Pension Insurance Link",  "Penzisko Osiguruvanje",                 "Pension Insurance",         ostId, "genericContentPage");
+        S("Standing Order",          "Traen Nalog",                           "Standing Order",            ostId, "genericContentPage");
+        S("Safe Deposit Boxes",      "Sefovi",                                "Safe Deposit Boxes",        ostId, "genericContentPage");
+        S("Population Tariffs",      "Tarifi Naselenie",                      "Population Tariffs",        ostId, "genericContentPage");
+        S("Client Update App",       "Aplikacija Za Azuriranje Za Naselenie", "Client Update Application", ostId, "genericContentPage");
+        S("Standard Data Table",     "Standardna Tabela So Podatoci",         "Standard Data Table",       ostId, "genericContentPage");
+        S("User Corner",             "Katce Za Korisnici",                    "User Corner",               ostId, "genericContentPage");
+        S("Data Protection",         "Zashtita Na Licni Podatoci",            "Data Protection",           ostId, "genericContentPage");
+        S("Open Banking Portal",     "Portal Za Otvoreno Bankarstvo",         "Open Banking Portal",       ostId, "genericContentPage");
+
+        _logger.LogInformation("STBWeb: 'Ostanato' section created successfully.");
     }
 
     /// <summary>Creates and publishes a content node; returns its Id.</summary>
