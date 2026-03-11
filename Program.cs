@@ -1,4 +1,6 @@
+using Humanizer;
 using STBWeb.Services;
+using static NPoco.Snapshot<T>;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -12,14 +14,13 @@ builder.CreateUmbracoBuilder()
 
 WebApplication app = builder.Build();
 
-// Ensure Umbraco media folder exists before booting (required on Azure)
+// ✅ MOVED HERE — must be before BootUmbracoAsync
 var mediaPath = Path.Combine(app.Environment.WebRootPath, "media");
 Directory.CreateDirectory(mediaPath);
 Directory.CreateDirectory(Path.Combine(mediaPath, "Uploads"));
 
 await app.BootUmbracoAsync();
 
-// Serve static files from wwwroot/ BEFORE Umbraco routing
 app.UseStaticFiles();
 
 var scrapedMediaPath = Path.Combine(app.Environment.ContentRootPath, "scraped-media");
