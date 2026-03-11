@@ -282,23 +282,74 @@ h1, h2, h3, h4, h5, h6 {
 /* ============================================================
    5a. NEWS CAROUSEL (homepage Соопштенија card)
    ============================================================ */
+
+/* Card flex cascade: header → carousel(grows) → pagination(pinned bottom) */
+.home-news-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.home-news-card .card-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Carousel fills the space between heading and pagination */
+.home-news-card #newsSlider {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* carousel-inner stretches to fill the carousel box */
+.home-news-card #newsSlider .carousel-inner {
+    flex: 1 1 auto;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Active slide becomes a flex column so news-article can grow */
+.home-news-card #newsSlider .carousel-item.active {
+    display: flex !important;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Article row fills remaining slide height */
+.home-news-card #newsSlider .news-article {
+    flex: 1 1 auto;
+    align-content: flex-start;
+}
+
 .home-news-title {
-    font-size: 1rem;
-    line-height: 1.2rem;
+    font-size: .95rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: .4rem;
 }
 
 .home-news-title .news-title-date,
 .news-title-date {
     color: #EC008C;
+    display: block;
+    font-size: .8rem;
+    font-weight: 400;
+    margin-bottom: .1rem;
 }
 
 .news-article {
-    line-height: 1.2rem;
+    line-height: 1.4;
+    font-size: .875rem;
+    color: #555;
 }
 
 .news-article img {
-    max-width: 100px;
-    height: auto;
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 3px;
 }
 
 /* Rounded pagination pills used by the news carousel pager */
@@ -440,22 +491,60 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
 
-.home-block-main .card-header {
-    background: #EC008C;
-    color: #fff;
-    font-weight: 600;
-    font-size: 14px;
+/* "Целосна листа >" and similar float-right card links */
+.home-block-main .float-right a {
+    font-size: 12px;
+    color: #98a6ad;
+    text-decoration: none;
+}
+.home-block-main .float-right a:hover {
+    color: #EC008C;
 }
 
-.home-exchange-rate .table {
-    font-size: 13px;
-    margin: 0;
+/* ── Exchange rate card ── */
+.home-exchange-rate {
+    position: relative;
+    overflow: hidden;
 }
 
-    .home-exchange-rate .table th {
-        background: #f8f9fa;
-        font-size: 12px;
-    }
+/* Large faint watermark icon (MDI mdi-checkbox-marked-circle) */
+.home-exchange-rate::before {
+    font: normal normal normal 24px/1 "Material Design Icons";
+    content: "\F12A";
+    display: block;
+    font-size: 13rem;
+    font-weight: 400;
+    line-height: 1.5;
+    position: absolute;
+    right: 2%;
+    top: 0;
+    opacity: .07;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.home-exchange-rate table {
+    font-size: 1.2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.home-exchange-rate td,
+.home-exchange-rate th {
+    border-top: none;
+    vertical-align: middle;
+    padding: .55rem .5rem;
+}
+
+.home-exchange-rate td img {
+    max-width: 43px;
+    height: auto;
+}
+
+/* Subtle divider before sell column */
+.home-exchange-rate .rate-sell {
+    border-left: 1px solid #f0f0f0;
+}
 
 /* ============================================================
    9. CONTENT AREA / PRODUCT PAGES

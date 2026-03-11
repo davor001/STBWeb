@@ -426,9 +426,12 @@
 
         <!-- Currency Widget -->
         <div class="col-md-4 mb-3">
-            <div class="card h-100">
-                <div class="card-header">Курсна листа</div>
-                <div class="card-body p-2 d-flex flex-column">
+            <div class="card home-exchange-rate h-100">
+                <div class="card-body" style="z-index:50">
+                    <div class="float-right">
+                        <a href="/finansiski-pazari/kursna-lista/">Целосна листа &gt;</a>
+                    </div>
+                    <h4 class="header-title mt-0 mb-4">КУРСНА ЛИСТА</h4>
                     @await Html.PartialAsync("_CurrencyWidget")
                 </div>
             </div>
@@ -436,16 +439,16 @@
 
         <!-- Latest News -->
         <div class="col-md-4 mb-3">
-            <div class="card h-100">
-                <div class="card-body p-2 d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-baseline mb-1">
-                        <h4 class="header-title mt-0 mb-0">Соопштенија</h4>
-                        <a href="@allNewsUrl" class="text-nowrap small">Сите соопштенија &gt;</a>
+            <div class="card h-100 home-news-card">
+                <div class="card-body d-flex flex-column">
+                    <div class="float-right">
+                        <a href="@allNewsUrl">Сите соопштенија &gt;</a>
                     </div>
+                    <h4 class="header-title mt-0 mb-3">СООПШТЕНИЈА</h4>
 
                     @if (latestNews.Any())
                     {
-                        <div id="newsSlider" class="carousel slide flex-grow-1 d-flex flex-column" data-ride="carousel" data-interval="false">
+                        <div id="newsSlider" class="carousel slide flex-grow-1" data-ride="carousel" data-interval="false">
                             <div class="carousel-inner">
                                 @{
                                     var newsIdx = 0;
@@ -453,18 +456,15 @@
                                 @foreach (var news in latestNews)
                                 {
                                     <div class="carousel-item @(newsIdx == 0 ? "active" : "")">
-                                        <p class="home-news-title mt-2">
-                                            @if (!string.IsNullOrWhiteSpace(news.PublishDate))
-                                            {
-                                                <span class="news-title-date">@news.PublishDate</span>
-                                            }
+                                        <p class="home-news-title mt-0 mb-2">
+                                            <span class="news-title-date">@(!string.IsNullOrWhiteSpace(news.PublishDate) ? news.PublishDate : "")</span>
                                             @news.Title
                                         </p>
-                                        <div class="row news-article">
-                                            <div class="col-auto">
+                                        <div class="row news-article no-gutters">
+                                            <div class="col-auto pr-2">
                                                 <img alt="@news.Title" src="@(string.IsNullOrWhiteSpace(news.ThumbnailUrl) ? "/scraped-media/homepage/news/defaultnews.png" : news.ThumbnailUrl)">
                                             </div>
-                                            <div class="col pl-0">
+                                            <div class="col">
                                                 @if (!string.IsNullOrWhiteSpace(news.Excerpt))
                                                 {
                                                     @news.Excerpt
@@ -476,29 +476,29 @@
                                     newsIdx++;
                                 }
                             </div>
+                        </div>
 
-                            <div class="row mt-auto">
-                                <div class="col-12">
-                                    <div class="dataTables_paginate paging_simple_numbers text-center">
-                                        <ol class="pagination pagination-rounded mb-0 d-inline-flex">
-                                            <li class="paginate_button page-item previous">
-                                                <a href="#newsSlider" data-slide="prev" class="page-link" aria-label="Претходно">
-                                                    <i class="mdi mdi-chevron-left"></i>
-                                                </a>
+                        <div class="row mt-auto pt-2">
+                            <div class="col-12">
+                                <div class="dataTables_paginate paging_simple_numbers text-center">
+                                    <ol class="pagination pagination-rounded mb-0 d-inline-flex">
+                                        <li class="paginate_button page-item previous">
+                                            <a href="#newsSlider" data-slide="prev" class="page-link" aria-label="Претходно">
+                                                <i class="mdi mdi-chevron-left"></i>
+                                            </a>
+                                        </li>
+                                        @for (var pi = 0; pi < latestNews.Count; pi++)
+                                        {
+                                            <li id="newsSlider@(pi)" data-target="#newsSlider" data-slide-to="@pi" class="paginate_button page-item @(pi == 0 ? "active" : "")">
+                                                <a href="#" class="page-link">@(pi + 1)</a>
                                             </li>
-                                            @for (var pi = 0; pi < latestNews.Count; pi++)
-                                            {
-                                                <li id="newsSlider@(pi)" data-target="#newsSlider" data-slide-to="@pi" class="paginate_button page-item @(pi == 0 ? "active" : "")">
-                                                    <a href="#" class="page-link">@(pi + 1)</a>
-                                                </li>
-                                            }
-                                            <li class="paginate_button page-item next">
-                                                <a href="#newsSlider" data-slide="next" class="page-link" aria-label="Наредно">
-                                                    <i class="mdi mdi-chevron-right"></i>
-                                                </a>
-                                            </li>
-                                        </ol>
-                                    </div>
+                                        }
+                                        <li class="paginate_button page-item next">
+                                            <a href="#newsSlider" data-slide="next" class="page-link" aria-label="Наредно">
+                                                <i class="mdi mdi-chevron-right"></i>
+                                            </a>
+                                        </li>
+                                    </ol>
                                 </div>
                             </div>
                         </div>

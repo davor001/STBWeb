@@ -1,37 +1,29 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
-<div class="home-exchange-rate flex-grow-1 d-flex flex-column">
-    <table class="table table-sm table-bordered mb-0">
-        <thead>
-            <tr>
-                <th>Валута</th>
-                <th>Купува</th>
-                <th>Продава</th>
-            </tr>
-        </thead>
-        <tbody id="exchangeRateWidget">
-            <tr>
-                <td><img src="/assets/images/flag_EUR.png" alt="EUR" style="height:14px;"> EUR</td>
-                <td class="rate-buy" data-currency="EUR">—</td>
-                <td class="rate-sell" data-currency="EUR">—</td>
-            </tr>
-            <tr>
-                <td><img src="/assets/images/flag_USD.png" alt="USD" style="height:14px;"> USD</td>
-                <td class="rate-buy" data-currency="USD">—</td>
-                <td class="rate-sell" data-currency="USD">—</td>
-            </tr>
-            <tr>
-                <td><img src="/assets/images/flag_GBP.png" alt="GBP" style="height:14px;"> GBP</td>
-                <td class="rate-buy" data-currency="GBP">—</td>
-                <td class="rate-sell" data-currency="GBP">—</td>
-            </tr>
-            <tr>
-                <td><img src="/assets/images/flag_CHF.png" alt="CHF" style="height:14px;"> CHF</td>
-                <td class="rate-buy" data-currency="CHF">—</td>
-                <td class="rate-sell" data-currency="CHF">—</td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="text-right mt-auto pt-2">
-        <a href="/finansiski-pazari/kursna-lista/" class="btn btn-sm btn-outline-primary">Целосна курсна листа</a>
-    </div>
-</div>
+<table class="table table-sm mb-0">
+    <tbody id="exchangeRateWidget">
+        <tr>
+            <td><img src="/assets/images/flag_EUR.png" alt="EUR"></td>
+            <td>EUR</td>
+            <td class="rate-buy" data-currency="EUR">61.30</td>
+            <td class="rate-sell" data-currency="EUR">61.80</td>
+        </tr>
+        <tr>
+            <td><img src="/assets/images/flag_USD.png" alt="USD"></td>
+            <td>USD</td>
+            <td class="rate-buy" data-currency="USD">52.1201</td>
+            <td class="rate-sell" data-currency="USD">53.6682</td>
+        </tr>
+        <tr>
+            <td><img src="/assets/images/flag_GBP.png" alt="GBP"></td>
+            <td>GBP</td>
+            <td class="rate-buy" data-currency="GBP">70.0578</td>
+            <td class="rate-sell" data-currency="GBP">72.1387</td>
+        </tr>
+        <tr>
+            <td><img src="/assets/images/flag_CHF.png" alt="CHF"></td>
+            <td>CHF</td>
+            <td class="rate-buy" data-currency="CHF">66.9983</td>
+            <td class="rate-sell" data-currency="CHF">68.9884</td>
+        </tr>
+    </tbody>
+</table>
