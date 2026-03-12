@@ -22,7 +22,11 @@ namespace STBWeb.Migrations;
 public class HomepageContentImporterHandler : INotificationAsyncHandler<UmbracoApplicationStartedNotification>
 {
     private const string ImportStateKey = "STBWeb.HomepageImport.Version";
-    private const string ImportVersion = "homepage-v1";
+    // Bump this string whenever homepage content/media needs to be re-imported on Azure.
+    // The importer is idempotent per version: it runs once, stores this key in the DB,
+    // and skips on every subsequent startup until the version is changed.
+    // v2: scraped-media/ is now included in the publish output so images resolve correctly.
+    private const string ImportVersion = "homepage-v2";
     private const string HomepageMediaFolderName = "Homepage Import";
     private const string MkCulture = "mk";
     private const string EnCulture = "en";
