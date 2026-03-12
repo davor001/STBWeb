@@ -478,14 +478,9 @@ umbraco-package-schema.json
 # Log files
 /umbraco/Logs/
 
-<<<<<<< HEAD
-# Media files
-# /wwwroot/media/
-=======
 # Media files - track the directory itself so it exists on deploy, but ignore all content
 /wwwroot/media/*
 !/wwwroot/media/.gitkeep
->>>>>>> 0cc4a6e12647ecaa2331ef1b4a89a24ca68026fb
 
 ## Reference crawl data (large local-only reference, not tracked in git)
 reference/stb-crawl/

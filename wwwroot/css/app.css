@@ -810,17 +810,29 @@ h1, h2, h3, h4, h5, h6 {
    13. FOOTER
    ============================================================ */
 .footer {
-    background: #1a1a2e;
-    color: #ccc;
-    padding: 40px 0 20px;
+    background-color: #ebebeb;
+    border-top: 1px solid rgba(152, 166, 173, .2);
+    color: #98a6ad;
+    padding: 19px 30px 20px;
     font-size: 13px;
 }
 
-    .footer h4 {
-        color: #fff;
-        font-size: 15px;
-        font-weight: 600;
-        margin-bottom: 15px;
+    .footer hr {
+        border-top: 1px solid rgba(57, 57, 57, .1);
+    }
+
+    /* Upper section: nav columns */
+    .footer .link-block {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .footer .link-block h4 {
+        color: #cd007a;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 12px;
     }
 
 .footer-links {
@@ -830,32 +842,52 @@ h1, h2, h3, h4, h5, h6 {
 }
 
     .footer-links li {
-        padding: 3px 0;
+        padding: 2px 0;
     }
 
         .footer-links li a {
-            color: #adb5bd;
+            color: #6c757d;
             text-decoration: none;
+            transition: color .4s;
         }
 
             .footer-links li a:hover {
-                color: #fff;
+                color: #ec008c;
             }
+
+/* Bottom bar: left links use spacing to match the original */
+.footer .row:last-child .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+}
+
+    .footer .row:last-child .footer-links li a {
+        margin-left: 0;
+        margin-right: 1.5rem;
+    }
 
 .footer-social {
 }
 
+    .footer-social li {
+        float: left;
+    }
+
     .footer-social .nav-link {
-        color: #adb5bd;
+        padding: 0;
+        color: #98a6ad;
         font-size: 20px;
+        min-width: 32px;
+        display: block;
+        text-align: center;
+        margin: 0 8px;
     }
 
         .footer-social .nav-link:hover {
-            color: #fff;
+            color: #ec008c;
         }
-
-.link-block {
-}
 
 /* ============================================================
    14. GDPR / COOKIE CONSENT

@@ -40,6 +40,14 @@
 			overrides that exclusion and guarantees the directory exists in every package.
 		-->
 		<Content Include="wwwroot\media\.gitkeep" CopyToPublishDirectory="PreserveNewest" />
+		<!--
+			scraped-media/ is a content-root directory (not wwwroot/) that serves fallback
+			homepage images (hero slides, promo banners, news thumbnails) via a virtual path
+			registered in Program.cs. dotnet publish does not copy content-root directories
+			automatically, so these images are absent from every Azure deploy package and
+			return 404 on the live site.
+		-->
+		<Content Include="scraped-media\**\*" CopyToPublishDirectory="PreserveNewest" />
 	</ItemGroup>
 
 </Project>
