@@ -41,6 +41,11 @@
         color: #EC008C;
     }
 
+/* Pause scrolling while the mouse is anywhere over the ticker bar */
+.js-conveyor-example:hover ul {
+    animation-play-state: paused;
+}
+
 @keyframes ticker-scroll {
     0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
