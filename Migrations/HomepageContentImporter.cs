@@ -25,8 +25,9 @@ public class HomepageContentImporterHandler : INotificationAsyncHandler<UmbracoA
     // Bump this string whenever homepage content/media needs to be re-imported on Azure.
     // The importer is idempotent per version: it runs once, stores this key in the DB,
     // and skips on every subsequent startup until the version is changed.
-    // v2: scraped-media/ is now included in the publish output so images resolve correctly.
-    private const string ImportVersion = "homepage-v2";
+    // v3: re-run after previous import crashed on missing subBrandHomePage document type,
+    // leaving heroSlides empty on the Doma node.
+    private const string ImportVersion = "homepage-v3";
 
     private const string DigitalChannelsImportStateKey = "STBWeb.DigitalChannelsImport.Version";
     // v3: fix block list JSON — lowercase "layout" key and populated "expose" array so
@@ -720,37 +721,52 @@ public class HomepageContentImporterHandler : INotificationAsyncHandler<UmbracoA
         string enName,
         string subbrandKey)
     {
-        var existing = _contentService
-            .GetPagedChildren(home.Id, 0, 200, out _, null, null)
-            .FirstOrDefault(x =>
-                x.ContentType.Alias == "subBrandHomePage" &&
-                !string.IsNullOrWhiteSpace(x.Name) &&
-                x.Name.InvariantContains(invariantName));
-
-        if (existing != null)
+        try
         {
-            return existing;
+            var existing = _contentService
+                .GetPagedChildren(home.Id, 0, 200, out _, null, null)
+                .FirstOrDefault(x =>
+                    x.ContentType.Alias == "subBrandHomePage" &&
+                    !string.IsNullOrWhiteSpace(x.Name) &&
+                    x.Name.InvariantContains(invariantName));
+
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            // Guard: if the document type doesn't exist yet, don't crash the whole import
+            if (_contentTypeService.Get("subBrandHomePage") == null)
+            {
+                _logger.LogWarning("STBWeb: 'subBrandHomePage' document type not found — skipping sub-brand node '{Name}'.", invariantName);
+                return null;
+            }
+
+            var subBrand = _contentService.Create(invariantName, home.Id, "subBrandHomePage");
+            subBrand.SetCultureName(mkName, MkCulture);
+            subBrand.SetCultureName(enName, EnCulture);
+            SetPropertyValue(subBrand, "subbrandKey", subbrandKey, MkCulture, EnCulture);
+
+            var saveResult = _contentService.Save(subBrand);
+            if (!saveResult.Success)
+            {
+                _logger.LogWarning("STBWeb: Could not create sub-brand node '{Name}'. Result: {@Result}", invariantName, saveResult.Result);
+                return null;
+            }
+
+            var publishResult = _contentService.Publish(subBrand, new[] { "*" });
+            if (!publishResult.Success)
+            {
+                _logger.LogWarning("STBWeb: Could not publish sub-brand node '{Name}'. Result: {@Result}", invariantName, publishResult.Result);
+            }
+
+            return subBrand;
         }
-
-        var subBrand = _contentService.Create(invariantName, home.Id, "subBrandHomePage");
-        subBrand.SetCultureName(mkName, MkCulture);
-        subBrand.SetCultureName(enName, EnCulture);
-        SetPropertyValue(subBrand, "subbrandKey", subbrandKey, MkCulture, EnCulture);
-
-        var saveResult = _contentService.Save(subBrand);
-        if (!saveResult.Success)
+        catch (Exception ex)
         {
-            _logger.LogWarning("STBWeb: Could not create sub-brand node '{Name}'. Result: {@Result}", invariantName, saveResult.Result);
+            _logger.LogWarning(ex, "STBWeb: Failed to get/create sub-brand node '{Name}' — continuing without it.", invariantName);
             return null;
         }
-
-        var publishResult = _contentService.Publish(subBrand, new[] { "*" });
-        if (!publishResult.Success)
-        {
-            _logger.LogWarning("STBWeb: Could not publish sub-brand node '{Name}'. Result: {@Result}", invariantName, publishResult.Result);
-        }
-
-        return subBrand;
     }
 
     private void AssignSubBrandLogo(IContent? subBrandNode, string subbrandKey, IMedia logoMedia)

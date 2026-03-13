@@ -81,7 +81,15 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
         try
         {
             await ResolveDataTypesAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "STBWeb: Failed to resolve data types — aborting migration.");
+            return;
+        }
 
+        try
+        {
             // ----------------------------------------------------------------
             // ELEMENT TYPES
             // ----------------------------------------------------------------
@@ -184,8 +192,11 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
 
             // ----------------------------------------------------------------
             // DOCUMENT TYPES
+            // Each creation is wrapped individually so that a failure in one
+            // (e.g. UnauthorizedAccessException from file rename) does not
+            // prevent the remaining document types from being created.
             // ----------------------------------------------------------------
-            await EnsureDocumentTypeAsync("homePage", "Home Page",
+            await SafeEnsureDocTypeAsync("homePage", "Home Page",
                 compositions: ["seoComposition"],
                 allowedAtRoot: true,
                 allowedChildren: ["sectionRoot", "newsListingPage", "subBrandHomePage", "genericContentPage"],
@@ -199,7 +210,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("promoBanner2",     "Promo Banner 2",     _dtContentPicker!),
                 ]);
 
-            await EnsureDocumentTypeAsync("sectionRoot", "Section Root",
+            await SafeEnsureDocTypeAsync("sectionRoot", "Section Root",
                 compositions: ["seoComposition", "heroBannerComposition"],
                 allowedAtRoot: false,
                 allowedChildren: ["sectionRoot", "productDetailPage", "productListingPage", "genericContentPage", "exchangeRatePage", "locationMapPage", "calculatorsPage", "corporateGovernancePage", "newsListingPage"],
@@ -208,7 +219,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("bodyContent", "Body Content", _dtRichText!),
                 ]);
 
-            await EnsureDocumentTypeAsync("productDetailPage", "Product Detail Page",
+            await SafeEnsureDocTypeAsync("productDetailPage", "Product Detail Page",
                 compositions: ["seoComposition", "heroBannerComposition", "sidebarComposition"],
                 allowedAtRoot: false,
                 allowedChildren: [],
@@ -223,7 +234,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("faqItems",           "FAQ Items",                 _dtBlockList!),
                 ]);
 
-            await EnsureDocumentTypeAsync("productListingPage", "Product Listing Page",
+            await SafeEnsureDocTypeAsync("productListingPage", "Product Listing Page",
                 compositions: ["seoComposition", "heroBannerComposition", "sidebarComposition"],
                 allowedAtRoot: false,
                 allowedChildren: ["productDetailPage", "sectionRoot"],
@@ -232,7 +243,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("bodyContent", "Body Content", _dtRichText!),
                 ]);
 
-            await EnsureDocumentTypeAsync("newsListingPage", "News Listing Page",
+            await SafeEnsureDocTypeAsync("newsListingPage", "News Listing Page",
                 compositions: ["seoComposition", "heroBannerComposition"],
                 allowedAtRoot: false,
                 allowedChildren: ["newsDetailPage"],
@@ -241,7 +252,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("newsPerPage", "News Per Page", _dtNumeric!),
                 ]);
 
-            await EnsureDocumentTypeAsync("newsDetailPage", "News Detail Page",
+            await SafeEnsureDocTypeAsync("newsDetailPage", "News Detail Page",
                 compositions: ["seoComposition"],
                 allowedAtRoot: false,
                 allowedChildren: [],
@@ -253,7 +264,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("articleBody",    "Article Body",    _dtRichText!),
                 ]);
 
-            await EnsureDocumentTypeAsync("genericContentPage", "Generic Content Page",
+            await SafeEnsureDocTypeAsync("genericContentPage", "Generic Content Page",
                 compositions: ["seoComposition", "heroBannerComposition", "sidebarComposition"],
                 allowedAtRoot: false,
                 allowedChildren: ["genericContentPage", "sectionRoot"],
@@ -263,7 +274,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("documentDownloads", "Document Downloads", _dtBlockList!),
                 ]);
 
-            await EnsureDocumentTypeAsync("exchangeRatePage", "Exchange Rate Page",
+            await SafeEnsureDocTypeAsync("exchangeRatePage", "Exchange Rate Page",
                 compositions: ["seoComposition", "heroBannerComposition", "sidebarComposition"],
                 allowedAtRoot: false,
                 allowedChildren: [],
@@ -272,7 +283,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("rateApiEndpoint", "Rate API Endpoint", _dtTextstring!),
                 ]);
 
-            await EnsureDocumentTypeAsync("locationMapPage", "Location Map Page",
+            await SafeEnsureDocTypeAsync("locationMapPage", "Location Map Page",
                 compositions: ["seoComposition", "heroBannerComposition"],
                 allowedAtRoot: false,
                 allowedChildren: [],
@@ -283,7 +294,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("mapDefaultCenter",     "Map Default Center",     _dtTextstring!),
                 ]);
 
-            await EnsureDocumentTypeAsync("calculatorsPage", "Calculators Page",
+            await SafeEnsureDocTypeAsync("calculatorsPage", "Calculators Page",
                 compositions: ["seoComposition", "heroBannerComposition", "sidebarComposition"],
                 allowedAtRoot: false,
                 allowedChildren: [],
@@ -292,7 +303,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("calculatorConfig", "Calculator Config", _dtTextarea!),
                 ]);
 
-            await EnsureDocumentTypeAsync("corporateGovernancePage", "Corporate Governance Page",
+            await SafeEnsureDocTypeAsync("corporateGovernancePage", "Corporate Governance Page",
                 compositions: ["seoComposition", "heroBannerComposition", "sidebarComposition"],
                 allowedAtRoot: false,
                 allowedChildren: ["genericContentPage"],
@@ -304,7 +315,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("governanceDocs",   "Governance Documents", _dtBlockList!),
                 ]);
 
-            await EnsureDocumentTypeAsync("subBrandHomePage", "Sub-Brand Home Page",
+            await SafeEnsureDocTypeAsync("subBrandHomePage", "Sub-Brand Home Page",
                 compositions: ["seoComposition"],
                 allowedAtRoot: false,
                 allowedChildren: ["genericContentPage"],
@@ -380,6 +391,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                 {
                     Name = "Block List",
                     DatabaseType = ValueStorageType.Ntext,
+                    EditorUiAlias = "Umb.PropertyEditorUi.BlockList",
                 };
                 await _dataTypeService.CreateAsync(newBlockList, Constants.Security.SuperUserKey);
                 blockListDataType = newBlockList;
@@ -393,6 +405,14 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
         }
 
         _dtBlockList = blockListDataType;
+
+        // Fix missing EditorUiAlias on the generic Block List (needed by Umbraco 15 Bellissima UI)
+        if (blockListDataType != null && string.IsNullOrEmpty(blockListDataType.EditorUiAlias))
+        {
+            blockListDataType.EditorUiAlias = "Umb.PropertyEditorUi.BlockList";
+            await _dataTypeService.UpdateAsync(blockListDataType, Constants.Security.SuperUserKey);
+            _logger.LogInformation("STBWeb: Set EditorUiAlias on generic 'Block List' data type (ID {Id}).", blockListDataType.Id);
+        }
 
         // Final fallback validation
         if (_dtTextstring == null || _dtMediaPicker == null)
@@ -468,6 +488,29 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
     }
 
     // -----------------------------------------------------------------------
+    // SafeEnsureDocTypeAsync — wraps EnsureDocumentTypeAsync so that a
+    // failure (e.g. UnauthorizedAccessException from file rename) is logged
+    // but does not prevent subsequent document types from being created.
+    // -----------------------------------------------------------------------
+    private async Task SafeEnsureDocTypeAsync(
+        string alias,
+        string name,
+        string[] compositions,
+        bool allowedAtRoot,
+        string[] allowedChildren,
+        PropDef[] properties)
+    {
+        try
+        {
+            await EnsureDocumentTypeAsync(alias, name, compositions, allowedAtRoot, allowedChildren, properties);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "STBWeb: Failed to create document type '{Alias}' — continuing with remaining types.", alias);
+        }
+    }
+
+    // -----------------------------------------------------------------------
     // EnsureDocumentTypeAsync
     // -----------------------------------------------------------------------
     private async Task EnsureDocumentTypeAsync(
@@ -535,9 +578,16 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
             bool hidFile = false;
             if (System.IO.File.Exists(expectedPath))
             {
-                System.IO.File.Move(expectedPath, tempPath, true);
-                hidFile = true;
-                _logger.LogInformation("STBWeb: Temporarily renamed '{Path}' before CreateAsync.", expectedPath);
+                try
+                {
+                    System.IO.File.Move(expectedPath, tempPath, true);
+                    hidFile = true;
+                    _logger.LogInformation("STBWeb: Temporarily renamed '{Path}' before CreateAsync.", expectedPath);
+                }
+                catch (Exception moveEx)
+                {
+                    _logger.LogWarning(moveEx, "STBWeb: Could not rename '{Path}' — proceeding without hiding the file.", expectedPath);
+                }
             }
 
             var template = new Template(_shortStringHelper, templateName, templateAlias);
@@ -693,28 +743,32 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
             return _dtBlockList!;
         }
 
-        // Each entry is the editor format the Block List configuration editor expects.
-        var blockEntry = new Dictionary<string, object?>
+        // Build the typed BlockListConfiguration, then use the editor's own
+        // ConfigurationEditor.FromConfigurationObject() to produce the exact
+        // ConfigurationData dictionary that Umbraco can round-trip correctly.
+        // Previous approach used raw dictionaries which broke deserialization
+        // (string GUIDs vs typed Guid, wrong property casing, etc.).
+        var typedConfig = new BlockListConfiguration
         {
-            ["contentElementTypeKey"] = elementType.Key.ToString("D"),
-            ["settingsElementTypeKey"] = null,
-            ["label"] = null,
-            ["editorSize"] = "medium",
-            ["forceHideContentEditorInOverlay"] = false,
-            ["thumbnail"] = null,
-            ["iconColor"] = null,
-            ["stylesheet"] = null,
-            ["view"] = null,
-            ["displayInline"] = false,
+            Blocks = new[]
+            {
+                new BlockListConfiguration.BlockConfiguration
+                {
+                    ContentElementTypeKey = elementType.Key,
+                    SettingsElementTypeKey = null,
+                }
+            },
+            UseSingleBlockMode = false,
         };
 
-        var correctConfig = new Dictionary<string, object>
-        {
-            ["blocks"] = new object[] { blockEntry },
-            ["useSingleBlockMode"] = false,
-            ["useLiveEditing"] = false,
-            ["useInlineEditingAsDefault"] = false,
-        };
+        var configEditor = blockListEditor.GetConfigurationEditor();
+        var correctConfig = configEditor.FromConfigurationObject(typedConfig, _configurationEditorJsonSerializer);
+
+        _logger.LogInformation(
+            "STBWeb: Built Block List config for '{Name}' via FromConfigurationObject. Keys=[{Keys}], ElementKey={ElementKey}",
+            name,
+            string.Join(", ", correctConfig.Keys),
+            elementType.Key);
 
         // Search by name only — this catches data types that were created without a
         // proper editor (showing "Select a property editor" in the backoffice, which
@@ -726,31 +780,50 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
 
         if (existing != null)
         {
+            // Check whether the editor alias is correct (catches broken/unconfigured data types).
             var editorIsCorrect = existing.EditorAlias.Equals(
                 Constants.PropertyEditors.Aliases.BlockList, StringComparison.OrdinalIgnoreCase);
 
-            var hasBlocks = editorIsCorrect &&
-                            existing.ConfigurationData != null &&
-                            existing.ConfigurationData.TryGetValue("blocks", out var blocksVal) &&
-                            blocksVal is System.Collections.IEnumerable blocksEnum &&
-                            blocksEnum.Cast<object>().Any();
-
-            if (editorIsCorrect && hasBlocks)
-            {
-                _logger.LogInformation("STBWeb: Block List data type '{Name}' already fully configured.", name);
-                return existing;
-            }
-
-            // The data type exists but either has the wrong editor (broken/unconfigured)
-            // or is missing the blocks list. Fix it in-place so the DB record's ID/Key
-            // stays the same and any property already pointing at it is automatically fixed.
+            // Fix wrong/empty editor alias in-place so the DB record's ID/Key stays the
+            // same and any property already pointing at it is automatically fixed.
             if (!editorIsCorrect && existing is DataType concreteDataType)
             {
                 _logger.LogInformation("STBWeb: Block List data type '{Name}' has wrong/empty editor; reassigning Block List editor.", name);
                 concreteDataType.Editor = blockListEditor;
             }
 
-            existing.ConfigurationData = correctConfig;
+            // Use ToConfigurationObject to read the typed config back and verify
+            // the correct element type is registered as an allowed block.
+            var existingConfig = configEditor.ToConfigurationObject(
+                existing.ConfigurationData ?? new Dictionary<string, object>(),
+                _configurationEditorJsonSerializer) as BlockListConfiguration;
+
+            var hasCorrectBlock = existingConfig?.Blocks != null
+                && existingConfig.Blocks.Any(b => b.ContentElementTypeKey == elementType.Key);
+
+            // Fix missing EditorUiAlias (required by Umbraco 15 Bellissima UI)
+            var needsUiAlias = string.IsNullOrEmpty(existing.EditorUiAlias);
+
+            if (editorIsCorrect && hasCorrectBlock && !needsUiAlias)
+            {
+                _logger.LogInformation("STBWeb: Block List data type '{Name}' already configured with '{ElementType}'.", name, elementTypeAlias);
+                return existing;
+            }
+
+            if (needsUiAlias)
+            {
+                existing.EditorUiAlias = "Umb.PropertyEditorUi.BlockList";
+                _logger.LogInformation("STBWeb: Setting EditorUiAlias on '{Name}'.", name);
+            }
+
+            if (!hasCorrectBlock)
+            {
+                _logger.LogInformation(
+                    "STBWeb: Block List data type '{Name}' exists but missing '{ElementType}' block (found {Count} blocks); updating config.",
+                    name, elementTypeAlias, existingConfig?.Blocks?.Length ?? 0);
+                existing.ConfigurationData = correctConfig;
+            }
+
             await _dataTypeService.UpdateAsync(existing, Constants.Security.SuperUserKey);
             _logger.LogInformation("STBWeb: Fixed '{Name}' Block List data type — editor and blocks config updated for '{ElementType}'.", name, elementTypeAlias);
             return existing;
@@ -762,6 +835,10 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
             Name = name,
             DatabaseType = ValueStorageType.Ntext,
             ConfigurationData = correctConfig,
+            // Umbraco 15's Bellissima UI requires the EditorUiAlias to render the
+            // correct property editor component. Without it the backoffice shows the
+            // property as read-only with no controls.
+            EditorUiAlias = "Umb.PropertyEditorUi.BlockList",
         };
 
         await _dataTypeService.CreateAsync(dataType, Constants.Security.SuperUserKey);
@@ -833,6 +910,14 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
             if (!existing.Contains(alias))
                 toAdd.Add((groupAlias, groupName, sortOrder, P(alias, name, dt)));
         }
+
+        // ── Core content properties (may be missing if first CreateAsync was partial) ─
+        AddIfMissing("content", "Content", 0, "heroSlides",       "Hero Slides",        _dtHeroSlidesBlockList ?? _dtBlockList!);
+        AddIfMissing("content", "Content", 0, "featureIconLinks", "Feature Icon Links",  _dtFeatureIconLinksBlockList ?? _dtBlockList!);
+        AddIfMissing("content", "Content", 0, "applyOnlineImage", "Apply Online Image",  _dtMediaPicker!);
+        AddIfMissing("content", "Content", 0, "applyOnlineUrl",   "Apply Online URL",    _dtMultiUrlPicker!);
+        AddIfMissing("content", "Content", 0, "promoBanner1",     "Promo Banner 1",      _dtContentPicker!);
+        AddIfMissing("content", "Content", 0, "promoBanner2",     "Promo Banner 2",      _dtContentPicker!);
 
         // ── Section text labels ───────────────────────────────────────────
         AddIfMissing("homepageLabels", "Homepage Labels", 10, "whatINeedTitle",        "What I Need Section Title",    _dtTextstring!);

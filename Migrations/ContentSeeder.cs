@@ -435,6 +435,13 @@ public class ContentSeederHandler : INotificationAsyncHandler<UmbracoApplication
             return -1;
         }
 
+        // Guard: verify the content type exists before calling Create (which throws if missing)
+        if (_contentTypeService.Get(alias) == null)
+        {
+            _logger.LogError("STBWeb: Content type '{Alias}' not found — skipping node '{Name}'. Run the document type migration first.", alias, invariantName);
+            return 0;
+        }
+
         var content = _contentService.Create(invariantName, parentId, alias);
         content.SetCultureName(nameMk, "mk");
         content.SetCultureName(nameEn, "en");
