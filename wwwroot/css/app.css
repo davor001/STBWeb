@@ -23,7 +23,8 @@ body {
     font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 14px;
     color: #333;
-    background: #f5f5f5;
+    background: #fafbfe;
+    overflow-x: hidden;
 }
 
 a {
@@ -51,6 +52,8 @@ h1, h2, h3, h4, h5, h6 {
    2. LAYOUT WRAPPER
    ============================================================ */
 .wrapper {
+    width: 100%;
+    overflow: hidden;
 }
 
 .content-page {
@@ -64,7 +67,7 @@ h1, h2, h3, h4, h5, h6 {
    3. TOP BAR / NAVBAR
    ============================================================ */
 .topnav-navbar {
-    background: #fff;
+    background: #fafbfe;
     border-bottom: 1px solid #e9e9e9;
     padding: 0;
     margin: 0;
@@ -137,8 +140,8 @@ h1, h2, h3, h4, h5, h6 {
     }
 
 .topnav-phone {
-    color: #333;
-    font-weight: 600;
+    color: #6c757d;
+    font-weight: 400;
     font-size: 1rem;
 }
 
@@ -184,8 +187,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .topnav-menu .navbar-nav .nav-link {
     color: #555;
-    padding: 1rem 1.3rem;
-    font-size: 1.1rem;
+    padding: 0.75rem 0.6rem;
+    font-size: 1rem;
     font-weight: 700;
     position: relative;
     text-transform: none;
@@ -247,8 +250,10 @@ h1, h2, h3, h4, h5, h6 {
     color: #313a46;
     border-radius: .15rem;
     font-size: .875rem;
-    padding: .28rem .8rem;
+    padding: .35rem .9rem;
     line-height: 1.5;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
 .btn-eregistration:hover,
@@ -264,8 +269,10 @@ h1, h2, h3, h4, h5, h6 {
     color: #fff;
     border-radius: .15rem;
     font-size: .875rem;
-    padding: .28rem .8rem;
+    padding: .35rem .9rem;
     line-height: 1.5;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
 .btn-enajava:hover,
@@ -388,11 +395,18 @@ h1, h2, h3, h4, h5, h6 {
         text-shadow: 1px 1px 3px rgba(0,0,0,.4);
     }
 
-.carousel-indicators li {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+
+
+.carousel-indicators {
+    bottom: 15px;
+    margin-bottom: 0;
 }
+
+    .carousel-indicators li {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
@@ -400,14 +414,23 @@ h1, h2, h3, h4, h5, h6 {
     height: 30px;
 }
 
+#homeMainSlider {
+    margin-bottom: 0;
+}
+
+    #homeMainSlider .carousel-inner {
+        background: #e9ecef;
+    }
+
 /* ============================================================
    6. NEWS TICKER (jConveyorTicker)
    ============================================================ */
 .js-conveyor-example {
     overflow: hidden;
-    background: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-    padding: 6px 0;
+    background: #fafbfe;
+    border-top: 1px solid #e3eaef;
+    border-bottom: 1px solid #e3eaef;
+    padding: 4px 0;
 }
 
 .conveyor-content {
@@ -424,8 +447,8 @@ h1, h2, h3, h4, h5, h6 {
     }
 
         .conveyor-content li a {
-            color: #333;
-            font-size: 13px;
+            color: #6c757d;
+            font-size: 14px;
             text-decoration: none;
         }
 
@@ -441,8 +464,10 @@ h1, h2, h3, h4, h5, h6 {
     background: #fff;
     border-top: 1px solid #e9e9e9;
     border-bottom: 1px solid #e9e9e9;
+    margin-top: 0;
+    padding-top: 1.2rem;
+    padding-bottom: 0.5rem;
 }
-
 .home-what-i-need-title {
     font-size: 1.3rem;
     font-weight: 700;
@@ -1018,16 +1043,49 @@ h1, h2, h3, h4, h5, h6 {
 /* ── Responsive fixes ── */
 
 /* Nav link padding/size: shrink at medium viewports so 8 Cyrillic items fit */
-@media (min-width: 1200px) and (max-width: 1299.98px) {
+/* ── Responsive fixes ── */
+
+/* Nav link padding/size: shrink at medium viewports so 8 Cyrillic items fit */
+/* ── Responsive fixes ── */
+
+/* Nav: scale up slightly on very wide screens */
+/* ── Responsive fixes ── */
+
+/* Nav: scale up slightly on very wide screens */
+/* ── Responsive fixes ── */
+
+/* Nav: scale up slightly on very wide screens */
+@media (min-width: 1400px) {
     .topnav-menu .navbar-nav .nav-link {
-        padding: 1rem 0.65rem;
-        font-size: 0.95rem;
+        padding: 0.85rem 1rem;
+        font-size: 1.05rem;
     }
 }
+
+/* Nav link padding/size: shrink at medium viewports so 8 Cyrillic items fit */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+    .topnav-menu .navbar-nav .nav-link {
+        padding: 0.7rem 0.45rem;
+        font-size: 0.92rem;
+    }
+
+    .navbar-right-secundary .btn-eregistration,
+    .navbar-right-secundary .btn-enajava {
+        font-size: 0.78rem;
+        padding: .28rem .6rem;
+    }
+}
+
 @media (min-width: 992px) and (max-width: 1199.98px) {
     .topnav-menu .navbar-nav .nav-link {
-        padding: 1rem 0.35rem;
+        padding: 0.65rem 0.3rem;
         font-size: 0.82rem;
+    }
+
+    .navbar-right-secundary .btn-eregistration,
+    .navbar-right-secundary .btn-enajava {
+        font-size: 0.7rem;
+        padding: .2rem .4rem;
     }
 }
 
@@ -1047,3 +1105,10 @@ h1, h2, h3, h4, h5, h6 {
 /* Prevent images from overflowing their containers */
 img { max-width: 100%; height: auto; }
 .digital-channels a{color:#98a6ad}
+
+/* Match stb.com.mk container margin */
+@media (min-width: 992px) {
+    body[data-layout=topnav] .container-fluid {
+        max-width: 85%;
+    }
+}
