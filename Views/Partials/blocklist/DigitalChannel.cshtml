@@ -1,0 +1,21 @@
+@using Umbraco.Cms.Core.Models.Blocks
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BlockListItem>
+@{
+    var title       = Model.Content.Value<string>("channelTitle") ?? string.Empty;
+    var icon        = Model.Content.Value<string>("channelIcon") ?? "mdi-bank";
+    var description = Model.Content.Value<string>("channelDescription") ?? string.Empty;
+    var url         = Model.Content.Value<IEnumerable<Umbraco.Cms.Core.Models.Link>>("channelUrl")?.FirstOrDefault()?.Url ?? "#";
+}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <a href="@url">
+            <h4 class="header-title mt-0">@title</h4>
+            <div class="text-center">
+                <span class="dc-icon">
+                    <i class="mdi @icon"></i>
+                </span>
+                <p class="mb-0">@description</p>
+            </div>
+        </a>
+    </div>
+</div>
