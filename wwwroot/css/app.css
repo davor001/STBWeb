@@ -1039,6 +1039,7 @@ h1, h2, h3, h4, h5, h6 {
 .digital-channels .card{background-color:#fbfbfb}
 .digital-channels .card .header-title{font-size:1.2rem;text-align:center}
 .digital-channels .dc-icon{font-size:4rem}
+.digital-channels .card-body a{display:flex;flex-direction:column;align-items:center;width:100%}
 
 /* ── Responsive fixes ── */
 
