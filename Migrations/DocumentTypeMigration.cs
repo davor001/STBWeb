@@ -50,6 +50,9 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
     private IDataType? _dtContentPicker;
     private IDataType? _dtDropdown;
     private IDataType? _dtBlockList;
+    private IDataType? _dtHeroSlidesBlockList;
+    private IDataType? _dtFeatureIconLinksBlockList;
+    private IDataType? _dtDigitalChannelsBlockList;
 
     private readonly IConfigurationEditorJsonSerializer _configurationEditorJsonSerializer;
     private readonly PropertyEditorCollection _propertyEditorCollection;
@@ -92,6 +95,12 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                 P("slideCtaUrl",     "Slide CTA URL",    _dtMultiUrlPicker!),
             });
 
+            // Create a dedicated Block List data type configured to allow heroSlide blocks.
+            // The generic _dtBlockList has no allowed blocks configured, so backoffice editors
+            // cannot add or edit slides without this dedicated, configured data type.
+            _dtHeroSlidesBlockList = await EnsureConfiguredBlockListDataTypeAsync(
+                "Hero Slides Block List", "heroSlide");
+
             await EnsureElementTypeAsync("featureIconLink", "Feature Icon Link", new[]
             {
                 P("iconMdiClass", "Icon MDI Class", _dtTextstring!),
@@ -99,6 +108,9 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                 P("iconColor",    "Icon Color",     _dtTextstring!),
                 P("linkUrl",      "Link URL",       _dtMultiUrlPicker!),
             });
+
+            _dtFeatureIconLinksBlockList = await EnsureConfiguredBlockListDataTypeAsync(
+                "Feature Icon Links Block List", "featureIconLink");
 
             await EnsureElementTypeAsync("faqItem", "FAQ Item", new[]
             {
@@ -132,6 +144,17 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                 P("tickerText", "Text", _dtTextstring!),
                 P("tickerLink", "Link", _dtMultiUrlPicker!),
             });
+
+            await EnsureElementTypeAsync("digitalChannel", "Digital Channel", new[]
+            {
+                P("channelTitle",       "Title",          _dtTextstring!),
+                P("channelIcon",        "Icon MDI Class", _dtTextstring!),
+                P("channelDescription", "Description",    _dtTextstring!),
+                P("channelUrl",         "URL",            _dtMultiUrlPicker!),
+            });
+
+            _dtDigitalChannelsBlockList = await EnsureConfiguredBlockListDataTypeAsync(
+                "Digital Channels Block List", "digitalChannel");
 
             // ----------------------------------------------------------------
             // COMPOSITIONS
@@ -168,7 +191,7 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                 allowedChildren: ["sectionRoot", "newsListingPage", "subBrandHomePage", "genericContentPage"],
                 properties:
                 [
-                    P("heroSlides",       "Hero Slides",       _dtBlockList!),
+                    P("heroSlides",       "Hero Slides",       _dtHeroSlidesBlockList ?? _dtBlockList!),
                     P("featureIconLinks", "Feature Icon Links", _dtBlockList!),
                     P("applyOnlineImage", "Apply Online Image", _dtMediaPicker!),
                     P("applyOnlineUrl",   "Apply Online URL",   _dtMultiUrlPicker!),
@@ -293,6 +316,13 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
                     P("heroSlides",    "Hero Slides",     _dtBlockList!),
                     P("bodyContent",   "Body Content",    _dtRichText!),
                 ]);
+
+            // Ensure the existing homePage.heroSlides property uses the configured data type.
+            // This update path runs even when the document type already exists in the DB,
+            // so the migration is fully idempotent on subsequent startups.
+            await EnsureHomepageHeroSlidesDataTypeAsync();
+            await EnsureHomepagePropertyDataTypeAsync("featureIconLinks", _dtFeatureIconLinksBlockList);
+            await EnsureHomepageAdditionalPropertiesAsync();
 
             _logger.LogInformation("STBWeb: Document type migration completed successfully.");
         }
@@ -629,6 +659,266 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
         }
 
         ct.PropertyGroups.Add(group);
+    }
+
+    // -----------------------------------------------------------------------
+    // EnsureConfiguredBlockListDataTypeAsync
+    // Creates a Block List data type that explicitly lists which element type
+    // is allowed. Without this configuration the backoffice Block List picker
+    // shows an empty "Add block" menu and editors cannot add or edit blocks.
+    // The method is idempotent: it returns the existing data type when a type
+    // with the same name already exists.
+    // -----------------------------------------------------------------------
+    private async Task<IDataType> EnsureConfiguredBlockListDataTypeAsync(
+        string name,
+        string elementTypeAlias)
+    {
+        var elementType = _contentTypeService.Get(elementTypeAlias);
+        if (elementType == null)
+        {
+            _logger.LogWarning("STBWeb: Element type '{Alias}' not found; falling back to generic Block List for '{Name}'.", elementTypeAlias, name);
+            return _dtBlockList!;
+        }
+
+        if (!_propertyEditorCollection.TryGet(Constants.PropertyEditors.Aliases.BlockList, out var blockListEditor))
+        {
+            _logger.LogError("STBWeb: Block List property editor not found; falling back to generic Block List for '{Name}'.", name);
+            return _dtBlockList!;
+        }
+
+        // Each entry is the editor format the Block List configuration editor expects.
+        var blockEntry = new Dictionary<string, object?>
+        {
+            ["contentElementTypeKey"] = elementType.Key.ToString("D"),
+            ["settingsElementTypeKey"] = null,
+            ["label"] = null,
+            ["editorSize"] = "medium",
+            ["forceHideContentEditorInOverlay"] = false,
+            ["thumbnail"] = null,
+            ["iconColor"] = null,
+            ["stylesheet"] = null,
+            ["view"] = null,
+            ["displayInline"] = false,
+        };
+
+        var correctConfig = new Dictionary<string, object>
+        {
+            ["blocks"] = new object[] { blockEntry },
+            ["useSingleBlockMode"] = false,
+            ["useLiveEditing"] = false,
+            ["useInlineEditingAsDefault"] = false,
+        };
+
+        // Check if data type already exists.
+        var all = await _dataTypeService.GetAllAsync();
+        var existing = all.FirstOrDefault(d =>
+            d.EditorAlias.Equals(Constants.PropertyEditors.Aliases.BlockList, StringComparison.OrdinalIgnoreCase) &&
+            d.Name != null &&
+            d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+        if (existing != null)
+        {
+            // Check if blocks are already configured. If the data type was previously
+            // created with empty config ({}), update it now so the backoffice shows
+            // the "Add content" button for editors.
+            var hasBlocks = existing.ConfigurationData != null &&
+                            existing.ConfigurationData.TryGetValue("blocks", out var blocksVal) &&
+                            blocksVal is System.Collections.IEnumerable blocksEnum &&
+                            blocksEnum.Cast<object>().Any();
+
+            if (hasBlocks)
+            {
+                _logger.LogInformation("STBWeb: Block List data type '{Name}' already configured.", name);
+                return existing;
+            }
+
+            _logger.LogInformation("STBWeb: Block List data type '{Name}' exists but has no blocks; updating config.", name);
+            existing.ConfigurationData = correctConfig;
+            await _dataTypeService.UpdateAsync(existing, Constants.Security.SuperUserKey);
+            _logger.LogInformation("STBWeb: Updated '{Name}' Block List data type with '{ElementType}' block.", name, elementTypeAlias);
+            return existing;
+        }
+
+        // Create a new data type with the correct configuration.
+        var dataType = new DataType(blockListEditor, _configurationEditorJsonSerializer, -1)
+        {
+            Name = name,
+            DatabaseType = ValueStorageType.Ntext,
+            ConfigurationData = correctConfig,
+        };
+
+        await _dataTypeService.CreateAsync(dataType, Constants.Security.SuperUserKey);
+        _logger.LogInformation("STBWeb: Created '{Name}' Block List data type allowing '{ElementType}'.", name, elementTypeAlias);
+        return dataType;
+    }
+
+    // -----------------------------------------------------------------------
+    // EnsureHomepagePropertyDataTypeAsync
+    // Generic helper: updates any named property on homePage to use a given
+    // data type. No-op if the property already uses that data type.
+    // -----------------------------------------------------------------------
+    private async Task EnsureHomepagePropertyDataTypeAsync(string propertyAlias, IDataType? targetDataType)
+    {
+        if (targetDataType == null) return;
+
+        var homePage = _contentTypeService.Get("homePage");
+        if (homePage == null) return;
+
+        IPropertyType? pt = null;
+        foreach (var group in homePage.PropertyGroups)
+        {
+            pt = group.PropertyTypes?.FirstOrDefault(p => p.Alias == propertyAlias);
+            if (pt != null) break;
+        }
+
+        if (pt == null)
+        {
+            _logger.LogWarning("STBWeb: Property '{Alias}' not found on homePage.", propertyAlias);
+            return;
+        }
+
+        if (pt.DataTypeKey == targetDataType.Key)
+        {
+            _logger.LogInformation("STBWeb: homePage.{Alias} already uses correct data type.", propertyAlias);
+            return;
+        }
+
+        pt.DataTypeId = targetDataType.Id;
+        pt.DataTypeKey = targetDataType.Key;
+        await _contentTypeService.UpdateAsync(homePage, Constants.Security.SuperUserKey);
+        _logger.LogInformation("STBWeb: Updated homePage.{Alias} to use configured Block List.", propertyAlias);
+    }
+
+    // -----------------------------------------------------------------------
+    // EnsureHomepageAdditionalPropertiesAsync
+    // Adds homepage text-label, digital-channel, and footer properties that
+    // may not exist yet (idempotent: checks existence before adding).
+    // -----------------------------------------------------------------------
+    private async Task EnsureHomepageAdditionalPropertiesAsync()
+    {
+        var homePage = _contentTypeService.Get("homePage");
+        if (homePage == null) return;
+
+        var existing = homePage.PropertyGroups
+            .SelectMany(g => g.PropertyTypes ?? Enumerable.Empty<IPropertyType>())
+            .Select(p => p.Alias)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var toAdd = new List<(string groupAlias, string groupName, int sortOrder, PropDef prop)>();
+
+        void AddIfMissing(string groupAlias, string groupName, int sortOrder, string alias, string name, IDataType dt)
+        {
+            if (!existing.Contains(alias))
+                toAdd.Add((groupAlias, groupName, sortOrder, P(alias, name, dt)));
+        }
+
+        // ── Section text labels ───────────────────────────────────────────
+        AddIfMissing("homepageLabels", "Homepage Labels", 10, "whatINeedTitle",        "What I Need Section Title",    _dtTextstring!);
+        AddIfMissing("homepageLabels", "Homepage Labels", 10, "applyOnlineTitle",      "Apply Online Card Title",      _dtTextstring!);
+        AddIfMissing("homepageLabels", "Homepage Labels", 10, "applyOnlineButtonText", "Apply Online Button Text",     _dtTextstring!);
+        AddIfMissing("homepageLabels", "Homepage Labels", 10, "exchangeRateTitle",     "Exchange Rate Section Title",  _dtTextstring!);
+        AddIfMissing("homepageLabels", "Homepage Labels", 10, "exchangeRateAllLabel",  "Exchange Rate All Link Label", _dtTextstring!);
+        AddIfMissing("homepageLabels", "Homepage Labels", 10, "exchangeRateAllUrl",    "Exchange Rate All Link URL",   _dtMultiUrlPicker!);
+        AddIfMissing("homepageLabels", "Homepage Labels", 10, "latestNewsTitle",       "Latest News Section Title",    _dtTextstring!);
+        AddIfMissing("homepageLabels", "Homepage Labels", 10, "latestNewsAllLabel",    "Latest News All Link Label",   _dtTextstring!);
+        AddIfMissing("homepageLabels", "Homepage Labels", 10, "newsReadMoreLabel",     "News Read More Label",         _dtTextstring!);
+
+        // ── Digital Channels block list ───────────────────────────────────
+        AddIfMissing("digitalChannelsGroup", "Digital Channels", 20, "digitalChannels",     "Digital Channels",           _dtDigitalChannelsBlockList ?? _dtBlockList!);
+        AddIfMissing("digitalChannelsGroup", "Digital Channels", 20, "digitalChannelsTitle","Digital Channels Section Title", _dtTextstring!);
+
+        // ── Footer settings ───────────────────────────────────────────────
+        AddIfMissing("footerSettings", "Footer Settings", 30, "footerColumn1Title",   "Footer Column 1 Title",    _dtTextstring!);
+        AddIfMissing("footerSettings", "Footer Settings", 30, "footerColumn1Links",   "Footer Column 1 Links",    _dtMultiUrlPicker!);
+        AddIfMissing("footerSettings", "Footer Settings", 30, "footerColumn2Title",   "Footer Column 2 Title",    _dtTextstring!);
+        AddIfMissing("footerSettings", "Footer Settings", 30, "footerColumn2Links",   "Footer Column 2 Links",    _dtMultiUrlPicker!);
+        AddIfMissing("footerSettings", "Footer Settings", 30, "footerColumn3Title",   "Footer Column 3 Title",    _dtTextstring!);
+        AddIfMissing("footerSettings", "Footer Settings", 30, "footerColumn3Links",   "Footer Column 3 Links",    _dtMultiUrlPicker!);
+        AddIfMissing("footerSettings", "Footer Settings", 30, "footerColumn4Title",   "Footer Column 4 Title",    _dtTextstring!);
+        AddIfMissing("footerSettings", "Footer Settings", 30, "footerColumn4Links",   "Footer Column 4 Links",    _dtMultiUrlPicker!);
+        AddIfMissing("footerSettings", "Footer Settings", 30, "footerLogo",           "Footer Logo",              _dtMediaPicker!);
+        AddIfMissing("footerSettings", "Footer Settings", 30, "footerCopyrightLinks", "Footer Copyright Links",   _dtMultiUrlPicker!);
+        AddIfMissing("footerSettings", "Footer Settings", 30, "footerSocialLinks",    "Footer Social Links",      _dtMultiUrlPicker!);
+
+        if (toAdd.Count == 0)
+        {
+            _logger.LogInformation("STBWeb: homePage additional properties already all present.");
+            return;
+        }
+
+        // Group properties by their target property group
+        var byGroup = toAdd.GroupBy(x => x.groupAlias);
+        foreach (var grp in byGroup)
+        {
+            var first = grp.First();
+            var group = homePage.PropertyGroups.FirstOrDefault(g => g.Alias == grp.Key);
+            if (group == null)
+            {
+                group = new PropertyGroup(true)
+                {
+                    Name = first.groupName,
+                    Alias = grp.Key,
+                    SortOrder = first.sortOrder,
+                };
+                homePage.PropertyGroups.Add(group);
+            }
+
+            foreach (var (_, _, _, prop) in grp)
+            {
+                var pt = new PropertyType(_shortStringHelper, prop.DataType, prop.Alias) { Name = prop.Name };
+                group.PropertyTypes!.Add(pt);
+            }
+        }
+
+        await _contentTypeService.UpdateAsync(homePage, Constants.Security.SuperUserKey);
+        _logger.LogInformation("STBWeb: Added {Count} additional properties to homePage.", toAdd.Count);
+    }
+
+    // -----------------------------------------------------------------------
+    // EnsureHomepageHeroSlidesDataTypeAsync
+    // Updates the heroSlides property on the existing homePage document type
+    // to use the dedicated "Hero Slides Block List" data type. This runs on
+    // every startup but is a no-op when already up-to-date.
+    // -----------------------------------------------------------------------
+    private async Task EnsureHomepageHeroSlidesDataTypeAsync()
+    {
+        if (_dtHeroSlidesBlockList == null)
+        {
+            return;
+        }
+
+        var homePage = _contentTypeService.Get("homePage");
+        if (homePage == null)
+        {
+            return;
+        }
+
+        IPropertyType? heroSlidesPt = null;
+        foreach (var group in homePage.PropertyGroups)
+        {
+            heroSlidesPt = group.PropertyTypes?.FirstOrDefault(p => p.Alias == "heroSlides");
+            if (heroSlidesPt != null)
+            {
+                break;
+            }
+        }
+
+        if (heroSlidesPt == null)
+        {
+            _logger.LogWarning("STBWeb: heroSlides property not found on homePage; cannot update data type.");
+            return;
+        }
+
+        if (heroSlidesPt.DataTypeKey == _dtHeroSlidesBlockList.Key)
+        {
+            _logger.LogInformation("STBWeb: homePage.heroSlides already uses 'Hero Slides Block List'.");
+            return;
+        }
+
+        heroSlidesPt.DataTypeId = _dtHeroSlidesBlockList.Id;
+        heroSlidesPt.DataTypeKey = _dtHeroSlidesBlockList.Key;
+        await _contentTypeService.UpdateAsync(homePage, Constants.Security.SuperUserKey);
+        _logger.LogInformation("STBWeb: Updated homePage.heroSlides to use 'Hero Slides Block List' data type.");
     }
 
     private record PropDef(string Alias, string Name, IDataType DataType);

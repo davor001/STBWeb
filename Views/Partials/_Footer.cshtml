@@ -1,49 +1,135 @@
+@using Umbraco.Cms.Core.Models
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    // Read footer settings from the root homePage node.
+    // Falls back to hardcoded content when properties are empty so the footer
+    // always renders correctly even before an editor fills in the backoffice fields.
+    var home = Umbraco.ContentAtRoot().FirstOrDefault(c => c.ContentType.Alias == "homePage");
+
+    string Col(string alias, string fallback)
+    {
+        var v = home?.Value<string>(alias);
+        return string.IsNullOrWhiteSpace(v) ? fallback : v;
+    }
+
+    IEnumerable<Link> Links(string alias) =>
+        home?.Value<IEnumerable<Link>>(alias) ?? Enumerable.Empty<Link>();
+
+    // Column titles
+    var col1Title = Col("footerColumn1Title", "За банката");
+    var col2Title = Col("footerColumn2Title", "Финансиски пазари");
+    var col3Title = Col("footerColumn3Title", "Маркетинг и ООП");
+    var col4Title = Col("footerColumn4Title", "Кариера во СТБ");
+
+    // Column links (fall back to hardcoded when empty)
+    var col1Links = Links("footerColumn1Links").ToList();
+    var col2Links = Links("footerColumn2Links").ToList();
+    var col3Links = Links("footerColumn3Links").ToList();
+    var col4Links = Links("footerColumn4Links").ToList();
+
+    // Footer logo
+    var footerLogoMedia = home?.Value<MediaWithCrops>("footerLogo");
+    var footerLogoUrl   = footerLogoMedia?.MediaUrl() ?? "/media/2279/stb_logo_bottom_mk.png";
+
+    // Copyright / bottom links
+    var copyrightLinks = Links("footerCopyrightLinks").ToList();
+
+    // Social links: editor names each link "Facebook", "LinkedIn", etc.
+    var socialLinks = Links("footerSocialLinks").ToList();
+    var socialIconMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        ["facebook"]  = "mdi-facebook",
+        ["linkedin"]  = "mdi-linkedin",
+        ["instagram"] = "mdi-instagram",
+        ["twitter"]   = "mdi-twitter",
+        ["youtube"]   = "mdi-youtube",
+    };
+}
 <footer class="footer">
     <div class="container-fluid">
         <div class="row link-block">
 
             <div class="col-md-3">
-                <h4>За банката</h4>
+                <h4>@col1Title</h4>
                 <ul class="footer-links">
-                    <li><a href="/za-bankata/profil-na-bankata/">&gt; Профил на Банката</a></li>
-                    <li><a href="/za-bankata/korporativno-upravuvanje/">&gt; Корпоративно управување</a></li>
-                    <li><a href="/za-bankata/za-akcionerite/">&gt; За акционерите</a></li>
-                    <li><a href="/za-bankata/podatoci-i-izveshtai/">&gt; Податоци и извештаи</a></li>
-                    <li><a href="/za-bankata/kamatni-stapki/">&gt; Каматни стапки</a></li>
-                    <li><a href="/za-bankata/glavni-korespodentni-banki/">&gt; Главни коресподентни банки</a></li>
-                    <li><a href="/za-bankata/kontakt/">&gt; Контакт</a></li>
-                    <li><a href="/za-bankata/politika-za-privatnost-i-postavuvanje-na-kolacinja/">&gt; Политика за приватност и поставување на колачиња</a></li>
+                    @if (col1Links.Any())
+                    {
+                        foreach (var link in col1Links)
+                        {
+                            <li><a href="@link.Url">&gt; @link.Name</a></li>
+                        }
+                    }
+                    else
+                    {
+                        <li><a href="/za-bankata/profil-na-bankata/">&gt; Профил на Банката</a></li>
+                        <li><a href="/za-bankata/korporativno-upravuvanje/">&gt; Корпоративно управување</a></li>
+                        <li><a href="/za-bankata/za-akcionerite/">&gt; За акционерите</a></li>
+                        <li><a href="/za-bankata/podatoci-i-izveshtai/">&gt; Податоци и извештаи</a></li>
+                        <li><a href="/za-bankata/kamatni-stapki/">&gt; Каматни стапки</a></li>
+                        <li><a href="/za-bankata/glavni-korespodentni-banki/">&gt; Главни коресподентни банки</a></li>
+                        <li><a href="/za-bankata/kontakt/">&gt; Контакт</a></li>
+                        <li><a href="/za-bankata/politika-za-privatnost-i-postavuvanje-na-kolacinja/">&gt; Политика за приватност и поставување на колачиња</a></li>
+                    }
                 </ul>
             </div>
 
             <div class="col-md-3">
-                <h4>Финансиски пазари</h4>
+                <h4>@col2Title</h4>
                 <ul class="footer-links">
-                    <li><a href="/finansiski-pazari/devizen-pazar/">&gt; Девизен пазар</a></li>
-                    <li><a href="/finansiski-pazari/kursna-lista/">&gt; Курсна листа</a></li>
-                    <li><a href="/finansiski-pazari/brokerski-uslugi/">&gt; Брокерски услуги</a></li>
-                    <li><a href="/finansiski-pazari/drzavni-khartii-od-vrednost/">&gt; Државни хартии од вредност</a></li>
-                    <li><a href="/finansiski-pazari/menuvacko-rabotenje/">&gt; Менувачко работење</a></li>
+                    @if (col2Links.Any())
+                    {
+                        foreach (var link in col2Links)
+                        {
+                            <li><a href="@link.Url">&gt; @link.Name</a></li>
+                        }
+                    }
+                    else
+                    {
+                        <li><a href="/finansiski-pazari/devizen-pazar/">&gt; Девизен пазар</a></li>
+                        <li><a href="/finansiski-pazari/kursna-lista/">&gt; Курсна листа</a></li>
+                        <li><a href="/finansiski-pazari/brokerski-uslugi/">&gt; Брокерски услуги</a></li>
+                        <li><a href="/finansiski-pazari/drzavni-khartii-od-vrednost/">&gt; Државни хартии од вредност</a></li>
+                        <li><a href="/finansiski-pazari/menuvacko-rabotenje/">&gt; Менувачко работење</a></li>
+                    }
                 </ul>
             </div>
 
             <div class="col-md-3">
-                <h4>Маркетинг и ООП</h4>
+                <h4>@col3Title</h4>
                 <ul class="footer-links">
-                    <li><a href="/marketing-i-oop/opshtestveno-odgovorni-praktiki/">&gt; Општествено одговорни практики</a></li>
-                    <li><a href="/marketing-i-oop/realizirani-proekti/">&gt; Реализирани проекти</a></li>
-                    <li><a href="/marketing-i-oop/logo-i-trgovski-marki/">&gt; Лого и трговски марки</a></li>
-                    <li><a href="/marketing-i-oop/reklamni-kampanji/">&gt; Рекламни кампањи</a></li>
-                    <li><a href="/marketing-i-oop/intervjua-i-publikacii/">&gt; Интервјуа и публикации</a></li>
-                    <li><a href="/marketing-i-oop/sonuvame-menuvame-vol-7/">&gt; Сонуваме. Менуваме vol. 7</a></li>
+                    @if (col3Links.Any())
+                    {
+                        foreach (var link in col3Links)
+                        {
+                            <li><a href="@link.Url">&gt; @link.Name</a></li>
+                        }
+                    }
+                    else
+                    {
+                        <li><a href="/marketing-i-oop/opshtestveno-odgovorni-praktiki/">&gt; Општествено одговорни практики</a></li>
+                        <li><a href="/marketing-i-oop/realizirani-proekti/">&gt; Реализирани проекти</a></li>
+                        <li><a href="/marketing-i-oop/logo-i-trgovski-marki/">&gt; Лого и трговски марки</a></li>
+                        <li><a href="/marketing-i-oop/reklamni-kampanji/">&gt; Рекламни кампањи</a></li>
+                        <li><a href="/marketing-i-oop/intervjua-i-publikacii/">&gt; Интервјуа и публикации</a></li>
+                        <li><a href="/marketing-i-oop/sonuvame-menuvame-vol-7/">&gt; Сонуваме. Менуваме vol. 7</a></li>
+                    }
                 </ul>
             </div>
 
             <div class="col-md-3">
-                <h4>Кариера во СТБ</h4>
+                <h4>@col4Title</h4>
                 <ul class="footer-links">
-                    <li><a href="/kariera-vo-stb/kariera-vo-stb/">&gt; Кариера во СТБ</a></li>
+                    @if (col4Links.Any())
+                    {
+                        foreach (var link in col4Links)
+                        {
+                            <li><a href="@link.Url">&gt; @link.Name</a></li>
+                        }
+                    }
+                    else
+                    {
+                        <li><a href="/kariera-vo-stb/kariera-vo-stb/">&gt; Кариера во СТБ</a></li>
+                    }
                 </ul>
             </div>
 
@@ -56,20 +142,42 @@
         <div class="row align-items-center">
             <div class="col-sm-12 col-md mb-2 mb-md-0">
                 <ul class="footer-links">
-                    <li><a href="/ostanati-sodrzini/uslovi-za-koristenje/">Услови за користење</a></li>
-                    <li><a href="https://www.nbg.gr/en/the-group" target="_blank">NBG group</a></li>
+                    @if (copyrightLinks.Any())
+                    {
+                        foreach (var link in copyrightLinks)
+                        {
+                            var target = !string.IsNullOrWhiteSpace(link.Target) ? link.Target : null;
+                            <li><a href="@link.Url"@(target != null ? $" target=\"{target}\"" : "")>@link.Name</a></li>
+                        }
+                    }
+                    else
+                    {
+                        <li><a href="/ostanati-sodrzini/uslovi-za-koristenje/">Услови за користење</a></li>
+                        <li><a href="https://www.nbg.gr/en/the-group" target="_blank">NBG group</a></li>
+                    }
                 </ul>
             </div>
             <div class="col-sm-12 col-md-6 text-center">
-                <img src="/media/2279/stb_logo_bottom_mk.png" class="img-fluid d-inline-block" alt="Стопанска Банка">
+                <img src="@footerLogoUrl" class="img-fluid d-inline-block" alt="Стопанска Банка">
             </div>
             <div class="col-sm-12 col-md text-right mt-2 mt-md-0">
                 <ul class="list-unstyled footer-social float-md-right mb-0 topnav-category topnav-social-icons d-inline-block">
-                    <li><a href="https://www.facebook.com/stopanskabankaSK/" target="_blank" class="nav-link" aria-label="Facebook"><i class="mdi mdi-facebook"></i></a></li>
-                    <li><a href="https://www.linkedin.com/company/stopanska-banka-ad-skopje/" target="_blank" class="nav-link" aria-label="Linkedin"><i class="mdi mdi-linkedin"></i></a></li>
-                    <li><a href="https://www.instagram.com/stopanskabanka/" target="_blank" class="nav-link" aria-label="Instagram"><i class="mdi mdi-instagram"></i></a></li>
-                    <li><a href="https://twitter.com/ibankstoreSTB" target="_blank" class="nav-link" aria-label="Twitter"><i class="mdi mdi-twitter"></i></a></li>
-                    <li><a href="https://www.youtube.com/user/stopanskabankamk" target="_blank" class="nav-link" aria-label="Youtube"><i class="mdi mdi-youtube"></i></a></li>
+                    @if (socialLinks.Any())
+                    {
+                        foreach (var link in socialLinks)
+                        {
+                            var iconClass = socialIconMap.TryGetValue(link.Name ?? string.Empty, out var cls) ? cls : "mdi-web";
+                            <li><a href="@link.Url" target="_blank" class="nav-link" aria-label="@link.Name"><i class="mdi @iconClass"></i></a></li>
+                        }
+                    }
+                    else
+                    {
+                        <li><a href="https://www.facebook.com/stopanskabankaSK/" target="_blank" class="nav-link" aria-label="Facebook"><i class="mdi mdi-facebook"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/stopanska-banka-ad-skopje/" target="_blank" class="nav-link" aria-label="Linkedin"><i class="mdi mdi-linkedin"></i></a></li>
+                        <li><a href="https://www.instagram.com/stopanskabanka/" target="_blank" class="nav-link" aria-label="Instagram"><i class="mdi mdi-instagram"></i></a></li>
+                        <li><a href="https://twitter.com/ibankstoreSTB" target="_blank" class="nav-link" aria-label="Twitter"><i class="mdi mdi-twitter"></i></a></li>
+                        <li><a href="https://www.youtube.com/user/stopanskabankamk" target="_blank" class="nav-link" aria-label="Youtube"><i class="mdi mdi-youtube"></i></a></li>
+                    }
                 </ul>
             </div>
         </div>

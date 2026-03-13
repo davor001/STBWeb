@@ -309,6 +309,58 @@
     {
         allNewsUrl = "/novosti/";
     }
+
+    // ── Section text labels (editable in backoffice, hardcoded fallbacks) ─
+    var whatINeedTitle = Model.Value<string>("whatINeedTitle");
+    if (string.IsNullOrWhiteSpace(whatINeedTitle)) whatINeedTitle = "ШТО МИ ТРЕБА?";
+
+    var applyOnlineTitle = Model.Value<string>("applyOnlineTitle");
+    if (string.IsNullOrWhiteSpace(applyOnlineTitle)) applyOnlineTitle = "Аплицирај онлајн";
+
+    var applyOnlineButtonText = Model.Value<string>("applyOnlineButtonText");
+    if (string.IsNullOrWhiteSpace(applyOnlineButtonText)) applyOnlineButtonText = "Аплицирај сега";
+
+    var exchangeRateTitle = Model.Value<string>("exchangeRateTitle");
+    if (string.IsNullOrWhiteSpace(exchangeRateTitle)) exchangeRateTitle = "КУРСНА ЛИСТА";
+
+    var exchangeRateAllLabel = Model.Value<string>("exchangeRateAllLabel");
+    if (string.IsNullOrWhiteSpace(exchangeRateAllLabel)) exchangeRateAllLabel = "Целосна листа";
+
+    var exchangeRateAllUrl = Model.Value<IEnumerable<Link>>("exchangeRateAllUrl")?.FirstOrDefault()?.Url;
+    if (string.IsNullOrWhiteSpace(exchangeRateAllUrl)) exchangeRateAllUrl = "/finansiski-pazari/kursna-lista/";
+
+    var latestNewsTitle = Model.Value<string>("latestNewsTitle");
+    if (string.IsNullOrWhiteSpace(latestNewsTitle)) latestNewsTitle = "СООПШТЕНИЈА";
+
+    var latestNewsAllLabel = Model.Value<string>("latestNewsAllLabel");
+    if (string.IsNullOrWhiteSpace(latestNewsAllLabel)) latestNewsAllLabel = "Сите соопштенија";
+
+    var newsReadMoreLabel = Model.Value<string>("newsReadMoreLabel");
+    if (string.IsNullOrWhiteSpace(newsReadMoreLabel)) newsReadMoreLabel = "повеќе";
+
+    var digitalChannelsTitle = Model.Value<string>("digitalChannelsTitle");
+    if (string.IsNullOrWhiteSpace(digitalChannelsTitle)) digitalChannelsTitle = "ДИГИТАЛНИ КАНАЛИ 24/7";
+
+    // ── Digital Channels (BlockList with fallback to hardcoded defaults) ─
+    var umbracoDigitalChannels = Model.Value<BlockListModel>("digitalChannels")?
+        .Select(x => x.Content)
+        .OfType<IPublishedContent>()
+        .ToList() ?? new List<IPublishedContent>();
+
+    var digitalChannels = umbracoDigitalChannels.Any()
+        ? umbracoDigitalChannels.Select(ch => (
+            Title: ch.Value<string>("channelTitle") ?? string.Empty,
+            Icon: ch.Value<string>("channelIcon") ?? "mdi-bank",
+            Description: ch.Value<string>("channelDescription") ?? string.Empty,
+            Url: ch.Value<IEnumerable<Link>>("channelUrl")?.FirstOrDefault()?.Url ?? "#"
+        )).ToList()
+        : new List<(string Title, string Icon, string Description, string Url)>
+        {
+            ("e-banking",               "mdi-laptop-chromebook", "Достапен 24/7 за безбедно, брзо и лесно управување со вашите финансии",                                             "/naselenie/digitalno-bankarstvo/e-banking/"),
+            ("m-banking",               "mdi-cellphone-iphone",  "БЕСПЛАТНА Android и iOS апликација за 24/7 банка во вашиот мобилен",                                                 "/naselenie/digitalno-bankarstvo/m-banking/"),
+            ("Брзи плаќања - Topsi Pay","mdi-coin",              "сервис за БРЗИ плаќања кон пријателите на Facebook или контактите во мобилниот телефон",                             "/naselenie/digitalno-bankarstvo/brzi-plakjanja-topsi-pay/"),
+            ("E-Commerce",              "mdi-cart-outline",      "Сервис за е-commerce на Стопанска Банка е наменет за правни лица кои имаат сметка во Банката или планираат да отворат","/pravni-lica/digitalno-bankarstvo/e-commerce/"),
+        };
 }
 
 <!-- Hero Carousel -->
@@ -384,7 +436,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h3 class="home-what-i-need-title mb-2 mt-1">ШТО МИ ТРЕБА?</h3>
+                    <h3 class="home-what-i-need-title mb-2 mt-1">@whatINeedTitle</h3>
                 </div>
                 <div class="col-12">
                     <div class="win-icon-row">
@@ -418,8 +470,8 @@
                     <img src="@applyImageUrl" class="card-img-top" alt="Аплицирај онлајн">
                 }
                 <div class="card-body text-center">
-                    <h5 class="card-title">Аплицирај онлајн</h5>
-                    <a href="@applyUrl" class="btn btn-primary w-100">Аплицирај сега</a>
+                    <h5 class="card-title">@applyOnlineTitle</h5>
+                    <a href="@applyUrl" class="btn btn-primary w-100">@applyOnlineButtonText</a>
                 </div>
             </div>
         </div>
@@ -429,8 +481,8 @@
             <div class="card home-exchange-rate h-100">
                 <div class="card-body d-flex flex-column" style="z-index:50">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="header-title mt-0 mb-0">КУРСНА ЛИСТА</h4>
-                        <a href="/finansiski-pazari/kursna-lista/" class="xrate-all-link">Целосна листа &gt;</a>
+                        <h4 class="header-title mt-0 mb-0">@exchangeRateTitle</h4>
+                        <a href="@exchangeRateAllUrl" class="xrate-all-link">@exchangeRateAllLabel &gt;</a>
                     </div>
                     @await Html.PartialAsync("_CurrencyWidget")
                 </div>
@@ -442,9 +494,9 @@
             <div class="card h-100 home-news-card">
                 <div class="card-body d-flex flex-column">
                     <div class="float-right">
-                        <a href="@allNewsUrl">Сите соопштенија &gt;</a>
+                        <a href="@allNewsUrl">@latestNewsAllLabel &gt;</a>
                     </div>
-                    <h4 class="header-title mt-0 mb-3">СООПШТЕНИЈА</h4>
+                    <h4 class="header-title mt-0 mb-3">@latestNewsTitle</h4>
 
                     @if (latestNews.Any())
                     {
@@ -469,7 +521,7 @@
                                                 {
                                                     @news.Excerpt
                                                 }
-                                                <a href="@news.Url"> повеќе</a>
+                                                <a href="@news.Url"> @newsReadMoreLabel</a>
                                             </div>
                                         </div>
                                     </div>
@@ -511,83 +563,36 @@
 </div>
 
 <!-- Digital Channels 24/7 -->
-<div class="digital-channels pt-4">
-    <div class="container-fluid">
-        <div class="col-12 block-title">
-            <h3 class="mt-0 mb-3">ДИГИТАЛНИ КАНАЛИ 24/7</h3>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 col-lg-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <a href="/naselenie/digitalno-bankarstvo/e-banking/">
-                            <h4 class="header-title mt-0">e-banking</h4>
-                            <div class="text-center">
-                                <span class="dc-icon">
-                                    <i class="mdi mdi-laptop-chromebook"></i>
-                                </span>
-                                <p class="mb-0">
-                                    Достапен 24/7 за безбедно, брзо и лесно управување со вашите финансии
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+@if (digitalChannels.Any())
+{
+    <div class="digital-channels pt-4">
+        <div class="container-fluid">
+            <div class="col-12 block-title">
+                <h3 class="mt-0 mb-3">@digitalChannelsTitle</h3>
             </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <a href="/naselenie/digitalno-bankarstvo/m-banking/">
-                            <h4 class="header-title mt-0">m-banking</h4>
-                            <div class="text-center">
-                                <span class="dc-icon">
-                                    <i class="mdi mdi-cellphone-iphone"></i>
-                                </span>
-                                <p class="mb-0">
-                                    БЕСПЛАТНА Android и iOS апликација за 24/7 банка во вашиот мобилен
-                                </p>
+            <div class="row">
+                @foreach (var channel in digitalChannels)
+                {
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <a href="@channel.Url">
+                                    <h4 class="header-title mt-0">@channel.Title</h4>
+                                    <div class="text-center">
+                                        <span class="dc-icon">
+                                            <i class="mdi @channel.Icon"></i>
+                                        </span>
+                                        <p class="mb-0">@channel.Description</p>
+                                    </div>
+                                </a>
                             </div>
-                        </a>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <a href="/naselenie/digitalno-bankarstvo/brzi-plakjanja-topsi-pay/">
-                            <h4 class="header-title mt-0">Брзи плаќања - Topsi Pay</h4>
-                            <div class="text-center">
-                                <span class="dc-icon">
-                                    <i class="mdi mdi-coin"></i>
-                                </span>
-                                <p class="mb-0">
-                                    сервис за БРЗИ плаќања кон пријателите на Facebook или контактите во мобилниот телефон
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <a href="/pravni-lica/digitalno-bankarstvo/e-commerce/">
-                            <h4 class="header-title mt-0">E-Commerce</h4>
-                            <div class="text-center">
-                                <span class="dc-icon">
-                                    <i class="mdi mdi-cart-outline"></i>
-                                </span>
-                                <p class="mb-0">
-                                    Сервис за е-commerce на Стопанска Банка е наменет за правни лица кои имаат сметка во Банката или планираат да отворат
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>
-</div><!-- end digital-channels -->
+}<!-- end digital-channels -->
 
 <!-- Topsi / Golden Club promo banners -->
 @if (promoBanners.Any())
