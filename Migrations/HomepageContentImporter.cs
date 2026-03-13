@@ -27,6 +27,11 @@ public class HomepageContentImporterHandler : INotificationAsyncHandler<UmbracoA
     // and skips on every subsequent startup until the version is changed.
     // v2: scraped-media/ is now included in the publish output so images resolve correctly.
     private const string ImportVersion = "homepage-v2";
+
+    private const string DigitalChannelsImportStateKey = "STBWeb.DigitalChannelsImport.Version";
+    // v3: fix block list JSON — lowercase "layout" key and populated "expose" array so
+    //     blocks are visible in the backoffice editor and persist correctly after save.
+    private const string DigitalChannelsImportVersion = "digital-channels-v3";
     private const string HomepageMediaFolderName = "Homepage Import";
     private const string MkCulture = "mk";
     private const string EnCulture = "en";
@@ -81,6 +86,15 @@ public class HomepageContentImporterHandler : INotificationAsyncHandler<UmbracoA
         catch (Exception ex)
         {
             _logger.LogError(ex, "STBWeb: Homepage content importer failed.");
+        }
+
+        try
+        {
+            ImportDigitalChannels();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "STBWeb: Digital channels importer failed.");
         }
 
         return Task.CompletedTask;
@@ -320,6 +334,124 @@ public class HomepageContentImporterHandler : INotificationAsyncHandler<UmbracoA
         return BuildBlockListValue(blocks);
     }
 
+    // -----------------------------------------------------------------------
+    // ImportDigitalChannels
+    // Seeds the four default digital channel cards into the homePage content
+    // node so editors can manage them from the backoffice. Runs at most once
+    // (guarded by DigitalChannelsImportVersion). Skips if the property already
+    // contains content, so existing editor-managed data is never overwritten.
+    // -----------------------------------------------------------------------
+    private void ImportDigitalChannels()
+    {
+        if (_keyValueService.GetValue(DigitalChannelsImportStateKey) == DigitalChannelsImportVersion)
+        {
+            _logger.LogInformation("STBWeb: Digital channels import already completed, skipping.");
+            return;
+        }
+
+        var home = _contentService.GetRootContent().FirstOrDefault(x => x.ContentType.Alias == "homePage");
+        if (home == null)
+        {
+            _logger.LogWarning("STBWeb: Could not find homePage for digital channels import.");
+            return;
+        }
+
+        // Skip if an editor has already populated the field.
+        var existingValue = home.GetValue<string>("digitalChannels");
+        if (!string.IsNullOrWhiteSpace(existingValue) && existingValue.TrimStart().StartsWith("{", StringComparison.Ordinal))
+        {
+            _logger.LogInformation("STBWeb: digitalChannels property already has content, skipping seed.");
+            _keyValueService.SetValue(DigitalChannelsImportStateKey, DigitalChannelsImportVersion);
+            return;
+        }
+
+        var digitalChannelType = _contentTypeService.Get("digitalChannel");
+        if (digitalChannelType == null)
+        {
+            _logger.LogWarning("STBWeb: digitalChannel element type not found; digital channels import skipped.");
+            return;
+        }
+
+        var blockValue = BuildDigitalChannelsBlockValue(digitalChannelType.Key);
+        if (string.IsNullOrWhiteSpace(blockValue))
+        {
+            return;
+        }
+
+        // digitalChannels is an invariant property — set it directly without a culture.
+        home.SetValue("digitalChannels", blockValue);
+
+        var saveResult = _contentService.Save(home);
+        if (!saveResult.Success)
+        {
+            _logger.LogError("STBWeb: Failed to save digital channels. Result: {@Result}", saveResult.Result);
+            return;
+        }
+
+        var publishResult = _contentService.Publish(home, new[] { "*" });
+        if (!publishResult.Success)
+        {
+            _logger.LogError("STBWeb: Failed to publish digital channels. Result: {@Result}", publishResult.Result);
+            return;
+        }
+
+        _keyValueService.SetValue(DigitalChannelsImportStateKey, DigitalChannelsImportVersion);
+        _logger.LogInformation("STBWeb: Digital channels seeded into Umbraco (4 cards).");
+    }
+
+    private string BuildDigitalChannelsBlockValue(Guid digitalChannelContentTypeKey)
+    {
+        var channels = new[]
+        {
+            (
+                Title:       "e-banking",
+                Icon:        "mdi-laptop-chromebook",
+                Description: "Достапен 24/7 за безбедно, брзо и лесно управување со вашите финансии",
+                Url:         "/naselenie/digitalno-bankarstvo/e-banking/"
+            ),
+            (
+                Title:       "m-banking",
+                Icon:        "mdi-cellphone-iphone",
+                Description: "БЕСПЛАТНА Android и iOS апликација за 24/7 банка во вашиот мобилен",
+                Url:         "/naselenie/digitalno-bankarstvo/m-banking/"
+            ),
+            (
+                Title:       "Брзи плаќања - Topsi Pay",
+                Icon:        "mdi-coin",
+                Description: "сервис за БРЗИ плаќања кон пријателите на Facebook или контактите во мобилниот телефон",
+                Url:         "/naselenie/digitalno-bankarstvo/brzi-plakjanja-topsi-pay/"
+            ),
+            (
+                Title:       "E-Commerce",
+                Icon:        "mdi-cart-outline",
+                Description: "Сервис за е-commerce на Стопанска Банка е наменет за правни лица кои имаат сметка во Банката или планираат да отворат",
+                Url:         "/pravni-lica/digitalno-bankarstvo/e-commerce/"
+            ),
+        };
+
+        var blocks = new List<BlockListItemValue>();
+        foreach (var ch in channels)
+        {
+            var linkJson = JsonConvert.SerializeObject(new[]
+            {
+                new { name = ch.Title, target = (string?)null, udi = (string?)null, url = ch.Url, queryString = (string?)null }
+            });
+
+            blocks.Add(new BlockListItemValue(
+                Guid.NewGuid(),
+                digitalChannelContentTypeKey,
+                new object[]
+                {
+                    CreateBlockPropertyValue("channelTitle",       ch.Title,       "Umbraco.TextBox"),
+                    CreateBlockPropertyValue("channelIcon",        ch.Icon,        "Umbraco.TextBox"),
+                    CreateBlockPropertyValue("channelDescription", ch.Description, "Umbraco.TextBox"),
+                    CreateBlockPropertyValue("channelUrl",         linkJson,       "Umbraco.MultiUrlPicker"),
+                }));
+        }
+
+        return BuildBlockListValue(blocks);
+    }
+
     private string BuildBlockListValue(IEnumerable<BlockListItemValue> blocks)
     {
         var items = blocks.ToList();
@@ -328,29 +460,36 @@ public class HomepageContentImporterHandler : INotificationAsyncHandler<UmbracoA
             return string.Empty;
         }
 
-        // Umbraco 15 block list values are stored with key-based layout references plus
-        // per-block values[] entries; the older UDI/raw-property-only shape is not enough.
+        // Umbraco 15 block list JSON format requirements:
+        //  - "layout" key must be lowercase (System.Text.Json is case-sensitive on read)
+        //  - Every block that should be visible must appear in "expose" with exposed:true.
+        //    Blocks absent from expose are treated as soft-deleted; the backoffice editor
+        //    hides them, so saves from an apparently-empty editor discard them and the
+        //    newly-added block never survives the round-trip.
+        //  - layout items need only contentKey (no UDI fields in v15)
+        //  - contentData items need only contentTypeKey + key + values (no UDI in v15)
         var payload = new
         {
-            Layout = new Dictionary<string, object?>
+            layout = new Dictionary<string, object?>
             {
-                [Constants.PropertyEditors.Aliases.BlockList] = items.Select(item => new
-                {
-                    contentUdi = (string?)null,
-                    settingsUdi = (string?)null,
-                    contentKey = item.Key,
-                    settingsKey = (Guid?)null
-                }).ToList()
+                [Constants.PropertyEditors.Aliases.BlockList] = items
+                    .Select(item => new { contentKey = item.Key })
+                    .ToList()
             },
             contentData = items.Select(item => new
             {
-                udi = (string?)null,
                 contentTypeKey = item.ContentTypeKey,
                 key = item.Key,
                 values = item.Values
             }).ToList(),
             settingsData = Array.Empty<object>(),
-            expose = Array.Empty<object>()
+            expose = items.Select(item => new
+            {
+                contentKey = item.Key,
+                culture    = (string?)null,
+                segment    = (string?)null,
+                exposed    = true
+            }).ToList()
         };
 
         return JsonConvert.SerializeObject(payload, Formatting.None);

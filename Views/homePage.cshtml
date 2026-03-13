@@ -344,8 +344,7 @@
     // ── Digital Channels (BlockList with fallback to hardcoded defaults) ─
     var umbracoDigitalChannels = Model.Value<BlockListModel>("digitalChannels")?
         .Select(x => x.Content)
-        .OfType<IPublishedContent>()
-        .ToList() ?? new List<IPublishedContent>();
+        .ToList() ?? new List<IPublishedElement>();
 
     var digitalChannels = umbracoDigitalChannels.Any()
         ? umbracoDigitalChannels.Select(ch => (

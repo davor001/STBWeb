@@ -322,7 +322,14 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
             // so the migration is fully idempotent on subsequent startups.
             await EnsureHomepageHeroSlidesDataTypeAsync();
             await EnsureHomepagePropertyDataTypeAsync("featureIconLinks", _dtFeatureIconLinksBlockList);
+
+            // EnsureHomepageAdditionalPropertiesAsync MUST run before
+            // EnsureHomepagePropertyDataTypeAsync("digitalChannels") because
+            // "digitalChannels" lives in the "additional" group and is only
+            // created by the former. Calling the update first would log
+            // "Property 'digitalChannels' not found" and return without effect.
             await EnsureHomepageAdditionalPropertiesAsync();
+            await EnsureHomepagePropertyDataTypeAsync("digitalChannels", _dtDigitalChannelsBlockList);
 
             _logger.LogInformation("STBWeb: Document type migration completed successfully.");
         }
@@ -709,37 +716,47 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
             ["useInlineEditingAsDefault"] = false,
         };
 
-        // Check if data type already exists.
+        // Search by name only — this catches data types that were created without a
+        // proper editor (showing "Select a property editor" in the backoffice, which
+        // means EditorAlias is empty/wrong and a name-AND-alias filter would miss them).
         var all = await _dataTypeService.GetAllAsync();
         var existing = all.FirstOrDefault(d =>
-            d.EditorAlias.Equals(Constants.PropertyEditors.Aliases.BlockList, StringComparison.OrdinalIgnoreCase) &&
             d.Name != null &&
             d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
         if (existing != null)
         {
-            // Check if blocks are already configured. If the data type was previously
-            // created with empty config ({}), update it now so the backoffice shows
-            // the "Add content" button for editors.
-            var hasBlocks = existing.ConfigurationData != null &&
+            var editorIsCorrect = existing.EditorAlias.Equals(
+                Constants.PropertyEditors.Aliases.BlockList, StringComparison.OrdinalIgnoreCase);
+
+            var hasBlocks = editorIsCorrect &&
+                            existing.ConfigurationData != null &&
                             existing.ConfigurationData.TryGetValue("blocks", out var blocksVal) &&
                             blocksVal is System.Collections.IEnumerable blocksEnum &&
                             blocksEnum.Cast<object>().Any();
 
-            if (hasBlocks)
+            if (editorIsCorrect && hasBlocks)
             {
-                _logger.LogInformation("STBWeb: Block List data type '{Name}' already configured.", name);
+                _logger.LogInformation("STBWeb: Block List data type '{Name}' already fully configured.", name);
                 return existing;
             }
 
-            _logger.LogInformation("STBWeb: Block List data type '{Name}' exists but has no blocks; updating config.", name);
+            // The data type exists but either has the wrong editor (broken/unconfigured)
+            // or is missing the blocks list. Fix it in-place so the DB record's ID/Key
+            // stays the same and any property already pointing at it is automatically fixed.
+            if (!editorIsCorrect && existing is DataType concreteDataType)
+            {
+                _logger.LogInformation("STBWeb: Block List data type '{Name}' has wrong/empty editor; reassigning Block List editor.", name);
+                concreteDataType.Editor = blockListEditor;
+            }
+
             existing.ConfigurationData = correctConfig;
             await _dataTypeService.UpdateAsync(existing, Constants.Security.SuperUserKey);
-            _logger.LogInformation("STBWeb: Updated '{Name}' Block List data type with '{ElementType}' block.", name, elementTypeAlias);
+            _logger.LogInformation("STBWeb: Fixed '{Name}' Block List data type — editor and blocks config updated for '{ElementType}'.", name, elementTypeAlias);
             return existing;
         }
 
-        // Create a new data type with the correct configuration.
+        // No data type with this name exists at all — create it fresh.
         var dataType = new DataType(blockListEditor, _configurationEditorJsonSerializer, -1)
         {
             Name = name,
@@ -773,20 +790,25 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
 
         if (pt == null)
         {
-            _logger.LogWarning("STBWeb: Property '{Alias}' not found on homePage.", propertyAlias);
+            _logger.LogWarning("STBWeb: Property '{Alias}' not found on homePage — cannot assign data type (id={Id} key={Key}).",
+                propertyAlias, targetDataType.Id, targetDataType.Key);
             return;
         }
 
         if (pt.DataTypeKey == targetDataType.Key)
         {
-            _logger.LogInformation("STBWeb: homePage.{Alias} already uses correct data type.", propertyAlias);
+            _logger.LogInformation("STBWeb: homePage.{Alias} already uses correct data type (id={Id} key={Key}).",
+                propertyAlias, targetDataType.Id, targetDataType.Key);
             return;
         }
 
+        _logger.LogInformation("STBWeb: homePage.{Alias} — reassigning data type from key={OldKey} to id={NewId} key={NewKey}.",
+            propertyAlias, pt.DataTypeKey, targetDataType.Id, targetDataType.Key);
         pt.DataTypeId = targetDataType.Id;
         pt.DataTypeKey = targetDataType.Key;
         await _contentTypeService.UpdateAsync(homePage, Constants.Security.SuperUserKey);
-        _logger.LogInformation("STBWeb: Updated homePage.{Alias} to use configured Block List.", propertyAlias);
+        _logger.LogInformation("STBWeb: homePage.{Alias} — data type assignment saved (id={Id} key={Key}).",
+            propertyAlias, targetDataType.Id, targetDataType.Key);
     }
 
     // -----------------------------------------------------------------------
