@@ -314,6 +314,14 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string PromoBanner2Title => this.Value<string>(_publishedValueFallback, "promoBanner2Title");
 
 		///<summary>
+		/// Promo Banners
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.4.4+da43086")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("promoBanners")]
+		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel PromoBanners => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "promoBanners");
+
+		///<summary>
 		/// What I Need Section Title
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "15.4.4+da43086")]
