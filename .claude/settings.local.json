@@ -43,7 +43,31 @@
       "Bash(cd \"C:/Users/User1/Desktop/STBWeb\" && sqlite3 \"umbraco/Data/Umbraco.sqlite.db\" \"SELECT n.text, ct.isElement, ct.variations FROM cmsContentType ct JOIN umbracoNode n ON n.id = ct.nodeId WHERE n.text LIKE '%Hero Slide%';\" 2>&1)",
       "Bash(cd \"C:/Users/User1/Desktop/STBWeb\" && sqlite3 \"umbraco/Data/Umbraco.sqlite.db\" \"SELECT n.text, dt.config FROM umbracoDataType dt JOIN umbracoNode n ON dt.nodeId = n.id WHERE dt.propertyEditorAlias = 'Umbraco.BlockList' LIMIT 5;\" 2>&1)",
       "Bash(cd \"C:/Users/User1/Desktop/STBWeb\" && sqlite3 \"umbraco/Data/Umbraco.sqlite.db\" \"SELECT n.id, n.text, n.nodeObjectType, uc.contentTypeId FROM umbracoNode n JOIN umbracoContent uc ON uc.nodeId = n.id JOIN cmsContentType ct ON ct.nodeId = uc.contentTypeId JOIN umbracoNode cn ON cn.id = uc.contentTypeId WHERE cn.text = 'Home Page';\" 2>&1)",
-      "Bash(cd \"C:/Users/User1/Desktop/STBWeb\" && sqlite3 \"umbraco/Data/Umbraco.sqlite.db\" \"SELECT pd.propertyTypeId, pt.alias, pd.textValue FROM umbracoPropertyData pd JOIN cmsPropertyType pt ON pt.id = pd.propertyTypeId WHERE pd.versionId = \\(SELECT id FROM umbracoContentVersion WHERE nodeId = 1090 ORDER BY id DESC LIMIT 1\\) AND pt.alias LIKE '%hero%';\" 2>&1)"
+      "Bash(cd \"C:/Users/User1/Desktop/STBWeb\" && sqlite3 \"umbraco/Data/Umbraco.sqlite.db\" \"SELECT pd.propertyTypeId, pt.alias, pd.textValue FROM umbracoPropertyData pd JOIN cmsPropertyType pt ON pt.id = pd.propertyTypeId WHERE pd.versionId = \\(SELECT id FROM umbracoContentVersion WHERE nodeId = 1090 ORDER BY id DESC LIMIT 1\\) AND pt.alias LIKE '%hero%';\" 2>&1)",
+      "Bash(\"/c/Users/user/AppData/Local/Android/Sdk/platform-tools/sqlite3\" \"C:\\\\Users\\\\user\\\\Desktop\\\\Projects\\\\STBWeb\\\\umbraco\\\\Data\\\\Umbraco.sqlite.db\" \".tables\" 2>&1 | head -20)",
+      "Bash(cd \"C:\\\\Users\\\\user\\\\Desktop\\\\Projects\\\\STBWeb\" && dotnet tool list --global 2>/dev/null | head -5; pip show sqlite-utils 2>/dev/null | head -2)",
+      "Bash(node -e \"\nconst Database = require\\('better-sqlite3'\\);\nconst db = new Database\\('C:\\\\\\\\\\\\\\\\Users\\\\\\\\\\\\\\\\user\\\\\\\\\\\\\\\\Desktop\\\\\\\\\\\\\\\\Projects\\\\\\\\\\\\\\\\STBWeb\\\\\\\\\\\\\\\\umbraco\\\\\\\\\\\\\\\\Data\\\\\\\\\\\\\\\\Umbraco.sqlite.db'\\);\nconst rows = db.prepare\\(\\\\\"SELECT name FROM sqlite_master WHERE type='table'\\\\\"\\).all\\(\\);\nrows.forEach\\(r => console.log\\(r.name\\)\\);\n\" 2>&1 | head -30)",
+      "Bash(node -e \"\nconst Database = require\\('better-sqlite3'\\);\nconst db = new Database\\('C:/Users/user/Desktop/Projects/STBWeb/umbraco/Data/Umbraco.sqlite.db'\\);\nconst rows = db.prepare\\(\\\\\"SELECT name FROM sqlite_master WHERE type='table'\\\\\"\\).all\\(\\);\nrows.forEach\\(r => console.log\\(r.name\\)\\);\n\" 2>&1 | head -30)",
+      "Bash(cd \"C:\\\\Users\\\\user\\\\Desktop\\\\Projects\\\\STBWeb\" && dotnet-script query-db.csx 2>&1)",
+      "Bash(find /c/Users/user/.nuget/packages/umbraco.cms* -name \"*.xml\" -o -name \"*BlockList*\" | head -20)",
+      "Bash(grep -r \"contentElementTypeKey\\\\|BlockListConfiguration\" /c/Users/user/.nuget/packages/umbraco.cms* --include=\"*.xml\" | head -20)",
+      "Bash(grep -r \"contentElementTypeKey\\\\|BlockList\" /c/Users/user/.nuget/packages/umbraco.cms.api.management --include=\"*.xml\" 2>/dev/null | head -30)",
+      "Bash(find /c/Users/user/Desktop/Projects/STBWeb -name \"*.md\" -o -name \"*.txt\" | xargs grep -l \"BlockList\\\\|block\\\\|configuration\" 2>/dev/null | head -10)",
+      "Bash(find /c/Users/user/.nuget/packages -path \"*umbraco*\" -name \"*.md\" 2>/dev/null | head -5)",
+      "Bash(find /c/Users/user/.nuget/packages/umbraco.cms* -name \"*.json\" -o -name \"*schema*\" 2>/dev/null | head -20)",
+      "Bash(cd \"C:\\\\Users\\\\user\\\\Desktop\\\\Projects\\\\STBWeb\" && dotnet-script inspect-blocklist.csx 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\user\\\\Desktop\\\\Projects\\\\STBWeb\" && dotnet-script inspect-config.csx 2>&1)",
+      "Bash(taskkill //PID 34384 //F 2>&1; sleep 2 && cd \"C:\\\\Users\\\\user\\\\Desktop\\\\Projects\\\\STBWeb\" && dotnet build 2>&1 | tail -5)",
+      "Bash(cd \"C:\\\\Users\\\\user\\\\Desktop\\\\Projects\\\\STBWeb\" && dotnet-script inspect-dt.csx 2>&1)",
+      "Bash(taskkill //F //IM STBWeb.exe 2>/dev/null; sleep 2; dotnet build 2>&1 | tail -5)",
+      "Bash(taskkill //F //IM STBWeb.exe 2>/dev/null; taskkill //F //IM dotnet.exe 2>/dev/null; sleep 3; echo \"Killed\")",
+      "Bash(taskkill //F //IM STBWeb.exe 2>/dev/null; taskkill //F //IM dotnet.exe 2>/dev/null; sleep 2; echo \"done\")",
+      "Bash(cd \"C:/Users/user/Desktop/Projects/STBWeb\" && dotnet script -e \"\nusing Microsoft.Data.Sqlite;\nvar conn = new SqliteConnection\\(\\\\\"Data Source=umbraco/Data/Umbraco.sqlite.db\\\\\"\\);\nconn.Open\\(\\);\nvar cmd = conn.CreateCommand\\(\\);\ncmd.CommandText = \\\\\"SELECT nodeId, propertyEditorAlias, propertyEditorUiAlias FROM umbracoDataType WHERE propertyEditorAlias = 'Umbraco.BlockList'\\\\\";\nvar reader = cmd.ExecuteReader\\(\\);\nwhile \\(reader.Read\\(\\)\\)\n{\n    Console.WriteLine\\($\\\\\"ID={reader.GetInt32\\(0\\)}, Editor={reader.GetString\\(1\\)}, UiAlias={\\(!reader.IsDBNull\\(2\\) ? reader.GetString\\(2\\) : \\\\\"NULL\\\\\"\\)}\\\\\"\\);\n}\nconn.Close\\(\\);\n\" 2>&1)",
+      "Bash(curl -sk http://localhost:9023/ 2>/dev/null | grep -o \"Hero Carousel.*TotalSlides: [0-9]*\")",
+      "Bash(curl -sk http://localhost:9023/ 2>/dev/null | grep -o 'carousel-item' | wc -l)",
+      "Bash(curl -sk http://localhost:9023/ 2>/dev/null | grep -c 'class=\"carousel-item')",
+      "Bash(curl -sk http://localhost:9023/ 2>/dev/null | grep -o 'data-slide-to=\"[0-9]*\"' | sort -u)",
+      "Bash(taskkill //F //IM STBWeb.exe 2>/dev/null; taskkill //F //IM dotnet.exe 2>/dev/null; echo \"Done\")"
     ]
   }
 }

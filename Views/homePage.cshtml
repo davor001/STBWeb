@@ -136,8 +136,8 @@
 
     var umbracoHeroSlides = Model.Value<BlockListModel>("heroSlides")?
         .Select(x => x.Content)
-        .OfType<IPublishedContent>()
-        .ToList() ?? new List<IPublishedContent>();
+        .Where(c => c != null)
+        .ToList() ?? new List<IPublishedElement>();
     var heroSlides = umbracoHeroSlides.Any()
         ? umbracoHeroSlides.Select(slide => (
             Heading: slide.Value<string>("slideHeading") ?? string.Empty,
@@ -158,8 +158,8 @@
 
     var umbracoFeatureIcons = Model.Value<BlockListModel>("featureIconLinks")?
         .Select(x => x.Content)
-        .OfType<IPublishedContent>()
-        .ToList() ?? new List<IPublishedContent>();
+        .Where(c => c != null)
+        .ToList() ?? new List<IPublishedElement>();
     var featureIcons = umbracoFeatureIcons.Any()
         ? umbracoFeatureIcons.Select(icon => (
             Label: icon.Value<string>("label") ?? string.Empty,
@@ -344,8 +344,8 @@
     // ── Digital Channels (BlockList with fallback to hardcoded defaults) ─
     var umbracoDigitalChannels = Model.Value<BlockListModel>("digitalChannels")?
         .Select(x => x.Content)
-        .OfType<IPublishedContent>()
-        .ToList() ?? new List<IPublishedContent>();
+        .Where(c => c != null)
+        .ToList() ?? new List<IPublishedElement>();
 
     var digitalChannels = umbracoDigitalChannels.Any()
         ? umbracoDigitalChannels.Select(ch => (
@@ -409,7 +409,7 @@
                             }
                             @if (!string.IsNullOrEmpty(slide.CtaText) && !string.IsNullOrEmpty(slide.CtaUrl))
                             {
-                                <a href="@slide.CtaUrl" class="btn btn-primary">@slide.CtaText</a>
+                                <p class="pt-2 pt-lg-4"><a href="@slide.CtaUrl" class="btn btn-info btn-lg">@slide.CtaText</a></p>
                             }
                         </div>
                     }
