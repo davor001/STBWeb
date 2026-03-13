@@ -300,6 +300,12 @@
         allNewsUrl = "/novosti/";
     }
 
+    // Share the resolved news list with _NewsTicker so both sections
+    // always display the exact same items in the same order.
+    ViewData["TickerItems"] = latestNews
+        .Select(n => (Title: n.Title, Url: n.Url))
+        .ToList();
+
     // ── Section text labels (editable in backoffice, hardcoded fallbacks) ─
     var whatINeedTitle = Model.Value<string>("whatINeedTitle");
     if (string.IsNullOrWhiteSpace(whatINeedTitle)) whatINeedTitle = "ШТО МИ ТРЕБА?";

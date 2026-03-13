@@ -2,26 +2,33 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @inject STBWeb.Services.HomepageFallbackService HomepageFallbackService
 @{
-    // 1. Try Umbraco content tree (populated once Phase 1E seeding is done)
-    var newsRoot = Umbraco.ContentAtRoot()
-        .SelectMany(r => r.DescendantsOrSelf())
-        .FirstOrDefault(c => c.ContentType.Alias == "newsListingPage");
+    // Prefer the list already resolved by the parent view (e.g. HomePage passes
+    // its latestNews list via ViewData so the ticker and Latest News section
+    // always show the same items in the same order).
+    var tickerItems = ViewData["TickerItems"] as List<(string Title, string Url)>;
 
-    var tickerItems = newsRoot?.Children()
-        .Where(c => c.ContentType.Alias == "newsDetailPage")
-        .OrderByDescending(c => c.Value<DateTime>("publishDate"))
-        .Take(10)
-        .Select(c => (Title: c.Name, Url: c.Url() ?? string.Empty))
-        .ToList()
-        ?? new List<(string Title, string Url)>();
-
-    // 2. Fall back to scraped-data/homepage.json when Umbraco has no news yet
-    if (!tickerItems.Any())
+    if (tickerItems == null)
     {
-        tickerItems = HomepageFallbackService.GetData().LatestNews
-            .Where(n => !string.IsNullOrWhiteSpace(n.Title))
-            .Select(n => (Title: n.Title, Url: n.Url))
-            .ToList();
+        // Fallback for pages that include this partial without pre-populating ViewData.
+        var newsRoot = Umbraco.ContentAtRoot()
+            .SelectMany(r => r.DescendantsOrSelf())
+            .FirstOrDefault(c => c.ContentType.Alias == "newsListingPage");
+
+        tickerItems = newsRoot?.Children()
+            .Where(c => c.ContentType.Alias == "newsDetailPage")
+            .OrderByDescending(c => c.Value<DateTime>("publishDate"))
+            .Take(10)
+            .Select(c => (Title: c.Name, Url: c.Url() ?? string.Empty))
+            .ToList()
+            ?? new List<(string Title, string Url)>();
+
+        if (!tickerItems.Any())
+        {
+            tickerItems = HomepageFallbackService.GetData().LatestNews
+                .Where(n => !string.IsNullOrWhiteSpace(n.Title))
+                .Select(n => (Title: n.Title, Url: n.Url))
+                .ToList();
+        }
     }
 }
 @if (tickerItems.Any())
