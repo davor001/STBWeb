@@ -47,6 +47,7 @@
 			automatically, so these images are absent from every Azure deploy package and
 			return 404 on the live site.
 		-->
+		<Content Include="scraped-data\**\*" CopyToPublishDirectory="PreserveNewest" />
 		<Content Include="scraped-media\**\*" CopyToPublishDirectory="PreserveNewest" />
 	</ItemGroup>
 
