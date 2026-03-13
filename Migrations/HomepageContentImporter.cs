@@ -32,6 +32,11 @@ public class HomepageContentImporterHandler : INotificationAsyncHandler<UmbracoA
     // v3: fix block list JSON — lowercase "layout" key and populated "expose" array so
     //     blocks are visible in the backoffice editor and persist correctly after save.
     private const string DigitalChannelsImportVersion = "digital-channels-v3";
+
+    private const string PromoBannersImportStateKey = "STBWeb.PromoBannersImport.Version";
+    // v2: seed flat promoBanner1Title/Image/Link and promoBanner2Title/Image/Link properties
+    //     instead of the Block List approach that was reverted.
+    private const string PromoBannersImportVersion = "promo-banners-v2";
     private const string HomepageMediaFolderName = "Homepage Import";
     private const string MkCulture = "mk";
     private const string EnCulture = "en";
@@ -95,6 +100,15 @@ public class HomepageContentImporterHandler : INotificationAsyncHandler<UmbracoA
         catch (Exception ex)
         {
             _logger.LogError(ex, "STBWeb: Digital channels importer failed.");
+        }
+
+        try
+        {
+            ImportPromoBanners();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "STBWeb: Promo banners importer failed.");
         }
 
         return Task.CompletedTask;
@@ -397,6 +411,126 @@ public class HomepageContentImporterHandler : INotificationAsyncHandler<UmbracoA
 
         _keyValueService.SetValue(DigitalChannelsImportStateKey, DigitalChannelsImportVersion);
         _logger.LogInformation("STBWeb: Digital channels seeded into Umbraco (4 cards).");
+    }
+
+    // -----------------------------------------------------------------------
+    // ImportPromoBanners
+    // Seeds the Topsi / Golden Club promo banners as two fixed sets of flat
+    // properties (promoBanner1Title/Image/Link and promoBanner2Title/Image/Link)
+    // on homePage. Runs once (version-guarded). Skips if both title fields are
+    // already populated so editor changes are never overwritten.
+    // -----------------------------------------------------------------------
+    private void ImportPromoBanners()
+    {
+        if (_keyValueService.GetValue(PromoBannersImportStateKey) == PromoBannersImportVersion)
+        {
+            _logger.LogInformation("STBWeb: Promo banners import already completed, skipping.");
+            return;
+        }
+
+        var home = _contentService.GetRootContent().FirstOrDefault(x => x.ContentType.Alias == "homePage");
+        if (home == null)
+        {
+            _logger.LogWarning("STBWeb: Could not find homePage for promo banners import.");
+            return;
+        }
+
+        // Skip if an editor has already populated the fields.
+        var existing1 = home.GetValue<string>("promoBanner1Title");
+        var existing2 = home.GetValue<string>("promoBanner2Title");
+        if (!string.IsNullOrWhiteSpace(existing1) && !string.IsNullOrWhiteSpace(existing2))
+        {
+            _logger.LogInformation("STBWeb: promoBanner1Title/2Title already have content, skipping seed.");
+            _keyValueService.SetValue(PromoBannersImportStateKey, PromoBannersImportVersion);
+            return;
+        }
+
+        var homepageData = _homepageFallbackService.GetData();
+        if (!homepageData.PromoBanners.Any())
+        {
+            _logger.LogInformation("STBWeb: No promo banners in fallback data, skipping seed.");
+            _keyValueService.SetValue(PromoBannersImportStateKey, PromoBannersImportVersion);
+            return;
+        }
+
+        var mediaRoot = GetOrCreateMediaFolder(HomepageMediaFolderName, -1);
+
+        var bannerDefs = new[]
+        {
+            (Index: 1, MediaName: "Promo Banner TOPSI",       Keyword: "topsi"),
+            (Index: 2, MediaName: "Promo Banner Golden Club", Keyword: "golden"),
+        };
+
+        var seededCount = 0;
+
+        foreach (var def in bannerDefs)
+        {
+            var promo = homepageData.PromoBanners
+                .FirstOrDefault(p => p.Name.Contains(def.Keyword, StringComparison.OrdinalIgnoreCase))
+                ?? (def.Index <= homepageData.PromoBanners.Count ? homepageData.PromoBanners[def.Index - 1] : null);
+
+            if (promo == null)
+            {
+                continue;
+            }
+
+            var titleAlias = $"promoBanner{def.Index}Title";
+            var imageAlias = $"promoBanner{def.Index}Image";
+            var linkAlias  = $"promoBanner{def.Index}Link";
+
+            // Title (invariant)
+            if (home.Properties.Any(p => p.Alias == titleAlias))
+            {
+                home.SetValue(titleAlias, promo.Name);
+            }
+
+            // Image (invariant) — reuse image imported by ImportHomepageContent
+            var mediaItem = _mediaService
+                .GetPagedChildren(mediaRoot.Id, 0, 200, out _, null, null)
+                .FirstOrDefault(x => x.Name.InvariantEquals(def.MediaName))
+                ?? ImportImageMedia(mediaRoot.Id, def.MediaName, promo.ImageLocalPath);
+
+            if (mediaItem != null && home.Properties.Any(p => p.Alias == imageAlias))
+            {
+                home.SetValue(imageAlias, BuildSingleMediaPickerValue(mediaItem));
+            }
+
+            // Link (invariant)
+            var targetUrl = NormalizeImportedUrl(promo.TargetUrl);
+            if (!string.IsNullOrWhiteSpace(targetUrl) && home.Properties.Any(p => p.Alias == linkAlias))
+            {
+                var linkJson = JsonConvert.SerializeObject(new[]
+                {
+                    new { name = promo.Name, target = (string?)null, udi = (string?)null, url = targetUrl, queryString = (string?)null }
+                });
+                home.SetValue(linkAlias, linkJson);
+            }
+
+            seededCount++;
+        }
+
+        if (seededCount == 0)
+        {
+            _keyValueService.SetValue(PromoBannersImportStateKey, PromoBannersImportVersion);
+            return;
+        }
+
+        var saveResult = _contentService.Save(home);
+        if (!saveResult.Success)
+        {
+            _logger.LogError("STBWeb: Failed to save promo banners. Result: {@Result}", saveResult.Result);
+            return;
+        }
+
+        var publishResult = _contentService.Publish(home, new[] { "*" });
+        if (!publishResult.Success)
+        {
+            _logger.LogError("STBWeb: Failed to publish promo banners. Result: {@Result}", publishResult.Result);
+            return;
+        }
+
+        _keyValueService.SetValue(PromoBannersImportStateKey, PromoBannersImportVersion);
+        _logger.LogInformation("STBWeb: Promo banners seeded into Umbraco ({Count} banners).", seededCount);
     }
 
     private string BuildDigitalChannelsBlockValue(Guid digitalChannelContentTypeKey)

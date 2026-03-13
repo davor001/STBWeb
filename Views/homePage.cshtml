@@ -198,56 +198,46 @@
         applyUrl = "/appForm/";
     }
 
-    var promoBanners = new[]
-        {
-            Model.Value<IPublishedContent>("promoBanner1"),
-            Model.Value<IPublishedContent>("promoBanner2")
-        }
-        .OfType<IPublishedContent>()
-        .Select(promoNode => (
-            Name: promoNode.Name,
-            Url: promoNode.Url() ?? string.Empty,
-            ImageUrl: GetPublishedMediaUrl(GetPromoImage(promoNode))
-        ))
-        .Where(promo =>
-            !string.IsNullOrWhiteSpace(promo.Name) ||
-            !string.IsNullOrWhiteSpace(promo.Url) ||
-            !string.IsNullOrWhiteSpace(promo.ImageUrl))
-        .ToList();
+    // ── Promo Banners — two fixed banners from flat properties on homePage ───────
+    var pb1Title    = Model.Value<string>("promoBanner1Title");
+    var pb1ImageUrl = GetPublishedMediaUrl(Model.Value<MediaWithCrops>("promoBanner1Image"));
+    var pb1Url      = Model.Value<IEnumerable<Link>>("promoBanner1Link")?.FirstOrDefault()?.Url ?? string.Empty;
 
-    if (promoBanners.Count < 2)
+    if (string.IsNullOrWhiteSpace(pb1Title))
     {
-        var existingPromoUrls = new HashSet<string>(promoBanners.Select(x => x.Url), StringComparer.OrdinalIgnoreCase);
-
-        foreach (var promo in homepageFallback.PromoBanners)
+        var fb1 = homepageFallback.PromoBanners.ElementAtOrDefault(0);
+        if (fb1 != null)
         {
-            if (promoBanners.Count >= 2)
-            {
-                break;
-            }
-
-            var normalizedPromoUrl = NormalizeFallbackUrl(promo.TargetUrl);
-            if (!string.IsNullOrWhiteSpace(normalizedPromoUrl) && existingPromoUrls.Contains(normalizedPromoUrl))
-            {
-                continue;
-            }
-
-            var imageUrl = ResolveFallbackMediaUrl(promo.ImageLocalPath, promo.ImageUrl);
-            if (string.IsNullOrWhiteSpace(promo.Name) &&
-                string.IsNullOrWhiteSpace(normalizedPromoUrl) &&
-                string.IsNullOrWhiteSpace(imageUrl))
-            {
-                continue;
-            }
-
-            promoBanners.Add((promo.Name, normalizedPromoUrl, imageUrl));
-
-            if (!string.IsNullOrWhiteSpace(normalizedPromoUrl))
-            {
-                existingPromoUrls.Add(normalizedPromoUrl);
-            }
+            pb1Title    = fb1.Name;
+            pb1ImageUrl = ResolveFallbackMediaUrl(fb1.ImageLocalPath, fb1.ImageUrl);
+            pb1Url      = NormalizeFallbackUrl(fb1.TargetUrl);
         }
     }
+
+    var pb2Title    = Model.Value<string>("promoBanner2Title");
+    var pb2ImageUrl = GetPublishedMediaUrl(Model.Value<MediaWithCrops>("promoBanner2Image"));
+    var pb2Url      = Model.Value<IEnumerable<Link>>("promoBanner2Link")?.FirstOrDefault()?.Url ?? string.Empty;
+
+    if (string.IsNullOrWhiteSpace(pb2Title))
+    {
+        var fb2 = homepageFallback.PromoBanners.ElementAtOrDefault(1);
+        if (fb2 != null)
+        {
+            pb2Title    = fb2.Name;
+            pb2ImageUrl = ResolveFallbackMediaUrl(fb2.ImageLocalPath, fb2.ImageUrl);
+            pb2Url      = NormalizeFallbackUrl(fb2.TargetUrl);
+        }
+    }
+
+    var promoBanners = new[]
+    {
+        (Name: pb1Title ?? string.Empty, Url: pb1Url, ImageUrl: pb1ImageUrl),
+        (Name: pb2Title ?? string.Empty, Url: pb2Url, ImageUrl: pb2ImageUrl),
+    }
+    .Where(p => !string.IsNullOrWhiteSpace(p.Name) ||
+                !string.IsNullOrWhiteSpace(p.Url)  ||
+                !string.IsNullOrWhiteSpace(p.ImageUrl))
+    .ToList();
 
     var newsRoot = Umbraco.ContentAtRoot()
         .SelectMany(r => r.DescendantsOrSelf())

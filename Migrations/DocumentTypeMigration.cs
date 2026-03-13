@@ -849,6 +849,14 @@ public class DocumentTypeMigrationHandler : INotificationAsyncHandler<UmbracoApp
         AddIfMissing("digitalChannelsGroup", "Digital Channels", 20, "digitalChannels",     "Digital Channels",           _dtDigitalChannelsBlockList ?? _dtBlockList!);
         AddIfMissing("digitalChannelsGroup", "Digital Channels", 20, "digitalChannelsTitle","Digital Channels Section Title", _dtTextstring!);
 
+        // ── Promo Banners — two fixed banners, each with title / image / link ────────
+        AddIfMissing("promoBanner1Group", "Promo Banner 1", 25, "promoBanner1Title", "Title", _dtTextstring!);
+        AddIfMissing("promoBanner1Group", "Promo Banner 1", 25, "promoBanner1Image", "Image", _dtMediaPicker!);
+        AddIfMissing("promoBanner1Group", "Promo Banner 1", 25, "promoBanner1Link",  "Link",  _dtMultiUrlPicker!);
+        AddIfMissing("promoBanner2Group", "Promo Banner 2", 26, "promoBanner2Title", "Title", _dtTextstring!);
+        AddIfMissing("promoBanner2Group", "Promo Banner 2", 26, "promoBanner2Image", "Image", _dtMediaPicker!);
+        AddIfMissing("promoBanner2Group", "Promo Banner 2", 26, "promoBanner2Link",  "Link",  _dtMultiUrlPicker!);
+
         // ── Footer settings ───────────────────────────────────────────────
         AddIfMissing("footerSettings", "Footer Settings", 30, "footerColumn1Title",   "Footer Column 1 Title",    _dtTextstring!);
         AddIfMissing("footerSettings", "Footer Settings", 30, "footerColumn1Links",   "Footer Column 1 Links",    _dtMultiUrlPicker!);
